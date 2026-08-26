@@ -11,18 +11,19 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (30) and frontend tests (8)
+- Backend tests (30) and frontend tests (9)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI
-- DigitalOcean droplet deploy notes (`docs/deployment.md`)
-
-## In progress
-
-- First DigitalOcean Compose deploy (build/start on the droplet)
+- DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
+- Live HTTP app at `http://159.89.125.246:8080` (laptop and phone verified)
+- Host firewall (`ufw`): OpenSSH + 8080/tcp; 5432 and 8000 not public
 
 ## Remaining
 
-- Finish hardening the droplet (firewall, HTTPS, stop publishing Postgres)
+- HTTPS and a domain; then `COOKIE_SECURE=true`
+- Stop publishing Postgres (`5432`) in `docker-compose.yml`
+- Optional DigitalOcean cloud firewall in front of `ufw`
+- Ubuntu package updates on the droplet (`apt upgrade`)
 - Playwright was not executed against a running stack
 
 ## Known issues

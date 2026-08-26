@@ -86,7 +86,7 @@ docker compose up --build
 
 Docker Compose starts PostgreSQL, the API, and the nginx-hosted frontend. Do not use the bundled development `SECRET_KEY` in production.
 
-To run the same stack on a DigitalOcean droplet (SSH, Docker on the server, clone, secret, Compose), see [docs/deployment.md](docs/deployment.md).
+The first DigitalOcean deploy is live at **http://159.89.125.246:8080** (HTTP, `ufw` allows SSH and 8080 only). Steps, firewall commands, and remaining hardening are in [docs/deployment.md](docs/deployment.md).
 
 ## Environment variables
 

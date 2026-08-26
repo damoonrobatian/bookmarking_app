@@ -33,7 +33,7 @@ docker compose up --build
 - App: `http://localhost:8080`
 - API directly: `http://localhost:8000/docs`
 
-DigitalOcean droplet setup (create the VM, SSH, install Docker, clone, secret, Compose) is documented in [deployment.md](deployment.md).
+DigitalOcean droplet setup (create the VM, SSH, install Docker, clone, secret, Compose, `ufw`) is documented in [deployment.md](deployment.md). The first live instance is `http://159.89.125.246:8080`.
 
 ## Tests
 
