@@ -14,14 +14,15 @@
 - Backend tests (30) and frontend tests (8)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI
+- DigitalOcean droplet deploy notes (`docs/deployment.md`)
 
 ## In progress
 
-- None
+- First DigitalOcean Compose deploy (build/start on the droplet)
 
 ## Remaining
 
-- Docker Compose was not executed in this environment (Docker CLI unavailable)
+- Finish hardening the droplet (firewall, HTTPS, stop publishing Postgres)
 - Playwright was not executed against a running stack
 
 ## Known issues
