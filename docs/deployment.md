@@ -18,14 +18,15 @@ These are the choices and results from the first live deploy:
 | Auth | Existing laptop SSH key (no root password) |
 | Automated backups | Enabled (~20% extra) |
 | Public IPv4 | `159.89.125.246` |
-| App URL | http://159.89.125.246:8080 |
+| App URL (until HTTPS) | http://159.89.125.246:8080 |
+| Domain | `neshanak.ca` (CIRA; registrar Namespro Solutions Inc.) |
 | API docs | http://159.89.125.246:8080/docs (via nginx; port 8000 is firewalled) |
 | Docker | Official install script on the droplet (`Docker Compose` v2) |
 | Repo path on droplet | `/root/bookmarking_app` |
 | `.env` | `SECRET_KEY` only (gitignored; Compose interpolates it) |
 | Compose | `docker compose up --build -d` — `db` healthy, `backend` 8000, `frontend` 8080 |
 | Firewall | `ufw` active: OpenSSH + `8080/tcp` only |
-| TLS | Not yet; HTTP only, `COOKIE_SECURE=false` |
+| TLS | Not yet. Domain is registered; live DNS was still Namespro parking as of 26 Aug 2026 evening. HTTPS waits until `neshanak.ca` resolves to `159.89.125.246`. |
 
 Verified: sign-in and save work from a laptop and a phone against that URL.
 
@@ -194,6 +195,64 @@ Confirm the site still loads on port **8080** after enabling the firewall. `/doc
 
 Do not add `5432` or `8000` to `ufw` unless you have a short-term reason.
 
+## 9. Domain (`neshanak.ca`) — in progress
+
+HTTPS needs a **name** at CIRA, not only the droplet IP. Let's Encrypt will not issue a certificate for `159.89.125.246`.
+
+### What was chosen
+
+| Item | Result |
+| --- | --- |
+| Name | `neshanak.ca` (نشانک, bookmark) |
+| Registry | CIRA (Ottawa), not Verisign `.com` |
+| Registrar | [Namespro](https://www.namespro.ca) (CIRA-certified) |
+| Term | 3 years, expiry **2029-08-26** |
+| Web setting | **5) DNS Hosting - Free** (not parking, not paid Linux/Windows hosting) |
+| Name servers | `htns1.namespro.ca`, `htns2.namespro.ca`, `htns3.namespro.ca` |
+| Intended A records | `@` / `neshanak.ca` → `159.89.125.246`; `www` → `159.89.125.246` |
+
+The site title in the app can stay **Nook**. The public hostname is `neshanak.ca`.
+
+Until DNS and TLS are working, keep using **http://159.89.125.246:8080**.
+
+### Registry vs shop list
+
+CIRA will only hold **one** `neshanak.ca`. After two checkouts, Namespro’s domain list showed two rows with the **same** expiry (2029). That is a duplicate listing of one registration, not two names on the internet.
+
+WHOIS (26 Aug 2026) showed a single CIRA object, Namespro as registrar, status `addPeriod`, expiry 2029-08-26.
+
+The first Namespro checkout did not appear in the account or on the card for some time; a second checkout then went through. Two invoices exist (domain + WHOIS, then domain only). A sales ticket asked Namespro to **refund the second invoice** and **keep** the domain, WHOIS, and the first invoice. Do not ask them to delete `neshanak.ca`.
+
+### DNS at Namespro (not the left-menu ad)
+
+**HOSTING → DNS hosting** in the left sidebar is a marketing page (`your-domain.ca` samples). It is not the zone for this name.
+
+1. **MANAGE → my domains** → click **`neshanak.ca`**.
+2. **Web settings → type** → **5) DNS Hosting - Free**. Save. Skip paid Linux/Windows/unlimited hosting.
+3. **click here to launch zone editing tool**.
+4. Add **A** records as in the table above. For `www`, type only `www` in the host box (the form already appends `.neshanak.ca`).
+5. Click **Update Zone** (not only Create).
+
+Check the **source** nameserver, not only a browser:
+
+```bash
+dig @htns1.namespro.ca neshanak.ca A +short
+```
+
+You want `159.89.125.246`. `51.222.143.2` is Namespro parking.
+
+**TTL** is how many seconds a resolver may cache an answer (here often 3600). If `htns1` itself still returns parking, waiting on TTL will not help; the published zone is wrong. If `htns1` is already the droplet IP, public resolvers can take up to one TTL to catch up.
+
+As of the evening of 26 Aug 2026, the Namespro panel listed the droplet A records while `htns1` still answered parking. That is a publish lag or a Namespro bug (possibly related to the duplicate domain row). Recheck `dig`; if it stays parking for more than an hour, open a **technical** ticket asking them to publish the zone.
+
+### After DNS matches the droplet
+
+Still to do (not done yet):
+
+- Allow **443/tcp** (and **80/tcp** for HTTP-01) on `ufw`; obtain a certificate for `neshanak.ca`.
+- Serve the app on 443 so the URL is `https://neshanak.ca` without `:8080`.
+- Set `COOKIE_SECURE=true` and point `FRONTEND_URL` / `BACKEND_URL` at `https://neshanak.ca`.
+
 ## Useful commands (on the droplet)
 
 ```bash
@@ -220,8 +279,8 @@ Done on this droplet:
 
 Still open:
 
-- There is no HTTPS yet. Do not turn on `COOKIE_SECURE=true` until you have TLS.
-- `FRONTEND_URL` / `BACKEND_URL` in Compose are still `http://localhost:8080`. The browser talks to nginx on port 8080, which proxies `/api` to the backend, so login works over the droplet IP. Point those URLs at the real origin when you add a domain.
+- There is no HTTPS yet. Do not turn on `COOKIE_SECURE=true` until `neshanak.ca` has TLS.
+- `FRONTEND_URL` / `BACKEND_URL` in Compose are still `http://localhost:8080`. The browser talks to nginx on port 8080, which proxies `/api` to the backend, so login works over the droplet IP. Point those URLs at `https://neshanak.ca` when TLS is on.
 - Compose still publishes `5432:5432`. Removing that publish from `docker-compose.yml` is extra hardening on top of `ufw`.
 - A DigitalOcean cloud firewall (same ports: 22 and 8080) can sit in front of `ufw`.
 - Apply Ubuntu security updates when you can: `apt update && apt upgrade`.

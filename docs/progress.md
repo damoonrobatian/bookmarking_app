@@ -17,10 +17,15 @@
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
 - Live HTTP app at `http://159.89.125.246:8080` (laptop and phone verified)
 - Host firewall (`ufw`): OpenSSH + 8080/tcp; 5432 and 8000 not public
+- Domain `neshanak.ca` registered at Namespro / CIRA (3 years, to 2029-08-26)
+- Namespro web setting: DNS Hosting - Free; intended A records to `159.89.125.246`
 
 ## Remaining
 
-- HTTPS and a domain; then `COOKIE_SECURE=true`
+- Confirm live DNS for `neshanak.ca` is `159.89.125.246` (panel saved; `htns1` still parking as of 26 Aug 2026 evening)
+- Namespro refund for the duplicate domain invoice (keep WHOIS and the first invoice)
+- HTTPS for `neshanak.ca`; then `COOKIE_SECURE=true` and Compose URLs
+- Namespro domain list showed `neshanak.ca` twice (same expiry); CIRA has one object
 - Stop publishing Postgres (`5432`) in `docker-compose.yml`
 - Optional DigitalOcean cloud firewall in front of `ufw`
 - Ubuntu package updates on the droplet (`apt upgrade`)
