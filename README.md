@@ -11,6 +11,8 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 ## Features
 
 - Account registration, login with optional Remember Me, and logout
+- Change password and delete account from Settings
+- Show Password on password fields
 - Save, edit, delete, favorite, archive, and restore bookmarks
 - Nested folders with move and rename
 - Tags with autocomplete

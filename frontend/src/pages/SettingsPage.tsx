@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { ChangePasswordForm } from "@/features/auth/ChangePasswordForm";
+import { DeleteAccountForm } from "@/features/auth/DeleteAccountForm";
 import type { ImportReport } from "@/types";
 
 export function SettingsPage() {
@@ -47,6 +49,11 @@ export function SettingsPage() {
         </dl>
       </section>
       <section className="rounded-2xl border border-line bg-paper-raised p-6">
+        <h2 className="font-medium">Change Password</h2>
+        <p className="mt-1 text-sm text-ink-muted">Choose A New Password For This Account.</p>
+        <ChangePasswordForm />
+      </section>
+      <section className="rounded-2xl border border-line bg-paper-raised p-6">
         <h2 className="font-medium">Import Bookmarks</h2>
         <p className="mt-1 text-sm text-ink-muted">
           Upload A Netscape Bookmark HTML File Exported From Chrome, Firefox, Or Edge.
@@ -84,6 +91,13 @@ export function SettingsPage() {
         <Button className="mt-4" variant="secondary" onClick={() => exportMutation.mutate()}>
           Export HTML
         </Button>
+      </section>
+      <section className="rounded-2xl border border-red-200 bg-paper-raised p-6">
+        <h2 className="font-medium text-red-800">Delete Account</h2>
+        <p className="mt-1 text-sm text-ink-muted">
+          Permanently Remove This Account And All Of Its Bookmarks, Folders, And Tags.
+        </p>
+        <DeleteAccountForm />
       </section>
     </div>
   );

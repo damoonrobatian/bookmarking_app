@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { errorMessage, useRegister } from "@/hooks/useAuth";
 
 export function RegisterForm() {
@@ -50,9 +51,8 @@ export function RegisterForm() {
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="password">Password</Label>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           autoComplete="new-password"
           minLength={8}
           required

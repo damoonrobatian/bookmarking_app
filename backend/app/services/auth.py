@@ -41,3 +41,24 @@ class AuthService:
             create_token(user.id, "access", remember=remember),
             create_token(user.id, "refresh", remember=remember),
         )
+
+    def change_password(self, user: User, current_password: str, new_password: str) -> None:
+        if not verify_password(current_password, user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Password.",
+            )
+        if current_password == new_password:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="New Password Must Be Different.",
+            )
+        user.password_hash = hash_password(new_password)
+
+    def delete_account(self, user: User, password: str) -> None:
+        if not verify_password(password, user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Password.",
+            )
+        self.users.delete(user)

@@ -78,3 +78,60 @@ def test_invalid_login(client: TestClient) -> None:
 
 def test_unauthenticated_bookmarks(client: TestClient) -> None:
     assert client.get("/api/bookmarks").status_code == 401
+
+
+def test_change_password(client: TestClient) -> None:
+    register_user(client)
+    wrong = client.post(
+        "/api/auth/password",
+        json={"current_password": "wrong-password", "new_password": "new-correct-horse"},
+    )
+    assert wrong.status_code == 401
+    same = client.post(
+        "/api/auth/password",
+        json={"current_password": "correct-horse", "new_password": "correct-horse"},
+    )
+    assert same.status_code == 400
+    changed = client.post(
+        "/api/auth/password",
+        json={"current_password": "correct-horse", "new_password": "new-correct-horse"},
+    )
+    assert changed.status_code == 204
+    client.post("/api/auth/logout")
+    old = client.post(
+        "/api/auth/login",
+        json={"email": "ada@example.com", "password": "correct-horse"},
+    )
+    assert old.status_code == 401
+    new = client.post(
+        "/api/auth/login",
+        json={"email": "ada@example.com", "password": "new-correct-horse"},
+    )
+    assert new.status_code == 200
+
+
+def test_delete_account(client: TestClient) -> None:
+    register_user(client)
+    client.post(
+        "/api/bookmarks",
+        json={"url": "https://fastapi.tiangolo.com/", "title": "FastAPI", "fetch_metadata": False},
+    )
+    wrong = client.request(
+        "DELETE",
+        "/api/auth/account",
+        json={"password": "wrong-password"},
+    )
+    assert wrong.status_code == 401
+    assert client.get("/api/auth/me").status_code == 200
+    deleted = client.request(
+        "DELETE",
+        "/api/auth/account",
+        json={"password": "correct-horse"},
+    )
+    assert deleted.status_code == 204
+    assert client.get("/api/auth/me").status_code == 401
+    again = client.post(
+        "/api/auth/register",
+        json={"email": "ada@example.com", "password": "correct-horse", "display_name": "Ada"},
+    )
+    assert again.status_code == 201

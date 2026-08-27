@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (32) and frontend tests (10)
+- Backend tests (34) and frontend tests (11)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -22,6 +22,7 @@
 - Product rename: **Neshanak** in the UI, API title, and docs (Postgres user/db on the droplet remain `nook`)
 - Remember Me on login: unchecked uses session cookies; checked uses persistent cookies. Refresh keeps that choice.
 - Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
+- Change password and delete account on Settings; Show Password on password fields
 
 ## Remaining
 

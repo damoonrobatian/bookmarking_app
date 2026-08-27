@@ -17,8 +17,12 @@ async function parseError(response: Response, path: string): Promise<ApiError> {
   } catch {
     if (response.status >= 500) message = "Server Unavailable.";
   }
-  const authForm = path.includes("/api/auth/login") || path.includes("/api/auth/register");
-  if (response.status === 401 && !authForm) message = "Session Expired.";
+  const authCredential =
+    path.includes("/api/auth/login") ||
+    path.includes("/api/auth/register") ||
+    path.includes("/api/auth/password") ||
+    path.includes("/api/auth/account");
+  if (response.status === 401 && !authCredential) message = "Session Expired.";
   return { status: response.status, message, duplicate };
 }
 

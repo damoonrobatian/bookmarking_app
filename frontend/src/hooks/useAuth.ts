@@ -43,6 +43,24 @@ export function useLogout() {
   });
 }
 
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: authApi.changePassword,
+  });
+}
+
+export function useDeleteAccount() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: authApi.deleteAccount,
+    onSuccess: () => {
+      queryClient.clear();
+      navigate("/login");
+    },
+  });
+}
+
 export function errorMessage(error: unknown, fallback: string) {
   return (error as ApiError)?.message ?? fallback;
 }

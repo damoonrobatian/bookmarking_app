@@ -34,6 +34,8 @@ Access and refresh tokens are JWTs stored in HTTP-only cookies.
 - Register always uses persistent cookies
 - Logout clears both cookies
 - The frontend retries once with `POST /api/auth/refresh` after a 401
+- `POST /api/auth/password` updates the password hash after checking the current password
+- `DELETE /api/auth/account` verifies the password, deletes the user (cascading bookmarks, folders, and tags), and clears cookies
 
 ## Data model
 
@@ -53,4 +55,4 @@ User-supplied URLs are treated as untrusted. Before fetching a page, the backend
 
 The SPA uses React Router for pages and TanStack Query for server state. Feature folders keep bookmark, folder, tag, and auth UI separate from shared layout and primitives.
 
-Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored.
+Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a Show Password control.

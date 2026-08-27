@@ -24,8 +24,14 @@ When using Docker Compose these URLs are available through the frontend origin a
 | POST | `/api/auth/logout` | Clears cookies |
 | GET | `/api/auth/me` | Current user |
 | POST | `/api/auth/refresh` | Rotates tokens using the refresh cookie, keeping the original Remember Me choice |
+| POST | `/api/auth/password` | Changes the signed-in user's password (`current_password`, `new_password`) |
+| DELETE | `/api/auth/account` | Deletes the signed-in account after `{ "password" }`; clears cookies |
 
 `POST /api/auth/login` accepts `{ "email", "password", "remember_me" }`. Omit `remember_me` or send `false` for session cookies; send `true` to persist cookies until the configured token lifetimes.
+
+`POST /api/auth/password` requires the current password. The new password must be at least 8 characters and different from the current one.
+
+`DELETE /api/auth/account` permanently removes the user and all of that user's bookmarks, folders, and tags.
 
 ## Bookmarks
 

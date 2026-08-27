@@ -68,3 +68,7 @@ Deleting a folder moves its bookmarks and subfolders to the parent folder. Root 
 ## Duplicate bookmarks
 
 Normalized URLs are unique per user. Creating a duplicate returns HTTP 409 and the existing bookmark so the UI can open or update it instead of inserting a second copy.
+
+## Account deletion
+
+`DELETE /api/auth/account` requires the current password. It removes the user and every bookmark, folder, and tag they own. Folder deletion in the library still reparents contents; account deletion does not.

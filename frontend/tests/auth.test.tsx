@@ -54,6 +54,19 @@ describe("login form", () => {
       remember_me: true,
     });
   });
+
+  it("reveals the password when Show Password is clicked", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<LoginForm />);
+    const field = screen.getByLabelText("Password");
+    expect(field).toHaveAttribute("type", "password");
+    await user.type(field, "secret-password");
+    await user.click(screen.getByRole("button", { name: "Show Password" }));
+    expect(field).toHaveAttribute("type", "text");
+    expect(field).toHaveValue("secret-password");
+    await user.click(screen.getByRole("button", { name: "Hide Password" }));
+    expect(field).toHaveAttribute("type", "password");
+  });
 });
 
 describe("register form", () => {

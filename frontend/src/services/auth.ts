@@ -26,3 +26,17 @@ export function logout() {
 export function me() {
   return apiFetch<User>("/api/auth/me");
 }
+
+export function changePassword(payload: { current_password: string; new_password: string }) {
+  return apiFetch<void>("/api/auth/password", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteAccount(payload: { password: string }) {
+  return apiFetch<void>("/api/auth/account", {
+    method: "DELETE",
+    body: JSON.stringify(payload),
+  });
+}
