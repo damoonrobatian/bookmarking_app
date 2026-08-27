@@ -55,6 +55,17 @@ describe("login form", () => {
     });
   });
 
+  it("keeps a save return path on the create-account link", () => {
+    renderWithProviders(
+      <LoginForm />,
+      "/login?next=%2Fsave%3Furl%3Dhttps%253A%252F%252Freact.dev%252Flearn",
+    );
+    expect(screen.getByRole("link", { name: "Create An Account" })).toHaveAttribute(
+      "href",
+      "/register?next=%2Fsave%3Furl%3Dhttps%253A%252F%252Freact.dev%252Flearn",
+    );
+  });
+
   it("reveals the password when Show Password is clicked", async () => {
     const user = userEvent.setup();
     renderWithProviders(<LoginForm />);

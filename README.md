@@ -21,7 +21,8 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Recently added and recently visited views
 - Visit counts
 - Duplicate URL detection
-- Automatic title/favicon retrieval with graceful failure
+- Automatic title, favicon, and tag suggestions when a page is saved
+- Save the current tab from a bookmarks-bar button or a small toolbar extension
 - Netscape HTML import and export
 - Responsive layout for desktop, tablet, and mobile
 
@@ -31,6 +32,7 @@ The repository is a monorepo:
 
 - `backend/` — FastAPI, SQLAlchemy, Alembic, PostgreSQL
 - `frontend/` — React, TypeScript, Vite, Tailwind CSS
+- `extension/` — Unpacked Chrome/Firefox toolbar button
 - `e2e/` — Playwright happy-path tests
 
 See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and SSRF notes.
@@ -46,6 +48,8 @@ See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and
 ## Use the app
 
 Your bookmark library is **https://neshanak.ca** only. Do not run `make backend` / `make frontend` or local Docker as a second copy of your bookmarks.
+
+To save a page you are looking at, sign in at https://neshanak.ca, open Settings, and drag **Save To Neshanak** onto the bookmarks bar. Click that button on any site to open a popup with the URL filled in and a suggested title and tags. For a toolbar button next to the address bar, load the unpacked `extension/` folder (Chrome: Load Unpacked; Firefox: Load Temporary Add-On). Install steps are also in [docs/development.md](docs/development.md).
 
 ## Changing the code
 
@@ -123,6 +127,7 @@ Pushes to `main` run the **CI/CD** workflow (`.github/workflows/ci-cd.yml`): lin
 ```text
 ├── backend/          FastAPI application, Alembic, pytest
 ├── frontend/         React SPA
+├── extension/        Unpacked Chrome/Firefox toolbar button
 ├── e2e/              Playwright
 ├── docs/             Architecture and API notes
 ├── docker-compose.yml

@@ -1,14 +1,17 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { errorMessage, useRegister } from "@/hooks/useAuth";
+import { safeInternalPath } from "@/utils/paths";
 
 export function RegisterForm() {
   const register = useRegister();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = safeInternalPath(params.get("next"));
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +24,7 @@ export function RegisterForm() {
         password,
         display_name: displayName,
       });
-      navigate("/app");
+      navigate(next);
     } catch {
       // error rendered below
     }
@@ -70,7 +73,7 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm text-ink-muted">
         Already Have An Account?{" "}
-        <Link className="font-medium text-accent hover:underline" to="/login">
+        <Link className="font-medium text-accent hover:underline" to={next === "/app" ? "/login" : `/login?next=${encodeURIComponent(next)}`}>
           Sign In
         </Link>
       </p>

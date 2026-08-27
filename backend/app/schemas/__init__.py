@@ -148,6 +148,7 @@ class BookmarkPreview(BaseModel):
     favicon_url: str | None
     page_domain: str | None
     metadata_status: str
+    suggested_tags: list[str] = []
 
 
 class DuplicateBookmark(BaseModel):

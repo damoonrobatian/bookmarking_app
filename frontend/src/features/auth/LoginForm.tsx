@@ -1,14 +1,17 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { errorMessage, useLogin } from "@/hooks/useAuth";
+import { safeInternalPath } from "@/utils/paths";
 
 export function LoginForm() {
   const login = useLogin();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = safeInternalPath(params.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
@@ -17,7 +20,7 @@ export function LoginForm() {
     event.preventDefault();
     try {
       await login.mutateAsync({ email, password, remember_me: rememberMe });
-      navigate("/app");
+      navigate(next);
     } catch {
       // error rendered below
     }
@@ -65,7 +68,7 @@ export function LoginForm() {
       </Button>
       <p className="text-center text-sm text-ink-muted">
         New Here?{" "}
-        <Link className="font-medium text-accent hover:underline" to="/register">
+        <Link className="font-medium text-accent hover:underline" to={next === "/app" ? "/register" : `/register?next=${encodeURIComponent(next)}`}>
           Create An Account
         </Link>
       </p>

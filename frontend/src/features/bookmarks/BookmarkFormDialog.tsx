@@ -19,15 +19,21 @@ export function BookmarkFormDialog({
   bookmark,
   onSubmit,
   title,
+  initialUrl = "",
+  initialTitle = "",
+  variant = "dialog",
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   bookmark?: Bookmark | null;
   title: string;
   onSubmit: (payload: Record<string, unknown>) => Promise<unknown>;
+  initialUrl?: string;
+  initialTitle?: string;
+  variant?: "dialog" | "page";
 }) {
-  const [url, setUrl] = useState(bookmark?.url ?? "");
-  const [bookmarkTitle, setBookmarkTitle] = useState(bookmark?.title ?? "");
+  const [url, setUrl] = useState(bookmark?.url ?? initialUrl);
+  const [bookmarkTitle, setBookmarkTitle] = useState(bookmark?.title ?? initialTitle);
   const [description, setDescription] = useState(bookmark?.description ?? "");
   const [notes, setNotes] = useState(bookmark?.notes ?? "");
   const [folderId, setFolderId] = useState(bookmark?.folder_id ?? "");
@@ -35,6 +41,7 @@ export function BookmarkFormDialog({
   const [favorite, setFavorite] = useState(bookmark?.is_favorite ?? false);
   const [error, setError] = useState<ApiError | null>(null);
   const [titleTouched, setTitleTouched] = useState(Boolean(bookmark));
+  const [tagsTouched, setTagsTouched] = useState(Boolean(bookmark));
   const debouncedUrl = useDebounce(url, 500);
   const folders = useQuery({ queryKey: ["folders"], queryFn: listFolders, enabled: open });
   const tagList = useQuery({ queryKey: ["tags"], queryFn: listTags, enabled: open });
@@ -42,8 +49,8 @@ export function BookmarkFormDialog({
 
   useEffect(() => {
     if (!open) return;
-    setUrl(bookmark?.url ?? "");
-    setBookmarkTitle(bookmark?.title ?? "");
+    setUrl(bookmark?.url ?? initialUrl);
+    setBookmarkTitle(bookmark?.title ?? initialTitle);
     setDescription(bookmark?.description ?? "");
     setNotes(bookmark?.notes ?? "");
     setFolderId(bookmark?.folder_id ?? "");
@@ -51,7 +58,8 @@ export function BookmarkFormDialog({
     setFavorite(bookmark?.is_favorite ?? false);
     setError(null);
     setTitleTouched(Boolean(bookmark));
-  }, [open, bookmark]);
+    setTagsTouched(Boolean(bookmark));
+  }, [open, bookmark, initialUrl, initialTitle]);
 
   useEffect(() => {
     if (!open || bookmark || !debouncedUrl.startsWith("http")) return;
@@ -61,14 +69,15 @@ export function BookmarkFormDialog({
         if (cancelled) return;
         if (!titleTouched && preview.title) setBookmarkTitle(preview.title);
         if (!description && preview.description) setDescription(preview.description);
+        if (!tagsTouched && preview.suggested_tags?.length) setTags(preview.suggested_tags);
       })
       .catch(() => {
-        if (!cancelled) setError({ status: 0, message: "Unable To Retrieve Page Information." });
+        /* Preview is best-effort; URL and title already in the form are enough to save. */
       });
     return () => {
       cancelled = true;
     };
-  }, [debouncedUrl, open, bookmark, titleTouched, description]);
+  }, [debouncedUrl, open, bookmark, titleTouched, description, tagsTouched]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -90,14 +99,7 @@ export function BookmarkFormDialog({
     }
   }
 
-  return (
-    <Modal
-      open={open}
-      onOpenChange={onOpenChange}
-      title={title}
-      description="Save A Page To Your Library. Title And Favicon Can Be Filled In Automatically."
-      className="max-w-xl"
-    >
+  const form = (
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-1.5">
           <Label htmlFor="bookmark-url">URL</Label>
@@ -148,7 +150,7 @@ export function BookmarkFormDialog({
         </div>
         <div className="space-y-1.5">
           <Label>Tags</Label>
-          <TagInput value={tags} onChange={setTags} suggestions={tagList.data ?? []} />
+          <TagInput value={tags} onChange={(next) => { setTagsTouched(true); setTags(next); }} suggestions={tagList.data ?? []} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bookmark-description">Description</Label>
@@ -192,6 +194,21 @@ export function BookmarkFormDialog({
           <Button type="submit">Save Bookmark</Button>
         </div>
       </form>
+  );
+
+  if (variant === "page") {
+    return form;
+  }
+
+  return (
+    <Modal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      description="Save A Page To Your Library. Title And Favicon Can Be Filled In Automatically."
+      className="max-w-xl"
+    >
+      {form}
     </Modal>
   );
 }

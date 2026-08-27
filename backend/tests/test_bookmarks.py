@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from tests.conftest import register_user
@@ -124,3 +125,23 @@ def test_pagination(client: TestClient) -> None:
     assert page.json()["page_size"] == 2
     assert page.json()["total"] == 3
     assert len(page.json()["items"]) == 2
+
+
+def test_preview_suggests_tags(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.services.metadata import PageMetadata
+
+    register_user(client)
+    client.post(
+        "/api/bookmarks",
+        json={"url": "https://react.dev/old", "title": "React", "tags": ["react"], "fetch_metadata": False},
+    )
+
+    def fake_extract(_url: str) -> PageMetadata:
+        return PageMetadata("React Docs", "Learn react", None, "react.dev", "ok", ["javascript"])
+
+    monkeypatch.setattr("app.services.bookmark.extract_metadata", fake_extract)
+    preview = client.post("/api/bookmarks/preview", json={"url": "https://react.dev/learn"})
+    assert preview.status_code == 200
+    tags = preview.json()["suggested_tags"]
+    assert "javascript" in tags
+    assert "react" in tags

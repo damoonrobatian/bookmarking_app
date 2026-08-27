@@ -76,6 +76,7 @@ export type BookmarkPreview = {
   favicon_url: string | null;
   page_domain: string | null;
   metadata_status: string;
+  suggested_tags: string[];
 };
 
 export type ApiError = {

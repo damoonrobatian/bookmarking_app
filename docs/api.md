@@ -49,7 +49,9 @@ When using Docker Compose these URLs are available through the frontend origin a
 
 `GET /api/bookmarks` accepts `folder_id`, `tag`, `favorite`, `archived`, `search`, `sort`, `order`, `page`, `page_size`, and `recent=added|visited`.
 
-A later browser extension can create bookmarks with `POST /api/bookmarks` and `{ "url", "title" }` once an additional client credential is added.
+`POST /api/bookmarks/preview` returns `{ url, title, description, favicon_url, page_domain, metadata_status, suggested_tags }`. Title and description come from Open Graph / HTML. `suggested_tags` combines page keywords (`meta keywords`, `article:tag`) with the user's existing tags that appear in the title, description, or URL, capped at five.
+
+The `/save` page and the toolbar extension create bookmarks with the same `POST /api/bookmarks` call as the library dialog. Session cookies on `https://neshanak.ca` are enough; there is no separate extension credential.
 
 ## Folders and tags
 

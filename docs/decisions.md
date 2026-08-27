@@ -159,3 +159,21 @@ Manual SSH after every push; a webhook listener on the droplet; DigitalOcean App
 ### Date
 
 2026-08-27
+
+---
+
+## Decision
+
+Save the current page through a same-origin `/save` popup, installed as a bookmarklet or an unpacked toolbar extension.
+
+### Reason
+
+A click on another site cannot write to Neshanak directly; the popup must run on `https://neshanak.ca` so HTTP-only cookies are sent. A bookmarklet is enough for most use. A small MV3 extension (`extension/`) adds a toolbar button without a store listing or a separate API key. Tag suggestions stay conservative (page keywords plus the user's own tags found in the page text) so the library is not filled with noisy auto-tags.
+
+### Alternatives considered
+
+A browser-store extension with its own OAuth client; a content-script overlay; creating the bookmark with no confirmation.
+
+### Date
+
+2026-08-27

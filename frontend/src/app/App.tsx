@@ -12,6 +12,7 @@ import {
 import { HomePage } from "@/pages/HomePage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
+import { SavePage } from "@/pages/SavePage";
 import { SettingsPage } from "@/pages/SettingsPage";
 
 const queryClient = new QueryClient({
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
+  { path: "/save", element: <SavePage /> },
   {
     path: "/app",
     element: <AppLayout />,

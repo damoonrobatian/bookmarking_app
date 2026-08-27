@@ -30,4 +30,54 @@ describe("bookmark creation", () => {
     await user.click(screen.getByRole("button", { name: "Save Bookmark" }));
     expect(onSubmit).toHaveBeenCalled();
   });
+
+  it("applies a suggested title and tags for an initial URL", async () => {
+    const onSubmit = vi.fn().mockResolvedValue({});
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((path: string) => {
+        if (path === "/api/bookmarks/preview") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            headers: { get: () => "application/json" },
+            json: async () => ({
+              url: "https://react.dev/learn",
+              title: "React Docs",
+              description: "Learn React",
+              favicon_url: null,
+              page_domain: "react.dev",
+              metadata_status: "ok",
+              suggested_tags: ["javascript"],
+            }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          headers: { get: () => "application/json" },
+          json: async () => [],
+        });
+      }),
+    );
+    render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter>
+          <BookmarkFormDialog
+            open
+            variant="page"
+            onOpenChange={() => undefined}
+            title="Save Bookmark"
+            initialUrl="https://react.dev/learn"
+            initialTitle="React"
+            onSubmit={onSubmit}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    expect(screen.getByDisplayValue("https://react.dev/learn")).toBeInTheDocument();
+    expect(await screen.findByDisplayValue("React Docs", {}, { timeout: 2000 })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "javascript ×" })).toBeInTheDocument();
+  });
 });

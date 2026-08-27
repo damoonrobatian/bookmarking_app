@@ -71,7 +71,7 @@ def preview_bookmark(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> BookmarkPreview:
-    data = BookmarkService(db).preview(payload.url)
+    data = BookmarkService(db).preview(user, payload.url)
     return BookmarkPreview(**data)
 
 

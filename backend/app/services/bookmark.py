@@ -166,12 +166,23 @@ class BookmarkService:
         bookmark.is_archived = False
         return bookmark
 
-    def preview(self, url: str) -> dict[str, str | None]:
+    def preview(self, user: User, url: str) -> dict[str, object]:
         try:
             original = parse_user_url(url)
         except InvalidURLError as exc:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)) from exc
         metadata = extract_metadata(original)
+        suggested = list(metadata.suggested_tags)
+        haystack = " ".join(
+            part.lower() for part in (metadata.title, metadata.description, metadata.page_domain, original) if part
+        )
+        for tag in self.tags.list_for_user(user.id):
+            if tag.name in suggested:
+                continue
+            if tag.name in haystack:
+                suggested.append(tag.name)
+            if len(suggested) >= 5:
+                break
         return {
             "url": original,
             "title": metadata.title,
@@ -179,6 +190,7 @@ class BookmarkService:
             "favicon_url": metadata.favicon_url,
             "page_domain": metadata.page_domain,
             "metadata_status": metadata.status,
+            "suggested_tags": suggested[:5],
         }
 
     def _require_folder(self, user_id: UUID, folder_id: UUID | None) -> None:

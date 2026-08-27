@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
 
 from app.config import get_settings
+from app.repositories.tag import normalize_tag_name
 from app.services.ssrf import UnsafeURLError, validate_public_http_url
 from app.utils.urls import domain_from_url
 
@@ -23,6 +24,7 @@ class PageMetadata:
     favicon_url: str | None
     page_domain: str | None
     status: str
+    suggested_tags: list[str] = field(default_factory=list)
 
 
 def extract_metadata(url: str) -> PageMetadata:
@@ -54,8 +56,8 @@ def extract_metadata(url: str) -> PageMetadata:
     if html is None:
         return PageMetadata(None, None, None, domain, "unavailable")
 
-    title, description, favicon = _parse_html(html, final_url or url)
-    return PageMetadata(title, description, favicon, domain, "ok")
+    title, description, favicon, suggested_tags = _parse_html(html, final_url or url)
+    return PageMetadata(title, description, favicon, domain, "ok", suggested_tags)
 
 
 def _fetch_html(client: httpx.Client, url: str, max_bytes: int, redirects_left: int = 3) -> tuple[str | None, str]:
@@ -80,13 +82,13 @@ def _fetch_html(client: httpx.Client, url: str, max_bytes: int, redirects_left: 
     return content.decode(response.encoding or "utf-8", errors="replace"), str(response.url)
 
 
-def _parse_html(html: str, base_url: str) -> tuple[str | None, str | None, str | None]:
+def _parse_html(html: str, base_url: str) -> tuple[str | None, str | None, str | None, list[str]]:
     soup = BeautifulSoup(html, "html.parser")
     og_title = _meta(soup, property="og:title")
     title = og_title or (soup.title.string.strip() if soup.title and soup.title.string else None)
     description = _meta(soup, property="og:description") or _meta(soup, name="description")
     favicon = _favicon(soup, base_url)
-    return title, description, favicon
+    return title, description, favicon, _suggested_tags(soup)
 
 
 def _meta(soup: BeautifulSoup, *, property: str | None = None, name: str | None = None) -> str | None:
@@ -109,3 +111,44 @@ def _favicon(soup: BeautifulSoup, base_url: str) -> str | None:
         return urljoin(base_url, str(href))
     parsed = urlparse(base_url)
     return f"{parsed.scheme}://{parsed.netloc}/favicon.ico"
+
+
+_SKIP_TAGS = {
+    "a",
+    "an",
+    "and",
+    "com",
+    "for",
+    "from",
+    "html",
+    "http",
+    "https",
+    "in",
+    "of",
+    "on",
+    "or",
+    "org",
+    "the",
+    "to",
+    "www",
+}
+
+
+def _suggested_tags(soup: BeautifulSoup) -> list[str]:
+    raw: list[str] = []
+    keywords = _meta(soup, name="keywords")
+    if keywords:
+        raw.extend(keywords.split(","))
+    for tag in soup.find_all("meta", attrs={"property": "article:tag"}):
+        content = tag.get("content")
+        if content:
+            raw.append(str(content))
+    suggested: list[str] = []
+    for item in raw:
+        name = normalize_tag_name(str(item))
+        if len(name) < 2 or len(name) > 32 or name in _SKIP_TAGS or name in suggested:
+            continue
+        suggested.append(name)
+        if len(suggested) >= 5:
+            break
+    return suggested

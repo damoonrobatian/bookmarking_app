@@ -92,6 +92,24 @@ export function SettingsPage() {
           Export HTML
         </Button>
       </section>
+      <section className="rounded-2xl border border-line bg-paper-raised p-6">
+        <h2 className="font-medium">Save From The Browser</h2>
+        <p className="mt-1 text-sm text-ink-muted">
+          Drag The Button Below Onto Your Bookmarks Bar. On Any Page, Click It To Open A Save Popup With The Address Filled In.
+        </p>
+        <a
+          className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
+          href={`javascript:void((function(){var u=encodeURIComponent(location.href);var t=encodeURIComponent(document.title||'');window.open(${JSON.stringify(typeof window === "undefined" ? "https://neshanak.ca" : window.location.origin)}+'/save?url='+u+'&title='+t,'neshanak-save','popup=yes,width=520,height=760');})())`}
+          onClick={(event) => event.preventDefault()}
+        >
+          Save To Neshanak
+        </a>
+        <p className="mt-4 text-sm text-ink-muted">
+          For A Toolbar Button Next To The Address Bar, Load The Unpacked Extension Folder From This Repository:{" "}
+          <code className="text-ink">extension/</code>. Chrome: Extensions → Load Unpacked. Firefox: about:debugging → Load Temporary Add-On (select{" "}
+          <code className="text-ink">extension/manifest.json</code>).
+        </p>
+      </section>
       <section className="rounded-2xl border border-red-200 bg-paper-raised p-6">
         <h2 className="font-medium text-red-800">Delete Account</h2>
         <p className="mt-1 text-sm text-ink-muted">

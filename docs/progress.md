@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (35) and frontend tests (14)
+- Backend tests (37) and frontend tests (19)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -25,6 +25,7 @@
 - Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
 - Change password and delete account on Settings; Show Password on password fields
 - Copy URL on each bookmark card (clipboard + toast)
+- Save the current page from a Settings bookmarklet or the unpacked `extension/` toolbar button; `/save` popup auto-fills URL, suggested title, and tags
 
 ## Remaining
 

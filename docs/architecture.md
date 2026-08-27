@@ -57,4 +57,8 @@ User-supplied URLs are treated as untrusted. Before fetching a page, the backend
 
 The SPA uses React Router for pages and TanStack Query for server state. Feature folders keep bookmark, folder, tag, and auth UI separate from shared layout and primitives.
 
+`/save` is a compact page (no app chrome) used as a popup. Query parameters supply the page URL and `document.title`. The form then calls `POST /api/bookmarks/preview` for a better title and suggested tags. Signed-out visitors are sent to `/login?next=/save?...`; `safeInternalPath` keeps that return path on this origin.
+
+The Settings bookmarklet and the unpacked extension in `extension/` open that popup on `https://neshanak.ca` so existing login cookies apply (`SameSite=Lax`).
+
 Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a Show Password control.

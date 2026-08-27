@@ -76,3 +76,14 @@ Normalized URLs are unique per user. Creating a duplicate returns HTTP 409 and t
 ## Account deletion
 
 `DELETE /api/auth/account` requires the current password. It removes the user and every bookmark, folder, and tag they own. Folder deletion in the library still reparents contents; account deletion does not.
+
+## Save from the browser
+
+The live app's Settings page has a **Save To Neshanak** bookmarklet. Drag it to the bookmarks bar, then click it on any page. A popup opens `https://neshanak.ca/save` with the address filled in; title and tags are suggested from the page.
+
+For a button next to the address bar, load the unpacked folder `extension/`:
+
+- Chrome: `chrome://extensions` → Developer Mode → Load Unpacked → `extension/`
+- Firefox: `about:debugging#/runtime/this-firefox` → Load Temporary Add-On → `extension/manifest.json`
+
+The extension always opens `https://neshanak.ca/save`. You must already be signed in there.
