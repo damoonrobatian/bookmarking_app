@@ -279,6 +279,19 @@ A push to `main` runs `.github/workflows/ci-cd.yml`: tests, then SSH to the drop
 
 The droplet is reset to `origin/main` on each deploy (`git reset --hard`). Keep secrets in the droplet `.env` (gitignored), not in the repo. The deploy key is the GitHub Actions secret `DROPLET_SSH_KEY`; it is not the laptop SSH key.
 
+The 1 GB droplet uses a 2 GB `/swapfile`. Without it, `docker compose --build` can exhaust RAM and the machine stops answering SSH and HTTPS. After a new droplet:
+
+```bash
+fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+printf 'vm.swappiness=10\n' > /etc/sysctl.d/99-swap.conf
+sysctl -p /etc/sysctl.d/99-swap.conf
+```
+
+
 Manual deploy (if the Action fails):
 
 ```bash

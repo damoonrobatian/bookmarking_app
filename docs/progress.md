@@ -16,6 +16,7 @@
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
 - Live HTTPS app at `https://neshanak.ca` (public HTTP on port 8080 is closed)
+- 2 GB swap on the droplet so Compose rebuilds do not freeze the 1 GB machine
 - Host firewall (`ufw`): OpenSSH + 80/tcp + 443; 5432, 8000, and 8080 not public
 - Domain `neshanak.ca` registered at Namespro / CIRA (3 years, to 2029-08-26)
 - Namespro DNS Hosting - Free; A records `@` and `www` → `159.89.125.246` (ticket 790542899 confirmed 26 Aug 2026 21:15; htns1 and this laptop verified)
