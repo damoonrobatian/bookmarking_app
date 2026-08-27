@@ -83,22 +83,13 @@ export function AppLayout() {
           <SideLink to="/app/tags" icon={<Tag className="h-4 w-4" />}>
             Tags
           </SideLink>
+          <SideLink to="/settings" icon={<Settings className="h-4 w-4" />}>
+            Settings
+          </SideLink>
         </nav>
         <div className="mt-6 flex-1 overflow-y-auto">
           <FolderTree />
         </div>
-        <NavLink
-          to="/settings"
-          className={({ isActive }) =>
-            cn(
-              "mt-4 flex items-center gap-2 rounded-lg px-2 py-2 text-sm",
-              isActive ? "bg-accent-soft font-medium text-accent-hover" : "text-ink-muted hover:bg-paper-sunken",
-            )
-          }
-        >
-          <Settings className="h-4 w-4" />
-          Settings
-        </NavLink>
       </aside>
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-line bg-paper/90 px-4 py-3 backdrop-blur">
