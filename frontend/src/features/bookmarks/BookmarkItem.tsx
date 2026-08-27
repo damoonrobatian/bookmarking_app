@@ -1,6 +1,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Archive, MoreHorizontal, Pencil, Star, Trash2, FolderInput } from "lucide-react";
-import type { ReactNode } from "react";
+import { Archive, Check, Copy, FolderInput, MoreHorizontal, Pencil, Star, Trash2 } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import type { Bookmark } from "@/types";
 import { cn } from "@/utils/cn";
 
@@ -25,6 +26,24 @@ export function BookmarkItem({
   onRestore: () => void;
   onDelete: () => void;
 }) {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = window.setTimeout(() => setCopied(false), 1500);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+
+  async function copyUrl() {
+    try {
+      await navigator.clipboard.writeText(bookmark.url);
+      setCopied(true);
+      toast.success("URL Copied.");
+    } catch {
+      toast.error("Couldn't Copy The URL.");
+    }
+  }
+
   const body = (
     <>
       <img
@@ -80,6 +99,14 @@ export function BookmarkItem({
         <button
           type="button"
           className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-accent"
+          aria-label="Copy URL"
+          onClick={() => void copyUrl()}
+        >
+          {copied ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
+        </button>
+        <button
+          type="button"
+          className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-accent"
           aria-label={bookmark.is_favorite ? "Remove Favorite" : "Add Favorite"}
           onClick={onFavorite}
         >
@@ -97,6 +124,9 @@ export function BookmarkItem({
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="z-50 min-w-40 rounded-xl border border-line bg-paper-raised p-1 shadow-card">
+              <MenuItem icon={<Copy className="h-4 w-4" />} onSelect={() => void copyUrl()}>
+                Copy URL
+              </MenuItem>
               <MenuItem icon={<Pencil className="h-4 w-4" />} onSelect={onEdit}>
                 Edit
               </MenuItem>

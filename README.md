@@ -13,7 +13,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Account registration, login with Remember Me (on by default), and logout
 - Change password and delete account from Settings
 - Show Password on password fields
-- Save, edit, delete, favorite, archive, and restore bookmarks
+- Save, edit, delete, favorite, archive, restore, and copy a bookmark URL
 - Nested folders with move and rename
 - Tags with autocomplete
 - Search across title, URL, domain, description, notes, and tags

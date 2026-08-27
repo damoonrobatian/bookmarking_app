@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (35) and frontend tests (13)
+- Backend tests (35) and frontend tests (14)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -24,6 +24,7 @@
 - Remember Me on login: checked by default (persistent cookies, up to `REFRESH_TOKEN_EXPIRE_DAYS`). Unchecked uses session cookies. `GET /api/auth/me` refreshes an expired access cookie. Refresh rotation keeps that choice.
 - Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
 - Change password and delete account on Settings; Show Password on password fields
+- Copy URL on each bookmark card (clipboard + toast)
 
 ## Remaining
 
