@@ -53,16 +53,11 @@ See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and
 
 Your bookmark library is **https://neshanak.ca** only. Do not run `make backend` / `make frontend` or local Docker as a second copy of your bookmarks.
 
-To save a page you are looking at:
+To save a page you are looking at, open **Settings → Save From The Browser**. Three methods, easiest first:
 
-1. Sign in at https://neshanak.ca, open **Settings**, then **Save From The Browser**.
-2. Show the browser bookmarks bar if it is hidden: Chrome, Edge, and Firefox use Ctrl+Shift+B (Mac: Command+Shift+B). You can also right-click under the address bar and enable Bookmarks Bar / Bookmarks Toolbar.
-3. Download **Bar Button**. Then import the file:
-   - **Chrome / Edge:** three dots at the **top right of the browser** (next to your profile), not inside Bookmark Manager → **Bookmarks and lists** → **Import bookmarks and settings**. If it asks where to import from, pick **Bookmarks HTML File**, then open `Save To Neshanak.html`. Drag **Save To Neshanak** from **Other bookmarks** onto the bar.
-   - **Firefox:** three lines → **Bookmarks** → **Manage Bookmarks** (or Ctrl+Shift+O). **Import and Backup** → **Import Bookmarks from HTML**. Firefox puts it in the **Bookmarks Menu**; drag it onto the toolbar.
-4. On any site, click **Save To Neshanak** on the bar. A popup opens with the address filled in and a suggested title and tags.
-
-For a button next to the address bar instead, load the unpacked `extension/` folder (Chrome: Load Unpacked; Firefox: Load Temporary Add-On). Full steps are in [docs/development.md](docs/development.md).
+1. **Drag to the bookmarks bar** (no icon). Show the bar with Ctrl+Shift+B (Mac: Command+Shift+B), then drag **Save To Neshanak** onto it. The save action works; the button is text only.
+2. **Button next to the address bar.** Load the unpacked `extension/` folder (Chrome/Edge: Load unpacked; Firefox: Load Temporary Add-on).
+3. **Bookmarks bar button with icon** (hardest). Download **Bar button**, then import `Save To Neshanak.html`. Chrome/Edge: browser three-dots menu → **Bookmarks and lists** → **Import bookmarks and settings**. Firefox: **Manage Bookmarks** → **Import and Backup** → **Import Bookmarks from HTML**. Full steps are in [docs/development.md](docs/development.md).
 
 ## Changing the code
 

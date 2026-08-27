@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -14,7 +14,6 @@ import {
   bookmarkletNetscapeHtml,
   downloadBookmarkletHtml,
   saveBookmarkletHref,
-  setBookmarkletDragImage,
 } from "@/utils/bookmarklet";
 import { cn } from "@/utils/cn";
 
@@ -188,6 +187,7 @@ function ExportBody() {
 
 function SaveFromBrowserBody() {
   const href = saveBookmarkletHref();
+  const [browser, setBrowser] = useState<"chrome" | "firefox">("chrome");
   const [downloadError, setDownloadError] = useState("");
 
   async function downloadBarButton() {
@@ -201,68 +201,147 @@ function SaveFromBrowserBody() {
   }
 
   return (
-    <>
-      <p className="text-sm text-ink-muted">
-        Download the file, then import it as bookmarks. Chrome and Edge hide the import command in the browser menu, not in Bookmark Manager. Firefox puts the imported button in the Bookmarks Menu, not on the bar, until you drag it there.
-      </p>
-      <p className="mt-4 text-sm font-medium">Chrome or Edge</p>
-      <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-        <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-        <li>Download bar button.</li>
-        <li>
-          Click the three dots at the top right of the whole browser window, next to your profile. Not the dots inside Ctrl+Shift+O. Then Bookmarks and lists → Import bookmarks and settings.
-        </li>
-        <li>
-          If it asks what to import from, choose Bookmarks HTML file. Open Save To Neshanak.html from Downloads.
-        </li>
-        <li>
-          Look in Other Bookmarks (a folder at the end of the bar). Drag Save To Neshanak onto the bar.
-        </li>
-      </ol>
-      <p className="mt-4 text-sm font-medium">Firefox</p>
-      <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-        <li>Show the bookmarks toolbar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-        <li>Download bar button again after this fix. Delete any blank Save To Neshanak already on the toolbar or in the Bookmarks Menu.</li>
-        <li>
-          Click the three lines at the top right → Bookmarks → Manage Bookmarks. Or press Ctrl+Shift+O (Mac: Command+Shift+O). Do not use Settings → Import data; that path skips the logo.
-        </li>
-        <li>
-          In that window, click Import and Backup → Import Bookmarks from HTML. Open the new Save To Neshanak.html from Downloads.
-        </li>
-        <li>
-          Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak onto the Bookmarks Toolbar. Restart Firefox if the mark still does not appear.
-        </li>
-      </ol>
-      <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>
-        Download bar button
-      </Button>
-      {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
-      <p className="mt-6 text-sm text-ink-muted">
-        Or drag this onto the bar. The save action works; Chrome and Edge still hide the logo on a dragged script.
-      </p>
-      <a
-        className="mt-3 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
-        href={href}
-        onClick={(event) => event.preventDefault()}
-        onDragStart={setBookmarkletDragImage}
+    <div className="space-y-6">
+      <Method
+        step={1}
+        title="Drag To The Bookmarks Bar"
+        note="Easiest. Works without the Neshanak icon. After you drop it, the bar shows the words Save To Neshanak, not the terracotta mark."
       >
-        <img
-          data-bookmarklet-mark
-          src="/favicon-32.png"
-          alt=""
-          width={32}
-          height={32}
-          className="h-5 w-5 rounded-sm"
-          draggable={false}
-        />
-        Save To Neshanak
-      </a>
-      <p className="mt-4 text-sm text-ink-muted">
-        For a button next to the address bar instead of on the bookmarks bar, load the unpacked folder{" "}
-        <code className="text-ink">extension/</code> from this repository. Chrome: chrome://extensions → Developer mode → Load unpacked → select the{" "}
-        <code className="text-ink">extension</code> folder. Firefox: about:debugging → This Firefox → Load Temporary Add-on → select{" "}
-        <code className="text-ink">extension/manifest.json</code>.
-      </p>
-    </>
+        <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+          <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+          <li>Drag the control below onto the bar.</li>
+          <li>Open a page you want to keep and click Save To Neshanak.</li>
+        </ol>
+        <a
+          className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
+          href={href}
+          onClick={(event) => event.preventDefault()}
+        >
+          Save To Neshanak
+        </a>
+      </Method>
+
+      <fieldset className="min-w-0 border-0 p-0">
+        <legend className="text-sm font-medium">Which browser are you using?</legend>
+        <p className="mt-1 text-sm text-ink-muted">The next two methods show steps for that browser only.</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant={browser === "chrome" ? "primary" : "secondary"}
+            aria-pressed={browser === "chrome"}
+            onClick={() => setBrowser("chrome")}
+          >
+            Chrome or Edge
+          </Button>
+          <Button
+            type="button"
+            variant={browser === "firefox" ? "primary" : "secondary"}
+            aria-pressed={browser === "firefox"}
+            onClick={() => setBrowser("firefox")}
+          >
+            Firefox
+          </Button>
+        </div>
+      </fieldset>
+
+      <Method
+        step={2}
+        title="Button Next To The Address Bar"
+        note="A Neshanak button beside the address bar, not on the bookmarks bar. Load the unpacked extension from this repository."
+      >
+        {browser === "chrome" ? (
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>
+              Open <code className="text-ink">chrome://extensions</code> (Edge:{" "}
+              <code className="text-ink">edge://extensions</code>).
+            </li>
+            <li>Turn on Developer mode.</li>
+            <li>
+              Click Load unpacked and select the <code className="text-ink">extension</code> folder from this
+              repository.
+            </li>
+          </ol>
+        ) : (
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>
+              Open <code className="text-ink">about:debugging</code>.
+            </li>
+            <li>Click This Firefox, then Load Temporary Add-on.</li>
+            <li>
+              Select <code className="text-ink">extension/manifest.json</code> from this repository. Firefox
+              removes a temporary add-on when the browser restarts; load it again after a restart.
+            </li>
+          </ol>
+        )}
+      </Method>
+
+      <Method
+        step={3}
+        title="Bookmarks Bar Button With Icon"
+        note="Hardest. Import a bookmark file so the bar button can show the Neshanak icon. Dragging from method 1 will not add the icon."
+      >
+        {browser === "chrome" ? (
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+            <li>Download bar button.</li>
+            <li>
+              Click the three dots at the top right of the whole browser window, next to your profile. Not the
+              dots inside Ctrl+Shift+O. Then Bookmarks and lists → Import bookmarks and settings.
+            </li>
+            <li>
+              If it asks what to import from, choose Bookmarks HTML file. Open Save To Neshanak.html from
+              Downloads.
+            </li>
+            <li>Look in Other Bookmarks (a folder at the end of the bar). Drag Save To Neshanak onto the bar.</li>
+          </ol>
+        ) : (
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>Show the bookmarks toolbar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+            <li>
+              Delete any blank Save To Neshanak already on the toolbar or in the Bookmarks Menu, then download
+              bar button.
+            </li>
+            <li>
+              Click the three lines at the top right → Bookmarks → Manage Bookmarks. Or press Ctrl+Shift+O (Mac:
+              Command+Shift+O). Do not use Settings → Import data; that path skips the logo.
+            </li>
+            <li>
+              In that window, click Import and Backup → Import Bookmarks from HTML. Open Save To Neshanak.html
+              from Downloads.
+            </li>
+            <li>
+              Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak onto the Bookmarks Toolbar. Restart Firefox
+              if the mark still does not appear.
+            </li>
+          </ol>
+        )}
+        <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>
+          Download bar button
+        </Button>
+        {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
+      </Method>
+    </div>
+  );
+}
+
+function Method({
+  step,
+  title,
+  note,
+  children,
+}: {
+  step: number;
+  title: string;
+  note: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="rounded-xl border border-line bg-paper px-4 py-4">
+      <h3 className="font-medium">
+        {step}. {title}
+      </h3>
+      <p className="mt-1 text-sm text-ink-muted">{note}</p>
+      <div className="mt-3">{children}</div>
+    </section>
   );
 }

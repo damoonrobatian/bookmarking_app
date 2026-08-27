@@ -29,12 +29,31 @@ describe("settings", () => {
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
   });
 
-  it("shows the logo on the bookmarklet you drag to the bar", () => {
+  it("separates save methods and shows only the chosen browser", async () => {
+    const user = userEvent.setup();
     renderSettings("/settings/save-from-browser");
+
+    expect(screen.getByRole("heading", { name: "1. Drag To The Bookmarks Bar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "2. Button Next To The Address Bar" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "3. Bookmarks Bar Button With Icon" })).toBeInTheDocument();
+    expect(screen.getByText(/Works without the Neshanak icon/)).toBeInTheDocument();
+
     const link = screen.getByRole("link", { name: "Save To Neshanak" });
-    expect(link.querySelector("img")).toHaveAttribute("src", "/favicon-32.png");
-    const href = link.getAttribute("href") ?? "";
-    expect(href.startsWith("javascript:")).toBe(true);
+    expect(link.querySelector("img")).toBeNull();
+    expect(link.getAttribute("href") ?? "").toMatch(/^javascript:/);
+
+    expect(screen.getByRole("button", { name: "Chrome or Edge", pressed: true })).toBeInTheDocument();
+    expect(screen.getByText("chrome://extensions")).toBeInTheDocument();
+    expect(screen.getByText(/Other Bookmarks/)).toBeInTheDocument();
+    expect(screen.queryByText("about:debugging")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Import Bookmarks from HTML/)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Download bar button" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Firefox" }));
+    expect(screen.getByRole("button", { name: "Firefox", pressed: true })).toBeInTheDocument();
+    expect(screen.getByText("about:debugging")).toBeInTheDocument();
+    expect(screen.getByText(/Import Bookmarks from HTML/)).toBeInTheDocument();
+    expect(screen.queryByText("chrome://extensions")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Other Bookmarks/)).not.toBeInTheDocument();
   });
 });

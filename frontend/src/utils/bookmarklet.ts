@@ -57,18 +57,6 @@ export function downloadBookmarkletHtml(html: string): void {
   URL.revokeObjectURL(url);
 }
 
-export function setBookmarkletDragImage(event: { currentTarget: EventTarget; dataTransfer: DataTransfer | null }): void {
-  const transfer = event.dataTransfer;
-  const target = event.currentTarget;
-  if (!transfer || !(target instanceof Element)) {
-    return;
-  }
-  const mark = target.querySelector("[data-bookmarklet-mark]");
-  if (mark instanceof HTMLImageElement) {
-    transfer.setDragImage(mark, 8, 8);
-  }
-}
-
 function escapeAttr(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }

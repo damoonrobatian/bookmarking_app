@@ -79,24 +79,29 @@ Normalized URLs are unique per user. Creating a duplicate returns HTTP 409 and t
 
 ## Save from the browser
 
-This adds a clickable **Save To Neshanak** control on pages you want to keep. It is a bookmarklet: a bookmark whose address is a small script. It must sit on the **bookmarks bar** (the strip under the address bar), not only in Settings.
+This adds a clickable **Save To Neshanak** control on pages you want to keep. Settings → **Save From The Browser** lists three methods, easiest first. Pick **Chrome or Edge** or **Firefox** before methods 2 and 3; only that browser’s steps are shown.
 
-### Bookmarks bar button
+### 1. Drag to the bookmarks bar (easiest, no icon)
+
+A bookmarklet: a bookmark whose address is a small script. Drag **Save To Neshanak** onto the **bookmarks bar** (the strip under the address bar). The save action works. The bar button is text only; Chrome and Edge will not show the Neshanak icon on a dragged `javascript:` bookmark.
 
 1. Sign in at https://neshanak.ca, open **Settings**, then **Save From The Browser**.
-2. Show the bookmarks bar if you cannot see it:
-   - Chrome, Edge, and Firefox: **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
-   - Or right-click the empty area under the address bar and enable **Bookmarks Bar** / **Bookmarks Toolbar**.
-3. Download **Bar Button**. Chrome and Edge: the three dots at the top right of the **browser window** (beside the profile), then **Bookmarks and lists** → **Import bookmarks and settings**. Pick **Bookmarks HTML File** if asked, and open `Save To Neshanak.html`. Drag **Save To Neshanak** from **Other bookmarks** onto the bar. Firefox: delete any blank copy first, then **Manage Bookmarks** (Ctrl+Shift+O) → **Import and Backup** → **Import Bookmarks from HTML** (not Settings → Import Data). Firefox puts the item in the Bookmarks Menu; drag it onto the toolbar.
-4. Visit the page you want to save. Click **Save To Neshanak** on the bar. A popup opens `https://neshanak.ca/save` with the address filled in. Title and tags are suggested from the tab title, the page heading, and your existing tags when they match.
+2. Show the bookmarks bar if it is hidden: **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
+3. Drag the control onto the bar.
+4. Visit the page you want to save and click **Save To Neshanak**. A popup opens `https://neshanak.ca/save` with the address filled in. Title and tags are suggested from the tab title, the page heading, and your existing tags when they match.
 
 If popups are blocked, allow popups for `neshanak.ca` and try again.
 
-### Toolbar extension
+### 2. Button next to the address bar
 
-For a button next to the address bar, load the unpacked folder `extension/` from this repository:
+Load the unpacked folder `extension/` from this repository:
 
-- Chrome: `chrome://extensions` → enable Developer Mode → Load Unpacked → select the `extension` folder
-- Firefox: `about:debugging#/runtime/this-firefox` → Load Temporary Add-On → select `extension/manifest.json`
+- Chrome: `chrome://extensions` → Developer mode → Load unpacked → select the `extension` folder
+- Edge: `edge://extensions`, then the same steps
+- Firefox: `about:debugging` → This Firefox → Load Temporary Add-on → select `extension/manifest.json`
 
 The extension always opens `https://neshanak.ca/save`. You must already be signed in there. Firefox removes a temporary add-on when the browser restarts; load it again after a restart.
+
+### 3. Bookmarks bar button with icon (hardest)
+
+Download **Bar button**, then import the HTML file. Chrome and Edge: the three dots at the top right of the **browser window** (beside the profile), then **Bookmarks and lists** → **Import bookmarks and settings**. Pick **Bookmarks HTML file** if asked, and open `Save To Neshanak.html`. Drag **Save To Neshanak** from **Other bookmarks** onto the bar. Firefox: delete any blank copy first, then **Manage Bookmarks** (Ctrl+Shift+O) → **Import and Backup** → **Import Bookmarks from HTML** (not Settings → Import data). Firefox puts the item in the Bookmarks Menu; drag it onto the toolbar.
