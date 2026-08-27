@@ -13,7 +13,7 @@ from app.utils.urls import domain_from_url
 
 logger = logging.getLogger(__name__)
 
-USER_AGENT = "NookBookmarkManager/0.1 (+https://github.com/nook)"
+USER_AGENT = "NeshanakBookmarkManager/0.1 (+https://github.com/damoonrobatian/bookmarking_app)"
 
 
 @dataclass

@@ -1,8 +1,8 @@
-# Nook
+# Neshanak
 
 A personal bookmark manager for saving, organizing, searching, and revisiting the pages you want to keep.
 
-Nook is similar in spirit to a dedicated bookmarking tool: folders, tags, favorites, archive, import/export, and automatic page metadata — without social features.
+Neshanak is similar in spirit to a dedicated bookmarking tool: folders, tags, favorites, archive, import/export, and automatic page metadata — without social features.
 
 ## Screenshots
 

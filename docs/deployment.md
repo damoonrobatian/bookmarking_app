@@ -1,6 +1,6 @@
-# Deploying Nook on DigitalOcean
+# Deploying Neshanak on DigitalOcean
 
-This is the path used to put Nook on a small DigitalOcean droplet so other machines can reach the same library. Docker runs **on the droplet**, not on your laptop.
+This is the path used to put Neshanak on a small DigitalOcean droplet so other machines can reach the same library. Docker runs **on the droplet**, not on your laptop.
 
 You do not need Docker installed locally for this.
 
@@ -43,7 +43,7 @@ This deploy is **HTTP**, not HTTPS. Cookies work on that origin with `COOKIE_SEC
 
 ## Cost (as of this write-up)
 
-- **1 GB RAM** Basic droplet: about **$6/month**. This is the smallest size recommended for Nook.
+- **1 GB RAM** Basic droplet: about **$6/month**. This is the smallest size recommended for Neshanak.
 - **512 MB** is too small for PostgreSQL + API + website in Docker.
 - **2 GB** (~$12/month) is more comfortable, not required.
 - DigitalOcean **automated backups** are optional; they usually add about **20%** of the droplet price (about $1.20/month on a $6 plan). They snapshot the whole disk, including the database volume.
@@ -211,7 +211,7 @@ HTTPS needs a **name** at CIRA, not only the droplet IP. Let's Encrypt will not 
 | Name servers | `htns1.namespro.ca`, `htns2.namespro.ca`, `htns3.namespro.ca` |
 | Intended A records | `@` / `neshanak.ca` → `159.89.125.246`; `www` → `159.89.125.246` |
 
-The site title in the app can stay **Nook**. The public hostname is `neshanak.ca`.
+The product name in the app is **Neshanak**. The public hostname is `neshanak.ca`. The Ubuntu droplet hostname and PostgreSQL user/database remain `nook` from the first deploy; renaming those would break the running volume.
 
 Until DNS and TLS are working, keep using **http://159.89.125.246:8080**.
 
@@ -287,4 +287,4 @@ Still open:
 
 ## Local PostgreSQL vs this droplet
 
-Running Nook on your laptop (`make backend` / `make frontend`) uses your **local** database. The droplet is a **second** instance. Syncing across machines means everyone uses the droplet URL, not the laptop.
+Running Neshanak on your laptop (`make backend` / `make frontend`) uses your **local** database. The droplet is a **second** instance. Syncing across machines means everyone uses the droplet URL, not the laptop.

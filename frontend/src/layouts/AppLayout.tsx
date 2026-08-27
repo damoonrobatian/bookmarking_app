@@ -60,7 +60,7 @@ export function AppLayout() {
       >
         <div className="mb-6 flex items-center justify-between">
           <Link to="/app" className="font-serif text-2xl">
-            Nook
+            Neshanak
           </Link>
           {!isDesktop ? (
             <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close menu">

@@ -1,6 +1,6 @@
 # Architecture
 
-Nook is a personal bookmark manager split into a FastAPI backend and a React frontend.
+Neshanak is a personal bookmark manager split into a FastAPI backend and a React frontend.
 
 ## High-level shape
 

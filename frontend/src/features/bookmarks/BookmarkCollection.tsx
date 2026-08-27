@@ -18,7 +18,7 @@ import {
 import type { Bookmark, BookmarkFilters } from "@/types";
 import { Button } from "@/components/ui/button";
 
-const VIEW_KEY = "nook.view";
+const VIEW_KEY = "neshanak.view";
 
 export function BookmarkCollection({
   title,

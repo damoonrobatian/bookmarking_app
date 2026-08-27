@@ -19,6 +19,7 @@
 - Host firewall (`ufw`): OpenSSH + 8080/tcp; 5432 and 8000 not public
 - Domain `neshanak.ca` registered at Namespro / CIRA (3 years, to 2029-08-26)
 - Namespro web setting: DNS Hosting - Free; intended A records to `159.89.125.246`
+- Product rename: **Neshanak** in the UI, API title, and docs (Postgres user/db on the droplet remain `nook`)
 
 ## Remaining
 

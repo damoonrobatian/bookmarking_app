@@ -1,1 +1,1 @@
-"""Nook backend package."""
+"""Neshanak backend package."""

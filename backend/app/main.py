@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def create_app() -> FastAPI:
     settings = get_settings()
     application = FastAPI(
-        title="Nook API",
+        title="Neshanak API",
         description="Personal bookmark manager",
         version="0.1.0",
         docs_url="/docs",
