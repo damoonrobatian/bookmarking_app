@@ -1,5 +1,5 @@
 export const NESHANAK_ORIGIN = "https://neshanak.ca";
-export const BOOKMARKLET_TITLE = "Save To Neshanak";
+export const BOOKMARKLET_TITLE = "+Neshanak";
 
 export function saveBookmarkletHref(origin?: string): string {
   const appOrigin =

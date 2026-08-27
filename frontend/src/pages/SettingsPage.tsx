@@ -187,7 +187,8 @@ function ExportBody() {
 
 function SaveFromBrowserBody() {
   const href = saveBookmarkletHref();
-  const [browser, setBrowser] = useState<"chrome" | "firefox">("chrome");
+  const [addressBarBrowser, setAddressBarBrowser] = useState<"chrome" | "firefox">("chrome");
+  const [iconBarBrowser, setIconBarBrowser] = useState<"chrome" | "firefox">("chrome");
   const [downloadError, setDownloadError] = useState("");
 
   async function downloadBarButton() {
@@ -202,55 +203,40 @@ function SaveFromBrowserBody() {
 
   return (
     <div className="space-y-6">
+      <p className="text-sm text-ink-muted">
+        There are three ways to add a save button to your browser. The first way is the easiest: you drag a
+        button onto the bookmarks bar.
+      </p>
+
       <Method
         step={1}
         title="Drag To The Bookmarks Bar"
-        note="Easiest. Works without the Neshanak icon. After you drop it, the bar shows the words Save To Neshanak, not the terracotta mark."
+        note="This adds a +Neshanak button to your bookmarks bar, the strip under the address bar. It works in Google Chrome and Mozilla Firefox."
       >
         <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-          <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-          <li>Drag the control below onto the bar.</li>
-          <li>Open a page you want to keep and click Save To Neshanak.</li>
+          <li>
+            If you cannot see the bookmarks bar, press Ctrl+Shift+B (on a Mac, Command+Shift+B).
+          </li>
+          <li>Drag the orange button onto the bookmarks bar.</li>
+          <li>Open a page you want to save, then click +Neshanak on the bar.</li>
         </ol>
         <a
           className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
           href={href}
           onClick={(event) => event.preventDefault()}
         >
-          Save To Neshanak
+          Drag me to the bookmarks bar
         </a>
       </Method>
-
-      <fieldset className="min-w-0 border-0 p-0">
-        <legend className="text-sm font-medium">Which browser are you using?</legend>
-        <p className="mt-1 text-sm text-ink-muted">The next two methods show steps for that browser only.</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Button
-            type="button"
-            variant={browser === "chrome" ? "primary" : "secondary"}
-            aria-pressed={browser === "chrome"}
-            onClick={() => setBrowser("chrome")}
-          >
-            Chrome or Edge
-          </Button>
-          <Button
-            type="button"
-            variant={browser === "firefox" ? "primary" : "secondary"}
-            aria-pressed={browser === "firefox"}
-            onClick={() => setBrowser("firefox")}
-          >
-            Firefox
-          </Button>
-        </div>
-      </fieldset>
 
       <Method
         step={2}
         title="Button Next To The Address Bar"
-        note="A Neshanak button beside the address bar, not on the bookmarks bar. Load the unpacked extension from this repository."
+        note="This adds a Neshanak button next to the address bar, beside where you type a website address. Choose your browser, then follow the steps."
       >
-        {browser === "chrome" ? (
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+        <BrowserChoice value={addressBarBrowser} onChange={setAddressBarBrowser} />
+        {addressBarBrowser === "chrome" ? (
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
             <li>
               Open <code className="text-ink">chrome://extensions</code> (Edge:{" "}
               <code className="text-ink">edge://extensions</code>).
@@ -258,18 +244,18 @@ function SaveFromBrowserBody() {
             <li>Turn on Developer mode.</li>
             <li>
               Click Load unpacked and select the <code className="text-ink">extension</code> folder from this
-              repository.
+              project.
             </li>
           </ol>
         ) : (
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
             <li>
               Open <code className="text-ink">about:debugging</code>.
             </li>
             <li>Click This Firefox, then Load Temporary Add-on.</li>
             <li>
-              Select <code className="text-ink">extension/manifest.json</code> from this repository. Firefox
-              removes a temporary add-on when the browser restarts; load it again after a restart.
+              Select <code className="text-ink">extension/manifest.json</code> from this project. Firefox
+              removes this button when the browser restarts; add it again after a restart.
             </li>
           </ol>
         )}
@@ -278,11 +264,12 @@ function SaveFromBrowserBody() {
       <Method
         step={3}
         title="Bookmarks Bar Button With Icon"
-        note="Hardest. Import a bookmark file so the bar button can show the Neshanak icon. Dragging from method 1 will not add the icon."
+        note="This adds a +Neshanak button to the bookmarks bar with the Neshanak picture on it. Choose your browser, then follow the steps. You download a file and import it as bookmarks."
       >
-        {browser === "chrome" ? (
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-            <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+        <BrowserChoice value={iconBarBrowser} onChange={setIconBarBrowser} />
+        {iconBarBrowser === "chrome" ? (
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>If you cannot see the bookmarks bar, press Ctrl+Shift+B (on a Mac, Command+Shift+B).</li>
             <li>Download bar button.</li>
             <li>
               Click the three dots at the top right of the whole browser window, next to your profile. Not the
@@ -292,26 +279,26 @@ function SaveFromBrowserBody() {
               If it asks what to import from, choose Bookmarks HTML file. Open Save To Neshanak.html from
               Downloads.
             </li>
-            <li>Look in Other Bookmarks (a folder at the end of the bar). Drag Save To Neshanak onto the bar.</li>
+            <li>Look in Other Bookmarks (a folder at the end of the bar). Drag +Neshanak onto the bar.</li>
           </ol>
         ) : (
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-            <li>Show the bookmarks toolbar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+            <li>If you cannot see the bookmarks toolbar, press Ctrl+Shift+B (on a Mac, Command+Shift+B).</li>
             <li>
-              Delete any blank Save To Neshanak already on the toolbar or in the Bookmarks Menu, then download
-              bar button.
+              Delete any blank +Neshanak already on the toolbar or in the Bookmarks Menu, then download bar
+              button.
             </li>
             <li>
-              Click the three lines at the top right → Bookmarks → Manage Bookmarks. Or press Ctrl+Shift+O (Mac:
-              Command+Shift+O). Do not use Settings → Import data; that path skips the logo.
+              Click the three lines at the top right → Bookmarks → Manage Bookmarks. Or press Ctrl+Shift+O (on a
+              Mac, Command+Shift+O). Do not use Settings → Import data; that path skips the picture.
             </li>
             <li>
               In that window, click Import and Backup → Import Bookmarks from HTML. Open Save To Neshanak.html
               from Downloads.
             </li>
             <li>
-              Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak onto the Bookmarks Toolbar. Restart Firefox
-              if the mark still does not appear.
+              Open Bookmarks → Bookmarks Menu. Drag +Neshanak onto the Bookmarks Toolbar. Restart Firefox if the
+              picture still does not appear.
             </li>
           </ol>
         )}
@@ -321,6 +308,38 @@ function SaveFromBrowserBody() {
         {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
       </Method>
     </div>
+  );
+}
+
+function BrowserChoice({
+  value,
+  onChange,
+}: {
+  value: "chrome" | "firefox";
+  onChange: (next: "chrome" | "firefox") => void;
+}) {
+  return (
+    <fieldset className="min-w-0 border-0 p-0">
+      <legend className="text-sm font-medium">Which browser are you using?</legend>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button
+          type="button"
+          variant={value === "chrome" ? "primary" : "secondary"}
+          aria-pressed={value === "chrome"}
+          onClick={() => onChange("chrome")}
+        >
+          Chrome or Edge
+        </Button>
+        <Button
+          type="button"
+          variant={value === "firefox" ? "primary" : "secondary"}
+          aria-pressed={value === "firefox"}
+          onClick={() => onChange("firefox")}
+        >
+          Firefox
+        </Button>
+      </div>
+    </fieldset>
   );
 }
 
