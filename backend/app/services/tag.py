@@ -32,9 +32,9 @@ class TagService:
     def create(self, user: User, name: str) -> Tag:
         normalized = normalize_tag_name(name)
         if not normalized:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Tag Name Is Required.")
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Tag name is required.")
         if self.tags.get_by_name(user.id, normalized):
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A Tag With This Name Already Exists.")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A tag with this name already exists.")
         return self.tags.add(Tag(user_id=user.id, name=normalized))
 
     def update(self, user: User, tag_id: UUID, name: str) -> Tag:
@@ -42,7 +42,7 @@ class TagService:
         normalized = normalize_tag_name(name)
         existing = self.tags.get_by_name(user.id, normalized)
         if existing and existing.id != tag.id:
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A Tag With This Name Already Exists.")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="A tag with this name already exists.")
         tag.name = normalized
         return tag
 
@@ -53,5 +53,5 @@ class TagService:
     def _require(self, user_id: UUID, tag_id: UUID) -> Tag:
         tag = self.tags.get(user_id, tag_id)
         if tag is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tag Not Found.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tag not found.")
         return tag

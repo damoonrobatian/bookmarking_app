@@ -3,7 +3,7 @@ import { AuthLayout } from "@/layouts/AuthLayout";
 
 export function LoginPage() {
   return (
-    <AuthLayout title="Welcome Back" subtitle="Sign In To Open Your Bookmark Library.">
+    <AuthLayout title="Welcome Back" subtitle="Sign in to open your bookmark library.">
       <LoginForm />
     </AuthLayout>
   );

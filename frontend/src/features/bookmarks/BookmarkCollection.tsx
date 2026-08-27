@@ -86,7 +86,7 @@ export function BookmarkCollection({
         <div>
           <h1 className="font-serif text-3xl text-ink">{title}</h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {bookmarks.data ? `${bookmarks.data.total} Saved` : "Loading Your Library"}
+            {bookmarks.data ? `${bookmarks.data.total} saved` : "Loading your library"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export function BookmarkCollection({
             <Button
               variant="ghost"
               size="icon"
-              aria-label="List View"
+              aria-label="List view"
               aria-pressed={view === "list"}
               onClick={() => changeView("list")}
             >
@@ -122,7 +122,7 @@ export function BookmarkCollection({
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Grid View"
+              aria-label="Grid view"
               aria-pressed={view === "grid"}
               onClick={() => changeView("grid")}
             >
@@ -140,7 +140,7 @@ export function BookmarkCollection({
         </div>
       ) : bookmarks.isError ? (
         <p role="alert" className="rounded-2xl border border-line bg-paper-raised p-8 text-ink-muted">
-          Unable To Load Bookmarks. The Server May Be Unavailable.
+          Unable to load bookmarks. The server may be unavailable.
         </p>
       ) : items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-line bg-paper-raised px-6 py-16 text-center">
@@ -183,7 +183,7 @@ export function BookmarkCollection({
             Previous
           </Button>
           <span className="text-sm text-ink-muted">
-            Page {page} Of {totalPages}
+            Page {page} of {totalPages}
           </span>
           <Button
             variant="secondary"
@@ -211,7 +211,7 @@ export function BookmarkCollection({
         open={Boolean(deleting)}
         onOpenChange={(open) => !open && setDeleting(null)}
         title="Delete Bookmark?"
-        description="This Permanently Removes The Bookmark From Your Library. Consider Archiving It Instead If You Might Need It Later."
+        description="This permanently removes the bookmark from your library. Consider archiving it instead if you might need it later."
         onConfirm={() => deleting && remove.mutate(deleting.id)}
       />
     </section>

@@ -56,20 +56,20 @@ export function LoginForm() {
           checked={rememberMe}
           onChange={(event) => setRememberMe(event.target.checked)}
         />
-        Remember Me
+        Remember me
       </label>
       {login.isError ? (
         <p role="alert" className="text-sm text-red-700">
-          {errorMessage(login.error, "Invalid Email Or Password.")}
+          {errorMessage(login.error, "Invalid email or password.")}
         </p>
       ) : null}
       <Button type="submit" className="w-full" disabled={login.isPending}>
-        {login.isPending ? "Signing In…" : "Sign In"}
+        {login.isPending ? "Signing in…" : "Sign in"}
       </Button>
       <p className="text-center text-sm text-ink-muted">
-        New Here?{" "}
+        New here?{" "}
         <Link className="font-medium text-accent hover:underline" to={next === "/app" ? "/register" : `/register?next=${encodeURIComponent(next)}`}>
-          Create An Account
+          Create an account
         </Link>
       </p>
     </form>

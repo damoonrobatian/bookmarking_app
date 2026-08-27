@@ -34,7 +34,7 @@ export function MoveBookmarkDialog({
       open={Boolean(bookmark)}
       onOpenChange={(open) => !open && onClose()}
       title="Move Bookmark"
-      description="Choose A Folder For This Bookmark."
+      description="Choose a folder for this bookmark."
     >
       <div className="space-y-3">
         <Label htmlFor="move-folder">Folder</Label>

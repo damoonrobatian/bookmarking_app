@@ -43,7 +43,7 @@ export function SavePage() {
         <BrandMark />
       </Link>
       <h1 className="mt-6 font-serif text-3xl">Save Bookmark</h1>
-      <p className="mt-1 mb-6 text-sm text-ink-muted">The Page Address Was Filled In From Your Browser. Title And Tags Are Suggested When Possible.</p>
+      <p className="mt-1 mb-6 text-sm text-ink-muted">The page address was filled in from your browser. Title and tags are suggested when possible.</p>
       <BookmarkFormDialog
         open
         variant="page"

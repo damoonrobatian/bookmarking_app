@@ -41,7 +41,7 @@ export function TagsPage() {
       <header>
         <h1 className="font-serif text-3xl">Tags</h1>
         <p className="mt-1 text-sm text-ink-muted">
-          Choose One Or More Folders. Each Selected Folder Shows Only The Tags Used On Bookmarks Inside It.
+          Choose one or more folders. Each selected folder shows only the tags used on bookmarks inside it.
         </p>
       </header>
       <div className="mt-8 grid gap-8 lg:grid-cols-[16rem_1fr]">
@@ -65,7 +65,7 @@ export function TagsPage() {
         <div className="space-y-6">
           {openSets.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-line px-5 py-8 text-sm text-ink-muted">
-              Select A Folder On The Left To Open Its Tags.
+              Select a folder on the left to open its tags.
             </p>
           ) : (
             openSets.map((option) => {
@@ -74,7 +74,7 @@ export function TagsPage() {
                 <section key={option.id} className="rounded-2xl border border-line bg-paper-raised p-5">
                   <h2 className="font-medium">{option.name}</h2>
                   {tags.length === 0 ? (
-                    <p className="mt-3 text-sm text-ink-muted">No Tags In This Folder.</p>
+                    <p className="mt-3 text-sm text-ink-muted">No tags in this folder.</p>
                   ) : (
                     <ul className="mt-3 flex flex-wrap gap-2">
                       {tags.map((tag) => (

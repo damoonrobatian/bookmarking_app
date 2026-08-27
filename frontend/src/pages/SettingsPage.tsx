@@ -26,12 +26,12 @@ type SettingsSection = {
 };
 
 const SECTIONS: SettingsSection[] = [
-  { id: "account", title: "Account", description: "Name And Email For This Account." },
-  { id: "password", title: "Change Password", description: "Choose A New Password For This Account." },
-  { id: "import", title: "Import Bookmarks", description: "Upload A Netscape Bookmark HTML File." },
-  { id: "export", title: "Export Bookmarks", description: "Download A Browser-Compatible HTML File." },
-  { id: "save-from-browser", title: "Save From The Browser", description: "Add A Button To Save The Page You Are Looking At." },
-  { id: "delete-account", title: "Delete Account", description: "Permanently Remove This Account And Its Library.", danger: true },
+  { id: "account", title: "Account", description: "Name and email for this account." },
+  { id: "password", title: "Change Password", description: "Choose a new password for this account." },
+  { id: "import", title: "Import Bookmarks", description: "Upload a Netscape bookmark HTML file." },
+  { id: "export", title: "Export Bookmarks", description: "Download a browser-compatible HTML file." },
+  { id: "save-from-browser", title: "Save From The Browser", description: "Add a button to save the page you are looking at." },
+  { id: "delete-account", title: "Delete Account", description: "Permanently remove this account and its library.", danger: true },
 ];
 
 export function SettingsPage() {
@@ -42,7 +42,7 @@ export function SettingsPage() {
       <header>
         <h1 className="font-serif text-3xl">Settings</h1>
         <p className="mt-1 text-sm text-ink-muted">
-          {current ? current.title : "Choose One Setting At A Time."}
+          {current ? current.title : "Choose one setting at a time."}
         </p>
       </header>
       {current ? <SettingsDetail section={current} /> : <SettingsMenu />}
@@ -80,7 +80,7 @@ function SettingsDetail({
     <div className="mt-8">
       <Link to="/settings" className="inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline">
         <ChevronLeft className="h-4 w-4" />
-        All Settings
+        All settings
       </Link>
       <section
         className={cn(
@@ -129,15 +129,15 @@ function ImportBody() {
   const importMutation = useMutation({
     mutationFn: importBookmarks,
     onSuccess: setReport,
-    onError: () => setError("Invalid Bookmark File."),
+    onError: () => setError("Invalid bookmark file."),
   });
   return (
     <>
       <p className="text-sm text-ink-muted">
-        Upload A Netscape Bookmark HTML File Exported From Chrome, Firefox, Or Edge.
+        Upload a Netscape bookmark HTML file exported from Chrome, Firefox, or Edge.
       </p>
       <Label htmlFor="import-file" className="mt-4 block">
-        Bookmark File
+        Bookmark file
       </Label>
       <input
         id="import-file"
@@ -154,10 +154,10 @@ function ImportBody() {
       {error ? <p className="mt-3 text-sm text-red-700">{error}</p> : null}
       {report ? (
         <ul className="mt-4 space-y-1 text-sm text-ink-muted">
-          <li>Bookmarks Imported: {report.bookmarks_imported}</li>
-          <li>Folders Created: {report.folders_created}</li>
-          <li>Duplicates Detected: {report.duplicates_detected}</li>
-          <li>Invalid Entries Skipped: {report.invalid_entries_skipped}</li>
+          <li>Bookmarks imported: {report.bookmarks_imported}</li>
+          <li>Folders created: {report.folders_created}</li>
+          <li>Duplicates detected: {report.duplicates_detected}</li>
+          <li>Invalid entries skipped: {report.invalid_entries_skipped}</li>
         </ul>
       ) : null}
     </>
@@ -178,7 +178,7 @@ function ExportBody() {
   });
   return (
     <>
-      <p className="text-sm text-ink-muted">Download A Browser-Compatible HTML File That Preserves Your Folder Hierarchy.</p>
+      <p className="text-sm text-ink-muted">Download a browser-compatible HTML file that preserves your folder hierarchy.</p>
       <Button className="mt-4" variant="secondary" onClick={() => exportMutation.mutate()}>
         Export HTML
       </Button>
@@ -196,49 +196,49 @@ function SaveFromBrowserBody() {
       const icon = await bookmarkletIconDataUri();
       downloadBookmarkletHtml(bookmarkletNetscapeHtml(href, icon));
     } catch {
-      setDownloadError("Could Not Download The Bar Button. Try Again.");
+      setDownloadError("Could not download the bar button. Try again.");
     }
   }
 
   return (
     <>
       <p className="text-sm text-ink-muted">
-        Download The File, Then Import It As Bookmarks. Chrome And Edge Hide The Import Command In The Browser Menu, Not In Bookmark Manager. Firefox Puts The Imported Button In The Bookmarks Menu, Not On The Bar, Until You Drag It There.
+        Download the file, then import it as bookmarks. Chrome and Edge hide the import command in the browser menu, not in Bookmark Manager. Firefox puts the imported button in the Bookmarks Menu, not on the bar, until you drag it there.
       </p>
-      <p className="mt-4 text-sm font-medium">Chrome Or Edge</p>
+      <p className="mt-4 text-sm font-medium">Chrome or Edge</p>
       <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-        <li>Show The Bookmarks Bar If It Is Hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-        <li>Download Bar Button.</li>
+        <li>Show the bookmarks bar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+        <li>Download bar button.</li>
         <li>
-          Click The Three Dots At The Top Right Of The Whole Browser Window, Next To Your Profile. Not The Dots Inside Ctrl+Shift+O. Then Bookmarks And Lists → Import Bookmarks And Settings.
+          Click the three dots at the top right of the whole browser window, next to your profile. Not the dots inside Ctrl+Shift+O. Then Bookmarks and lists → Import bookmarks and settings.
         </li>
         <li>
-          If It Asks What To Import From, Choose Bookmarks HTML File. Open Save To Neshanak.html From Downloads.
+          If it asks what to import from, choose Bookmarks HTML file. Open Save To Neshanak.html from Downloads.
         </li>
         <li>
-          Look In Other Bookmarks (A Folder At The End Of The Bar). Drag Save To Neshanak Onto The Bar.
+          Look in Other Bookmarks (a folder at the end of the bar). Drag Save To Neshanak onto the bar.
         </li>
       </ol>
       <p className="mt-4 text-sm font-medium">Firefox</p>
       <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-        <li>Show The Bookmarks Toolbar If It Is Hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-        <li>Download Bar Button Again After This Fix. Delete Any Blank Save To Neshanak Already On The Toolbar Or In The Bookmarks Menu.</li>
+        <li>Show the bookmarks toolbar if it is hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+        <li>Download bar button again after this fix. Delete any blank Save To Neshanak already on the toolbar or in the Bookmarks Menu.</li>
         <li>
-          Click The Three Lines At The Top Right → Bookmarks → Manage Bookmarks. Or Press Ctrl+Shift+O (Mac: Command+Shift+O). Do Not Use Settings → Import Data; That Path Skips The Logo.
+          Click the three lines at the top right → Bookmarks → Manage Bookmarks. Or press Ctrl+Shift+O (Mac: Command+Shift+O). Do not use Settings → Import data; that path skips the logo.
         </li>
         <li>
-          In That Window, Click Import And Backup → Import Bookmarks From HTML. Open The New Save To Neshanak.html From Downloads.
+          In that window, click Import and Backup → Import Bookmarks from HTML. Open the new Save To Neshanak.html from Downloads.
         </li>
         <li>
-          Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak Onto The Bookmarks Toolbar. Restart Firefox If The Mark Still Does Not Appear.
+          Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak onto the Bookmarks Toolbar. Restart Firefox if the mark still does not appear.
         </li>
       </ol>
       <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>
-        Download Bar Button
+        Download bar button
       </Button>
       {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
       <p className="mt-6 text-sm text-ink-muted">
-        Or Drag This Onto The Bar. The Save Action Works; Chrome And Edge Still Hide The Logo On A Dragged Script.
+        Or drag this onto the bar. The save action works; Chrome and Edge still hide the logo on a dragged script.
       </p>
       <a
         className="mt-3 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
@@ -258,9 +258,9 @@ function SaveFromBrowserBody() {
         Save To Neshanak
       </a>
       <p className="mt-4 text-sm text-ink-muted">
-        For A Button Next To The Address Bar Instead Of On The Bookmarks Bar, Load The Unpacked Folder{" "}
-        <code className="text-ink">extension/</code> From This Repository. Chrome: chrome://extensions → Developer Mode → Load Unpacked → Select The{" "}
-        <code className="text-ink">extension</code> Folder. Firefox: about:debugging → This Firefox → Load Temporary Add-On → Select{" "}
+        For a button next to the address bar instead of on the bookmarks bar, load the unpacked folder{" "}
+        <code className="text-ink">extension/</code> from this repository. Chrome: chrome://extensions → Developer mode → Load unpacked → select the{" "}
+        <code className="text-ink">extension</code> folder. Firefox: about:debugging → This Firefox → Load Temporary Add-on → select{" "}
         <code className="text-ink">extension/manifest.json</code>.
       </p>
     </>

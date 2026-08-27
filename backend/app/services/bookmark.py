@@ -16,7 +16,7 @@ from app.utils.urls import InvalidURLError, domain_from_url, normalize_url, pars
 class DuplicateBookmarkError(Exception):
     def __init__(self, existing: Bookmark) -> None:
         self.existing = existing
-        super().__init__("Bookmark Already Exists.")
+        super().__init__("Bookmark already exists.")
 
 
 class BookmarkService:
@@ -35,7 +35,7 @@ class BookmarkService:
     def get(self, user: User, bookmark_id: UUID) -> Bookmark:
         bookmark = self.bookmarks.get(user.id, bookmark_id)
         if bookmark is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Bookmark Not Found.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Bookmark not found.")
         return bookmark
 
     def create(
@@ -197,4 +197,4 @@ class BookmarkService:
         if folder_id is None:
             return
         if self.folders.get(user_id, folder_id) is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Folder Not Found.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Folder not found.")

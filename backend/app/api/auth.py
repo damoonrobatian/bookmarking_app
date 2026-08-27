@@ -64,14 +64,14 @@ def refresh(
     db: Session = Depends(get_db),
 ) -> User:
     if not refresh_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.")
     try:
         payload = decode_token(refresh_token, "refresh")
     except InvalidTokenError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.") from exc
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.") from exc
     user = UserRepository(db).get_by_id(UUID(str(payload["sub"])))
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.")
     remember = bool(payload.get("remember", True))
     access, new_refresh = AuthService(db).issue_tokens(user, remember=remember)
     set_auth_cookies(response, access, new_refresh, remember=remember)

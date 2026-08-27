@@ -23,9 +23,9 @@ describe("settings", () => {
     const user = userEvent.setup();
     renderSettings();
     expect(screen.getByRole("link", { name: /Change Password/ })).toBeInTheDocument();
-    expect(screen.queryByLabelText("Current Password")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Current password")).not.toBeInTheDocument();
     await user.click(screen.getByRole("link", { name: /Change Password/ }));
-    expect(screen.getByLabelText("Current Password")).toBeInTheDocument();
+    expect(screen.getByLabelText("Current password")).toBeInTheDocument();
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
   });
 
@@ -35,6 +35,6 @@ describe("settings", () => {
     expect(link.querySelector("img")).toHaveAttribute("src", "/favicon-32.png");
     const href = link.getAttribute("href") ?? "";
     expect(href.startsWith("javascript:")).toBe(true);
-    expect(screen.getByRole("button", { name: "Download Bar Button" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Download bar button" })).toBeInTheDocument();
   });
 });

@@ -31,19 +31,19 @@ export function DeleteAccountForm() {
         </div>
         {deleteAccount.isError ? (
           <p role="alert" className="text-sm text-red-700">
-            {errorMessage(deleteAccount.error, "Unable To Delete Account.")}
+            {errorMessage(deleteAccount.error, "Unable to delete account.")}
           </p>
         ) : null}
         <Button type="submit" variant="danger" disabled={deleteAccount.isPending}>
-          Delete Account
+          Delete account
         </Button>
       </form>
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title="Delete Your Account?"
-        description="This Permanently Deletes Your Account And Every Bookmark, Folder, And Tag In Your Library. This Cannot Be Undone."
-        confirmLabel="Delete Account"
+        description="This permanently deletes your account and every bookmark, folder, and tag in your library. This cannot be undone."
+        confirmLabel="Delete account"
         onConfirm={() => {
           void deleteAccount.mutateAsync({ password }).catch(() => undefined);
         }}

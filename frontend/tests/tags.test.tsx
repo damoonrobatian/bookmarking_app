@@ -60,7 +60,7 @@ describe("tags page", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(await screen.findByText("Select A Folder On The Left To Open Its Tags.")).toBeInTheDocument();
+    expect(await screen.findByText("Select a folder on the left to open its tags.")).toBeInTheDocument();
     await user.click(await screen.findByLabelText("Work"));
     expect(screen.getByRole("link", { name: /docs/ })).toHaveAttribute("href", "/app/folder/f1?tag=docs");
     expect(screen.queryByRole("link", { name: /news/ })).not.toBeInTheDocument();

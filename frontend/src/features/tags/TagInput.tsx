@@ -47,7 +47,7 @@ export function TagInput({
       <Input
         className="mt-2"
         value={draft}
-        placeholder="Add A Tag And Press Enter"
+        placeholder="Add a tag and press Enter"
         role="combobox"
         aria-expanded={matches.length > 0}
         aria-autocomplete="list"
@@ -82,7 +82,7 @@ export function TagInput({
             }
           }
         }}
-        aria-label="Add Tag"
+        aria-label="Add tag"
       />
       {matches.length > 0 ? (
         <ul

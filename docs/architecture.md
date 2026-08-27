@@ -65,4 +65,4 @@ Settings is a menu of one action at a time (`/settings/password`, and so on) so 
 
 Tags live on `/app/tags`, grouped by folder. The sidebar lists folders only.
 
-Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a Show Password control.
+Page titles, dialog titles, settings section titles, and nav labels use Title Case. Other chrome copy (buttons, labels, descriptions, empty states, errors) uses sentence case. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a show-password control.

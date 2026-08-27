@@ -34,7 +34,7 @@ export function ChangePasswordForm() {
   return (
     <form onSubmit={onSubmit} className="mt-4 space-y-3" autoComplete="off">
       <div className="space-y-1.5">
-        <Label htmlFor="current-password">Current Password</Label>
+        <Label htmlFor="current-password">Current password</Label>
         <PasswordInput
           id="current-password"
           name="neshanak-current-password"
@@ -45,7 +45,7 @@ export function ChangePasswordForm() {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="new-password">New Password</Label>
+        <Label htmlFor="new-password">New password</Label>
         <PasswordInput
           id="new-password"
           autoComplete="new-password"
@@ -56,7 +56,7 @@ export function ChangePasswordForm() {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="confirm-password">Confirm New Password</Label>
+        <Label htmlFor="confirm-password">Confirm new password</Label>
         <PasswordInput
           id="confirm-password"
           autoComplete="new-password"
@@ -68,17 +68,17 @@ export function ChangePasswordForm() {
       </div>
       {mismatch ? (
         <p role="alert" className="text-sm text-red-700">
-          New Passwords Do Not Match.
+          New passwords do not match.
         </p>
       ) : changePassword.isError ? (
         <p role="alert" className="text-sm text-red-700">
-          {errorMessage(changePassword.error, "Unable To Change Password.")}
+          {errorMessage(changePassword.error, "Unable to change password.")}
         </p>
       ) : changePassword.isSuccess ? (
-        <p className="text-sm text-ink-muted">Password Updated.</p>
+        <p className="text-sm text-ink-muted">Password updated.</p>
       ) : null}
       <Button type="submit" disabled={changePassword.isPending}>
-        {changePassword.isPending ? "Saving…" : "Change Password"}
+        {changePassword.isPending ? "Saving…" : "Change password"}
       </Button>
     </form>
   );

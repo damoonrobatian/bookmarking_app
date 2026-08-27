@@ -38,9 +38,9 @@ export function BookmarkItem({
     try {
       await navigator.clipboard.writeText(bookmark.url);
       setCopied(true);
-      toast.success("URL Copied.");
+      toast.success("URL copied.");
     } catch {
-      toast.error("Couldn't Copy The URL.");
+      toast.error("Couldn't copy the URL.");
     }
   }
 
@@ -107,7 +107,7 @@ export function BookmarkItem({
         <button
           type="button"
           className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-accent"
-          aria-label={bookmark.is_favorite ? "Remove Favorite" : "Add Favorite"}
+          aria-label={bookmark.is_favorite ? "Remove favorite" : "Add favorite"}
           onClick={onFavorite}
         >
           <Star className={cn("h-4 w-4", bookmark.is_favorite && "fill-accent text-accent")} />
@@ -117,7 +117,7 @@ export function BookmarkItem({
             <button
               type="button"
               className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-ink"
-              aria-label="Bookmark Actions"
+              aria-label="Bookmark actions"
             >
               <MoreHorizontal className="h-4 w-4" />
             </button>
@@ -134,7 +134,7 @@ export function BookmarkItem({
                 Move
               </MenuItem>
               <MenuItem icon={<Star className="h-4 w-4" />} onSelect={onFavorite}>
-                {bookmark.is_favorite ? "Remove Favorite" : "Add Favorite"}
+                {bookmark.is_favorite ? "Remove favorite" : "Add favorite"}
               </MenuItem>
               {bookmark.is_archived ? (
                 <MenuItem icon={<Archive className="h-4 w-4" />} onSelect={onRestore}>

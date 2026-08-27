@@ -92,19 +92,19 @@ Always persist cookies; store Remember Me only in localStorage.
 
 ## Decision
 
-UI chrome is Title Case on every word; user content is not rewritten.
+Title Case is only for titles; other UI chrome uses sentence case. User content is not rewritten.
 
 ### Reason
 
-The product copy should read consistently across buttons, headings, and empty states. Bookmark titles, folder names, tags, emails, and URLs belong to the user and stay as entered.
+Capitalizing every word made buttons, errors, and helper text look shouty. Page titles, dialog titles, settings section titles, and nav labels stay Title Case so they still read as headings. Descriptions, buttons, labels, empty states, and errors use sentence case. Bookmark titles, folder names, tags, emails, and URLs belong to the user and stay as entered.
 
 ### Alternatives considered
 
-Sentence case; Title Case that leaves articles lowercase.
+Title Case on every word in UI chrome; Title Case that leaves articles lowercase.
 
 ### Date
 
-2026-08-26
+2026-08-27
 
 ---
 

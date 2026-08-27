@@ -65,16 +65,16 @@ export function RegisterForm() {
       </div>
       {register.isError ? (
         <p role="alert" className="text-sm text-red-700">
-          {errorMessage(register.error, "Unable To Create Your Account.")}
+          {errorMessage(register.error, "Unable to create your account.")}
         </p>
       ) : null}
       <Button type="submit" className="w-full" disabled={register.isPending}>
-        {register.isPending ? "Creating Account…" : "Create Account"}
+        {register.isPending ? "Creating account…" : "Create account"}
       </Button>
       <p className="text-center text-sm text-ink-muted">
-        Already Have An Account?{" "}
+        Already have an account?{" "}
         <Link className="font-medium text-accent hover:underline" to={next === "/app" ? "/login" : `/login?next=${encodeURIComponent(next)}`}>
-          Sign In
+          Sign in
         </Link>
       </p>
     </form>

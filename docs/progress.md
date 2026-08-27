@@ -23,7 +23,7 @@
 - HTTPS for `neshanak.ca` via Caddy / Let's Encrypt; `www` redirects to the apex; HSTS; Secure cookies; leftover HTTP cookies are expired on login
 - Product rename: **Neshanak** in the UI, API title, and docs (Postgres user/db on the droplet remain `nook`)
 - Remember Me on login: checked by default (persistent cookies, up to `REFRESH_TOKEN_EXPIRE_DAYS`). Unchecked uses session cookies. `GET /api/auth/me` refreshes an expired access cookie. Refresh rotation keeps that choice.
-- Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
+- Title Case on page titles, dialog titles, settings section titles, and nav labels; sentence case everywhere else. User-entered titles, folders, tags, emails, and URLs are unchanged
 - Change password and delete account from Settings (one section open at a time); Show Password on password fields
 - Copy URL on each bookmark card (clipboard + toast)
 - Save the current page from a Settings bookmarklet or the unpacked `extension/` toolbar button; `/save` popup auto-fills URL, a real title (not SEO keyword dumps), suggested tags, and can create a folder on the spot

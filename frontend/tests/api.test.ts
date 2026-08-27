@@ -13,7 +13,7 @@ describe("apiFetch", () => {
   it("refreshes the session when /api/auth/me returns 401", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(jsonResponse(401, { detail: "Not Authenticated." }))
+      .mockResolvedValueOnce(jsonResponse(401, { detail: "Not authenticated." }))
       .mockResolvedValueOnce(jsonResponse(200, { email: "ada@example.com" }))
       .mockResolvedValueOnce(jsonResponse(200, { email: "ada@example.com", display_name: "Ada" }));
     vi.stubGlobal("fetch", fetchMock);
@@ -28,7 +28,7 @@ describe("apiFetch", () => {
   });
 
   it("does not refresh after a failed login", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(401, { detail: "Invalid Email Or Password." }));
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse(401, { detail: "Invalid email or password." }));
     vi.stubGlobal("fetch", fetchMock);
 
     await expect(apiFetch("/api/auth/login", { method: "POST", body: "{}" })).rejects.toMatchObject({

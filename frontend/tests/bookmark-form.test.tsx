@@ -27,7 +27,7 @@ describe("bookmark creation", () => {
     );
     await user.type(screen.getByLabelText("URL"), "https://fastapi.tiangolo.com/");
     await user.type(screen.getByLabelText("Title"), "FastAPI");
-    await user.click(screen.getByRole("button", { name: "Save Bookmark" }));
+    await user.click(screen.getByRole("button", { name: "Save bookmark" }));
     expect(onSubmit).toHaveBeenCalled();
   });
 
@@ -129,8 +129,8 @@ describe("bookmark creation", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    await user.click(screen.getByRole("button", { name: "New Folder" }));
-    await user.type(screen.getByLabelText("New Folder Name"), "Reading");
+    await user.click(screen.getByRole("button", { name: "New folder" }));
+    await user.type(screen.getByLabelText("New folder name"), "Reading");
     await user.click(screen.getByRole("button", { name: "Add" }));
     expect(await screen.findByRole("option", { name: "Reading" })).toBeInTheDocument();
     expect(screen.getByLabelText("Folder")).toHaveValue("folder-1");

@@ -111,7 +111,7 @@ export function BookmarkFormDialog({
       setNewFolderName("");
       setCreatingFolder(false);
     } catch (caught) {
-      setFolderError(errorMessage(caught, "Unable To Create Folder."));
+      setFolderError(errorMessage(caught, "Unable to create folder."));
     }
   }
 
@@ -177,10 +177,10 @@ export function BookmarkFormDialog({
             {creatingFolder ? (
               <div className="flex gap-2">
                 <Input
-                  aria-label="New Folder Name"
+                  aria-label="New folder name"
                   value={newFolderName}
                   onChange={(event) => setNewFolderName(event.target.value)}
-                  placeholder="Folder Name"
+                  placeholder="Folder name"
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
                       event.preventDefault();
@@ -198,7 +198,7 @@ export function BookmarkFormDialog({
                 className="text-sm font-medium text-accent hover:underline"
                 onClick={() => setCreatingFolder(true)}
               >
-                New Folder
+                New folder
               </button>
             )}
             {folderError ? <p className="text-sm text-red-700">{folderError}</p> : null}
@@ -222,7 +222,7 @@ export function BookmarkFormDialog({
             id="bookmark-description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="What This Page Is About"
+            placeholder="What this page is about"
           />
         </div>
         <div className="space-y-1.5">
@@ -231,7 +231,7 @@ export function BookmarkFormDialog({
             id="bookmark-notes"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            placeholder="Your Private Notes"
+            placeholder="Your private notes"
           />
         </div>
         {error ? (
@@ -246,7 +246,7 @@ export function BookmarkFormDialog({
                   navigate(`/app?highlight=${error.duplicate?.id}`);
                 }}
               >
-                Open The Existing Bookmark
+                Open the existing bookmark
               </button>
             ) : null}
           </div>
@@ -255,7 +255,7 @@ export function BookmarkFormDialog({
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button type="submit">Save Bookmark</Button>
+          <Button type="submit">Save bookmark</Button>
         </div>
       </form>
   );
@@ -269,7 +269,7 @@ export function BookmarkFormDialog({
       open={open}
       onOpenChange={onOpenChange}
       title={title}
-      description="Save A Page To Your Library. Title And Favicon Can Be Filled In Automatically."
+      description="Save a page to your library. Title and favicon can be filled in automatically."
       className="max-w-xl"
     >
       {form}

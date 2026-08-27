@@ -19,7 +19,7 @@ describe("loading and error states", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(screen.getByText("Loading Your Library")).toBeInTheDocument();
+    expect(screen.getByText("Loading your library")).toBeInTheDocument();
   });
 
   it("shows an error state", async () => {
@@ -44,6 +44,6 @@ describe("loading and error states", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(await screen.findByRole("alert")).toHaveTextContent("Unable To Load Bookmarks");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load bookmarks");
   });
 });

@@ -37,7 +37,7 @@ export function AppLayout() {
   }, [debouncedSearch, navigate]);
 
   if (user.isLoading || !user.data) {
-    return <div className="p-8 text-ink-muted">Loading Your Library…</div>;
+    return <div className="p-8 text-ink-muted">Loading your library…</div>;
   }
 
   return (
@@ -46,7 +46,7 @@ export function AppLayout() {
         <button
           type="button"
           className="fixed inset-0 z-20 bg-ink/30"
-          aria-label="Close Sidebar"
+          aria-label="Close sidebar"
           onClick={() => setSidebarOpen(false)}
         />
       ) : null}
@@ -62,7 +62,7 @@ export function AppLayout() {
             <BrandMark size="sm" />
           </Link>
           {!isDesktop ? (
-            <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close Menu">
+            <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
               <X className="h-5 w-5" />
             </button>
           ) : null}
@@ -103,7 +103,7 @@ export function AppLayout() {
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-line bg-paper/90 px-4 py-3 backdrop-blur">
           {!isDesktop ? (
-            <button type="button" onClick={() => setSidebarOpen(true)} aria-label="Open Menu">
+            <button type="button" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
               <Menu className="h-5 w-5" />
             </button>
           ) : null}
@@ -111,20 +111,20 @@ export function AppLayout() {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
             <Input
               className="pl-9"
-              placeholder="Search Titles, URLs, Notes, And Tags"
+              placeholder="Search titles, URLs, notes, and tags"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              aria-label="Search Bookmarks"
+              aria-label="Search bookmarks"
             />
           </div>
           <Button onClick={() => setAddOpen(true)}>
             <Plus className="h-4 w-4" />
-            Add Bookmark
+            Add bookmark
           </Button>
           <div className="hidden items-center gap-2 sm:flex">
             <span className="max-w-[10rem] truncate text-sm text-ink-muted">{user.data.display_name}</span>
             <Button variant="ghost" size="sm" onClick={() => logout.mutate()}>
-              Log Out
+              Log out
             </Button>
           </div>
         </header>

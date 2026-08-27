@@ -12,7 +12,7 @@ describe("tag input", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<TagInput value={[]} onChange={onChange} suggestions={suggestions} />);
-    const field = screen.getByLabelText("Add Tag");
+    const field = screen.getByLabelText("Add tag");
     await user.type(field, "re");
     const react = await screen.findByRole("option", { name: "react" });
     const reading = screen.getByRole("option", { name: "reading" });

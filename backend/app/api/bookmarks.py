@@ -23,7 +23,7 @@ router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
 
 def _duplicate_response(exc: DuplicateBookmarkError) -> HTTPException:
     body = DuplicateBookmark(
-        message="This Bookmark Already Exists.",
+        message="This bookmark already exists.",
         existing=BookmarkRead.model_validate(exc.existing),
     )
     return HTTPException(status_code=status.HTTP_409_CONFLICT, detail=body.model_dump(mode="json"))
