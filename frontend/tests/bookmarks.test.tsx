@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { BookmarkCollection } from "@/features/bookmarks/BookmarkCollection";
@@ -69,6 +69,18 @@ describe("bookmark list", () => {
       "src",
       "https://outlook.office.com/apple-touch-icon.png",
     );
+  });
+
+  it("falls back to the site icon service if the first favicon fails", async () => {
+    renderCollection([{ ...sample, favicon_url: "https://broken.example/icon.png" }]);
+    await screen.findByText("React documentation");
+    const icon = document.querySelector("img");
+    expect(icon).toHaveAttribute("src", "https://broken.example/icon.png");
+    fireEvent.error(icon!);
+    expect(icon).toHaveAttribute("src", "https://react.dev/favicon.ico");
+    fireEvent.error(icon!);
+    expect(icon?.getAttribute("src")).toContain("google.com/s2/favicons");
+    expect(icon?.getAttribute("src")).toContain("react.dev");
   });
 
   it("copies the bookmark URL", async () => {

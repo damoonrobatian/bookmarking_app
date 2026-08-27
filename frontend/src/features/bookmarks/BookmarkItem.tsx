@@ -1,6 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Archive, Check, Copy, FolderInput, Globe, MoreHorizontal, Pencil, Star, Trash2 } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { Bookmark } from "@/types";
 import { cn } from "@/utils/cn";
@@ -149,31 +149,48 @@ export function BookmarkItem({
   );
 }
 
-function siteFaviconUrl(bookmark: Bookmark): string | null {
-  if (bookmark.favicon_url) return bookmark.favicon_url;
-  if (bookmark.page_domain) return `https://${bookmark.page_domain}/favicon.ico`;
-  try {
-    return `${new URL(bookmark.url).origin}/favicon.ico`;
-  } catch {
-    return null;
+function faviconCandidates(bookmark: Bookmark): string[] {
+  const urls: string[] = [];
+  const add = (value: string | null | undefined) => {
+    if (!value || value.includes("/logo.") || urls.includes(value)) return;
+    urls.push(value);
+  };
+  add(bookmark.favicon_url);
+  let host = bookmark.page_domain;
+  if (!host) {
+    try {
+      host = new URL(bookmark.url).hostname;
+    } catch {
+      host = null;
+    }
   }
+  if (host) {
+    add(`https://${host}/favicon.ico`);
+    add(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`);
+  }
+  return urls;
 }
 
 function BookmarkFavicon({ bookmark }: { bookmark: Bookmark }) {
-  const siteIcon = siteFaviconUrl(bookmark);
-  const [broken, setBroken] = useState(false);
+  const candidates = useMemo(
+    () => faviconCandidates(bookmark),
+    [bookmark.favicon_url, bookmark.page_domain, bookmark.url],
+  );
+  const [index, setIndex] = useState(0);
   useEffect(() => {
-    setBroken(false);
-  }, [bookmark.id, siteIcon]);
-  if (!siteIcon || broken) {
+    setIndex(0);
+  }, [bookmark.id, candidates]);
+  const src = candidates[index];
+  if (!src) {
     return <Globe className="h-5 w-5 shrink-0 text-ink-faint" aria-hidden />;
   }
   return (
     <img
-      src={siteIcon}
+      src={src}
       alt=""
+      referrerPolicy="no-referrer"
       className="h-5 w-5 shrink-0 rounded-sm"
-      onError={() => setBroken(true)}
+      onError={() => setIndex((current) => current + 1)}
     />
   );
 }
