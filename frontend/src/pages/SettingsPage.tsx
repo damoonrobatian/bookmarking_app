@@ -9,7 +9,13 @@ import { DeleteAccountForm } from "@/features/auth/DeleteAccountForm";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { exportBookmarks, importBookmarks } from "@/services/tags";
 import type { ImportReport } from "@/types";
-import { saveBookmarkletHref, setBookmarkletDragImage } from "@/utils/bookmarklet";
+import {
+  bookmarkletIconDataUri,
+  bookmarkletNetscapeHtml,
+  downloadBookmarkletHtml,
+  saveBookmarkletHref,
+  setBookmarkletDragImage,
+} from "@/utils/bookmarklet";
 import { cn } from "@/utils/cn";
 
 type SettingsSection = {
@@ -181,23 +187,46 @@ function ExportBody() {
 }
 
 function SaveFromBrowserBody() {
+  const href = saveBookmarkletHref();
+  const [downloadError, setDownloadError] = useState("");
+
+  async function downloadBarButton() {
+    setDownloadError("");
+    try {
+      const icon = await bookmarkletIconDataUri();
+      downloadBookmarkletHtml(bookmarkletNetscapeHtml(href, icon));
+    } catch {
+      setDownloadError("Could Not Download The Bar Button. Try Again.");
+    }
+  }
+
   return (
     <>
       <p className="text-sm text-ink-muted">
-        Add A Button To Your Browser Bookmarks Bar, Then Click It On Any Page You Want To Keep. A Popup Opens With The Address Filled In.
+        Add A Button To Your Browser Bookmarks Bar, Then Click It On Any Page You Want To Keep. A Popup Opens With The Address Filled In. Chrome And Edge Will Not Show The Logo If You Only Drag A Script; Import The File Below.
       </p>
       <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
         <li>
           Show The Bookmarks Bar If It Is Hidden. Chrome, Edge, And Firefox: Ctrl+Shift+B (Mac: Command+Shift+B). Or Right-Click Below The Address Bar And Enable Bookmarks Bar / Bookmarks Toolbar.
         </li>
         <li>
-          Drag The Button Below Onto That Bar. The Logo Travels With It. Clicking It On This Settings Page Does Nothing — It Only Works After It Lives On The Bar. If A Blank Icon Is Already On The Bar, Remove It And Drag This Button Again.
+          Download Bar Button. Open Bookmark Manager (Ctrl+Shift+O). Three Dots → Import Bookmarks → Bookmarks HTML File → Choose Save To Neshanak.html.
+        </li>
+        <li>
+          If It Lands In An Imported Folder, Drag It Onto The Bar. The Logo Stays. If A Blank Button Is Already On The Bar, Importing Paints The Logo On That Same Script; You Can Delete The Extra Copy.
         </li>
         <li>Open The Page You Want To Save, Then Click Save To Neshanak On The Bar.</li>
       </ol>
+      <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>
+        Download Bar Button
+      </Button>
+      {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
+      <p className="mt-6 text-sm text-ink-muted">
+        Or Drag This Onto The Bar. The Save Action Works; Chrome And Edge Still Hide The Logo On A Dragged Script.
+      </p>
       <a
-        className="mt-4 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
-        href={saveBookmarkletHref()}
+        className="mt-3 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
+        href={href}
         onClick={(event) => event.preventDefault()}
         onDragStart={setBookmarkletDragImage}
       >

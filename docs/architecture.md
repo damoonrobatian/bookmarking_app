@@ -59,7 +59,7 @@ The SPA uses React Router for pages and TanStack Query for server state. Feature
 
 `/save` is a compact page (no app chrome) used as a popup. Query parameters supply the page URL and `document.title`. The form keeps a reasonable tab title and only replaces it when that title looks like an SEO keyword list. `POST /api/bookmarks/preview` can still fill a heading-based title, a description, and suggested tags. Signed-out visitors are sent to `/login?next=/save?...`; `safeInternalPath` keeps that return path on this origin.
 
-The Settings bookmarklet and the unpacked extension in `extension/` open that popup on `https://neshanak.ca` so existing login cookies apply (`SameSite=Lax`). The bookmarklet `href` is a `javascript:` URL (so it can read the current tab) that also names `https://neshanak.ca/favicon.ico`, because the bookmarks bar uses bitmap favicons, not the SVG tab icon.
+The Settings bookmarklet and the unpacked extension in `extension/` open that popup on `https://neshanak.ca` so existing login cookies apply (`SameSite=Lax`). The bookmarklet `href` is a `javascript:` URL so it can read the current tab. Chrome and Edge will not show a custom icon on a script you drag onto the bar; Settings therefore also downloads a Netscape HTML file with an `ICON` data URI for Bookmark Manager import.
 
 Settings is a menu of one action at a time (`/settings/password`, and so on) so password fields are not mounted until that action is chosen.
 

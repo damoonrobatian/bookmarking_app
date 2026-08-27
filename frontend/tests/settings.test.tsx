@@ -35,6 +35,6 @@ describe("settings", () => {
     expect(link.querySelector("img")).toHaveAttribute("src", "/favicon-32.png");
     const href = link.getAttribute("href") ?? "";
     expect(href.startsWith("javascript:")).toBe(true);
-    expect(href).toContain("https://neshanak.ca/favicon.ico");
+    expect(screen.getByRole("button", { name: "Download Bar Button" })).toBeInTheDocument();
   });
 });

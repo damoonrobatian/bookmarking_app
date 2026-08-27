@@ -168,7 +168,7 @@ Save the current page through a same-origin `/save` popup, installed as a bookma
 
 ### Reason
 
-A click on another site cannot write to Neshanak directly; the popup must run on `https://neshanak.ca` so HTTP-only cookies are sent. A bookmarklet is enough for most use. A small MV3 extension (`extension/`) adds a toolbar button without a store listing or a separate API key. Tag suggestions stay conservative (page keywords plus the user's own tags found in the page text) so the library is not filled with noisy auto-tags.
+A click on another site cannot write to Neshanak directly; the popup must run on `https://neshanak.ca` so HTTP-only cookies are sent. A bookmarklet is enough for most use. Chrome and Edge refuse a custom icon on a dragged `javascript:` bookmark, so Settings also offers a Netscape HTML download with an `ICON` data URI. A small MV3 extension (`extension/`) adds a toolbar button without a store listing or a separate API key. Tag suggestions stay conservative (page keywords plus the user's own tags found in the page text) so the library is not filled with noisy auto-tags.
 
 ### Alternatives considered
 
