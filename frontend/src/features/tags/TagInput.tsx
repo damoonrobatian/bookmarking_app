@@ -13,6 +13,7 @@ export function TagInput({
   suggestions: Tag[];
 }) {
   const [draft, setDraft] = useState("");
+  const [highlight, setHighlight] = useState(-1);
   const matches = useMemo(() => {
     const query = draft.trim().toLowerCase();
     if (!query) return [];
@@ -26,10 +27,11 @@ export function TagInput({
     if (!normalized || value.includes(normalized)) return;
     onChange([...value, normalized]);
     setDraft("");
+    setHighlight(-1);
   }
 
   return (
-    <div>
+    <div className="relative">
       <div className="flex flex-wrap gap-1.5">
         {value.map((tag) => (
           <button
@@ -46,22 +48,60 @@ export function TagInput({
         className="mt-2"
         value={draft}
         placeholder="Add A Tag And Press Enter"
-        onChange={(event) => setDraft(event.target.value)}
+        role="combobox"
+        aria-expanded={matches.length > 0}
+        aria-autocomplete="list"
+        aria-activedescendant={highlight >= 0 ? `tag-option-${highlight}` : undefined}
+        onChange={(event) => {
+          setDraft(event.target.value);
+          setHighlight(-1);
+        }}
         onKeyDown={(event) => {
+          if (event.key === "ArrowDown" && matches.length > 0) {
+            event.preventDefault();
+            setHighlight((current) => (current + 1) % matches.length);
+            return;
+          }
+          if (event.key === "ArrowUp" && matches.length > 0) {
+            event.preventDefault();
+            setHighlight((current) => (current <= 0 ? matches.length - 1 : current - 1));
+            return;
+          }
+          if (event.key === "Escape" && (draft || matches.length > 0)) {
+            event.preventDefault();
+            setDraft("");
+            setHighlight(-1);
+            return;
+          }
           if (event.key === "Enter") {
             event.preventDefault();
-            add(draft);
+            if (highlight >= 0 && matches[highlight]) {
+              add(matches[highlight].name);
+            } else {
+              add(draft);
+            }
           }
         }}
         aria-label="Add Tag"
       />
       {matches.length > 0 ? (
-        <ul className="mt-1 overflow-hidden rounded-lg border border-line bg-paper-raised">
-          {matches.map((tag) => (
-            <li key={tag.id}>
+        <ul
+          role="listbox"
+          className="absolute z-20 mt-1 max-h-40 w-full overflow-y-auto rounded-lg border border-line bg-paper-raised shadow-sm"
+        >
+          {matches.map((tag, index) => (
+            <li key={tag.id} role="presentation">
               <button
                 type="button"
-                className={cn("block w-full px-3 py-2 text-left text-sm hover:bg-paper-sunken")}
+                id={`tag-option-${index}`}
+                role="option"
+                aria-selected={index === highlight}
+                className={cn(
+                  "block w-full px-3 py-2 text-left text-sm hover:bg-paper-sunken",
+                  index === highlight && "bg-paper-sunken",
+                )}
+                onMouseDown={(event) => event.preventDefault()}
+                onMouseEnter={() => setHighlight(index)}
                 onClick={() => add(tag.name)}
               >
                 {tag.name}

@@ -7,11 +7,13 @@ import { Label } from "@/components/ui/label";
 import { Modal } from "@/components/ui/modal";
 import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/features/tags/TagInput";
+import { errorMessage } from "@/hooks/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
 import { createBookmark, previewBookmark } from "@/services/bookmarks";
-import { listFolders } from "@/services/folders";
+import { createFolder, listFolders } from "@/services/folders";
 import { listTags } from "@/services/tags";
 import type { ApiError, Bookmark } from "@/types";
+import { displayTitle, looksLikeKeywordList } from "@/utils/title";
 
 export function BookmarkFormDialog({
   open,
@@ -33,7 +35,7 @@ export function BookmarkFormDialog({
   variant?: "dialog" | "page";
 }) {
   const [url, setUrl] = useState(bookmark?.url ?? initialUrl);
-  const [bookmarkTitle, setBookmarkTitle] = useState(bookmark?.title ?? initialTitle);
+  const [bookmarkTitle, setBookmarkTitle] = useState(displayTitle(bookmark?.title ?? initialTitle));
   const [description, setDescription] = useState(bookmark?.description ?? "");
   const [notes, setNotes] = useState(bookmark?.notes ?? "");
   const [folderId, setFolderId] = useState(bookmark?.folder_id ?? "");
@@ -42,7 +44,11 @@ export function BookmarkFormDialog({
   const [error, setError] = useState<ApiError | null>(null);
   const [titleTouched, setTitleTouched] = useState(Boolean(bookmark));
   const [tagsTouched, setTagsTouched] = useState(Boolean(bookmark));
+  const [creatingFolder, setCreatingFolder] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [folderError, setFolderError] = useState<string | null>(null);
   const debouncedUrl = useDebounce(url, 500);
+  const queryClient = useQueryClient();
   const folders = useQuery({ queryKey: ["folders"], queryFn: listFolders, enabled: open });
   const tagList = useQuery({ queryKey: ["tags"], queryFn: listTags, enabled: open });
   const navigate = useNavigate();
@@ -50,7 +56,7 @@ export function BookmarkFormDialog({
   useEffect(() => {
     if (!open) return;
     setUrl(bookmark?.url ?? initialUrl);
-    setBookmarkTitle(bookmark?.title ?? initialTitle);
+    setBookmarkTitle(displayTitle(bookmark?.title ?? initialTitle));
     setDescription(bookmark?.description ?? "");
     setNotes(bookmark?.notes ?? "");
     setFolderId(bookmark?.folder_id ?? "");
@@ -59,6 +65,9 @@ export function BookmarkFormDialog({
     setError(null);
     setTitleTouched(Boolean(bookmark));
     setTagsTouched(Boolean(bookmark));
+    setCreatingFolder(false);
+    setNewFolderName("");
+    setFolderError(null);
   }, [open, bookmark, initialUrl, initialTitle]);
 
   useEffect(() => {
@@ -67,7 +76,14 @@ export function BookmarkFormDialog({
     previewBookmark(debouncedUrl)
       .then((preview) => {
         if (cancelled) return;
-        if (!titleTouched && preview.title) setBookmarkTitle(preview.title);
+        if (!titleTouched && preview.title) {
+          setBookmarkTitle((current) => {
+            if (!current.trim() || looksLikeKeywordList(current)) {
+              return displayTitle(preview.title ?? "");
+            }
+            return current;
+          });
+        }
         if (!description && preview.description) setDescription(preview.description);
         if (!tagsTouched && preview.suggested_tags?.length) setTags(preview.suggested_tags);
       })
@@ -78,6 +94,26 @@ export function BookmarkFormDialog({
       cancelled = true;
     };
   }, [debouncedUrl, open, bookmark, titleTouched, description, tagsTouched]);
+
+  async function handleCreateFolder() {
+    const name = newFolderName.trim();
+    if (!name) return;
+    setFolderError(null);
+    try {
+      const folder = await createFolder({ name });
+      queryClient.setQueryData(["folders"], (current: unknown) => {
+        const list = Array.isArray(current) ? current : [];
+        if (list.some((item: { id: string }) => item.id === folder.id)) return list;
+        return [...list, folder];
+      });
+      await queryClient.invalidateQueries({ queryKey: ["folders"] });
+      setFolderId(folder.id);
+      setNewFolderName("");
+      setCreatingFolder(false);
+    } catch (caught) {
+      setFolderError(errorMessage(caught, "Unable To Create Folder."));
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -138,6 +174,34 @@ export function BookmarkFormDialog({
                 </option>
               ))}
             </select>
+            {creatingFolder ? (
+              <div className="flex gap-2">
+                <Input
+                  aria-label="New Folder Name"
+                  value={newFolderName}
+                  onChange={(event) => setNewFolderName(event.target.value)}
+                  placeholder="Folder Name"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      void handleCreateFolder();
+                    }
+                  }}
+                />
+                <Button type="button" variant="secondary" onClick={() => void handleCreateFolder()}>
+                  Add
+                </Button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="text-sm font-medium text-accent hover:underline"
+                onClick={() => setCreatingFolder(true)}
+              >
+                New Folder
+              </button>
+            )}
+            {folderError ? <p className="text-sm text-red-700">{folderError}</p> : null}
           </div>
           <label className="mt-7 flex items-center gap-2 text-sm">
             <input

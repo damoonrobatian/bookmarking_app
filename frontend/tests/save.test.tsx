@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { SavePage } from "@/pages/SavePage";
 
@@ -54,13 +54,8 @@ describe("save page", () => {
       </QueryClientProvider>,
     );
     expect(await screen.findByDisplayValue("https://react.dev/learn")).toBeInTheDocument();
-    await waitFor(
-      () => {
-        expect(screen.getByDisplayValue("React Docs")).toBeInTheDocument();
-      },
-      { timeout: 2000 },
-    );
-    expect(await screen.findByRole("button", { name: "javascript ×" })).toBeInTheDocument();
+    expect(screen.getByDisplayValue("React")).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "javascript ×" }, { timeout: 2000 })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "react ×" })).toBeInTheDocument();
   });
 });

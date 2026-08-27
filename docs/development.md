@@ -79,11 +79,24 @@ Normalized URLs are unique per user. Creating a duplicate returns HTTP 409 and t
 
 ## Save from the browser
 
-The live app's Settings page has a **Save To Neshanak** bookmarklet. Drag it to the bookmarks bar, then click it on any page. A popup opens `https://neshanak.ca/save` with the address filled in; title and tags are suggested from the page.
+This adds a clickable **Save To Neshanak** control on pages you want to keep. It is a bookmarklet: a bookmark whose address is a small script. It must sit on the **bookmarks bar** (the strip under the address bar), not only in Settings.
 
-For a button next to the address bar, load the unpacked folder `extension/`:
+### Bookmarks bar button
 
-- Chrome: `chrome://extensions` → Developer Mode → Load Unpacked → `extension/`
-- Firefox: `about:debugging#/runtime/this-firefox` → Load Temporary Add-On → `extension/manifest.json`
+1. Sign in at https://neshanak.ca and open **Settings**.
+2. Show the bookmarks bar if you cannot see it:
+   - Chrome, Edge, and Firefox: **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
+   - Or right-click the empty area under the address bar and enable **Bookmarks Bar** / **Bookmarks Toolbar**.
+3. Drag the orange **Save To Neshanak** button from Settings onto that bar. Do not only click it on Settings — that does nothing on purpose, so the page does not navigate away while you drag.
+4. Visit the page you want to save. Click **Save To Neshanak** on the bar. A popup opens `https://neshanak.ca/save` with the address filled in. Title and tags are suggested from the tab title, the page heading, and your existing tags when they match.
 
-The extension always opens `https://neshanak.ca/save`. You must already be signed in there.
+If popups are blocked, allow popups for `neshanak.ca` and try again.
+
+### Toolbar extension
+
+For a button next to the address bar, load the unpacked folder `extension/` from this repository:
+
+- Chrome: `chrome://extensions` → enable Developer Mode → Load Unpacked → select the `extension` folder
+- Firefox: `about:debugging#/runtime/this-firefox` → Load Temporary Add-On → select `extension/manifest.json`
+
+The extension always opens `https://neshanak.ca/save`. You must already be signed in there. Firefox removes a temporary add-on when the browser restarts; load it again after a restart.

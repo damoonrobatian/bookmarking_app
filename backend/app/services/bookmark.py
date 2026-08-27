@@ -8,7 +8,7 @@ from app.models.user import User
 from app.repositories.bookmark import BookmarkRepository
 from app.repositories.folder import FolderRepository
 from app.repositories.tag import TagRepository
-from app.services.metadata import extract_metadata
+from app.services.metadata import extract_metadata, tag_appears_in
 from app.utils.time import utcnow
 from app.utils.urls import InvalidURLError, domain_from_url, normalize_url, parse_user_url
 
@@ -179,7 +179,7 @@ class BookmarkService:
         for tag in self.tags.list_for_user(user.id):
             if tag.name in suggested:
                 continue
-            if tag.name in haystack:
+            if tag_appears_in(tag.name, haystack):
                 suggested.append(tag.name)
             if len(suggested) >= 5:
                 break

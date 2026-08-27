@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass, field
 from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from app.config import get_settings
 from app.repositories.tag import normalize_tag_name
@@ -33,7 +35,7 @@ def extract_metadata(url: str) -> PageMetadata:
         validate_public_http_url(url)
     except UnsafeURLError as exc:
         logger.info("Skipping metadata fetch for unsafe URL %s: %s", url, exc)
-        return PageMetadata(None, None, None, domain, "blocked")
+        return PageMetadata(None, None, None, domain, "blocked", _url_tags(url, domain))
 
     settings = get_settings()
     try:
@@ -45,16 +47,16 @@ def extract_metadata(url: str) -> PageMetadata:
             html, final_url = _fetch_html(client, url, settings.metadata_max_bytes)
     except httpx.TimeoutException:
         logger.info("Metadata fetch timed out for %s", url)
-        return PageMetadata(None, None, None, domain, "timeout")
+        return PageMetadata(None, None, None, domain, "timeout", _url_tags(url, domain))
     except httpx.HTTPError as exc:
         logger.info("Metadata fetch failed for %s: %s", url, exc)
-        return PageMetadata(None, None, None, domain, "unreachable")
+        return PageMetadata(None, None, None, domain, "unreachable", _url_tags(url, domain))
     except UnsafeURLError as exc:
         logger.info("Redirect to unsafe URL for %s: %s", url, exc)
-        return PageMetadata(None, None, None, domain, "blocked")
+        return PageMetadata(None, None, None, domain, "blocked", _url_tags(url, domain))
 
     if html is None:
-        return PageMetadata(None, None, None, domain, "unavailable")
+        return PageMetadata(None, None, None, domain, "unavailable", _url_tags(url, domain))
 
     title, description, favicon, suggested_tags = _parse_html(html, final_url or url)
     return PageMetadata(title, description, favicon, domain, "ok", suggested_tags)
@@ -84,24 +86,67 @@ def _fetch_html(client: httpx.Client, url: str, max_bytes: int, redirects_left: 
 
 def _parse_html(html: str, base_url: str) -> tuple[str | None, str | None, str | None, list[str]]:
     soup = BeautifulSoup(html, "html.parser")
-    og_title = _meta(soup, property="og:title")
-    title = og_title or (soup.title.string.strip() if soup.title and soup.title.string else None)
+    title = _best_title(soup)
     description = _meta(soup, property="og:description") or _meta(soup, name="description")
     favicon = _favicon(soup, base_url)
-    return title, description, favicon, _suggested_tags(soup)
+    return title, description, favicon, _suggested_tags(soup, base_url)
+
+
+def _best_title(soup: BeautifulSoup) -> str | None:
+    h1 = soup.find("h1")
+    h1_text = _normalize_space(h1.get_text(" ", strip=True) if h1 else None)
+    raw_title = None
+    if soup.title:
+        raw_title = _normalize_space(soup.title.get_text(" ", strip=True))
+    candidates = [
+        _meta(soup, property="og:title"),
+        _meta(soup, name="twitter:title"),
+        h1_text,
+        raw_title,
+    ]
+    for candidate in candidates:
+        if candidate and not looks_like_keyword_list(candidate):
+            return candidate[:200]
+    for candidate in candidates:
+        if candidate:
+            clause = _first_clause(candidate)
+            if clause:
+                return clause[:200]
+    return None
+
+
+def looks_like_keyword_list(text: str) -> bool:
+    parts = [part.strip() for part in re.split(r"[,|;]", text) if part.strip()]
+    return len(parts) >= 3
+
+
+def _first_clause(text: str) -> str | None:
+    parts = [part.strip() for part in re.split(r"[,|;]", text) if part.strip()]
+    return parts[0] if parts else None
+
+
+def _normalize_space(value: str | None) -> str | None:
+    if not value:
+        return None
+    cleaned = " ".join(value.split())
+    return cleaned or None
 
 
 def _meta(soup: BeautifulSoup, *, property: str | None = None, name: str | None = None) -> str | None:
-    if property:
-        tag = soup.find("meta", attrs={"property": property})
-    else:
-        tag = soup.find("meta", attrs={"name": name})
-    if not tag:
+    def match(tag: Tag) -> bool:
+        if tag.name != "meta":
+            return False
+        if property:
+            return str(tag.get("property") or "").lower() == property.lower()
+        return str(tag.get("name") or "").lower() == (name or "").lower()
+
+    tag = soup.find(match)
+    if not tag or not isinstance(tag, Tag):
         return None
     content = tag.get("content")
     if not content:
         return None
-    return str(content).strip() or None
+    return _normalize_space(str(content))
 
 
 def _favicon(soup: BeautifulSoup, base_url: str) -> str | None:
@@ -133,22 +178,86 @@ _SKIP_TAGS = {
     "www",
 }
 
+_SKIP_PATH = {
+    "blog",
+    "docs",
+    "home",
+    "html",
+    "index",
+    "learn",
+    "page",
+    "pages",
+    "post",
+    "posts",
+    "www",
+}
 
-def _suggested_tags(soup: BeautifulSoup) -> list[str]:
+
+def _suggested_tags(soup: BeautifulSoup, base_url: str) -> list[str]:
     raw: list[str] = []
-    keywords = _meta(soup, name="keywords")
-    if keywords:
-        raw.extend(keywords.split(","))
-    for tag in soup.find_all("meta", attrs={"property": "article:tag"}):
+    keywords = _meta(soup, name="keywords") or _meta(soup, name="news_keywords")
+    if keywords and not looks_like_keyword_list(keywords):
+        raw.extend(re.split(r"[,|;]", keywords))
+    elif keywords:
+        # A long SEO keyword dump is not useful as tags; keep only short single tokens.
+        for item in re.split(r"[,|;]", keywords):
+            token = normalize_tag_name(item)
+            if " " not in token:
+                raw.append(token)
+    for tag in soup.find_all("meta"):
+        if not isinstance(tag, Tag):
+            continue
+        if str(tag.get("property") or "").lower() != "article:tag":
+            continue
         content = tag.get("content")
         if content:
             raw.append(str(content))
     suggested: list[str] = []
     for item in raw:
-        name = normalize_tag_name(str(item))
-        if len(name) < 2 or len(name) > 32 or name in _SKIP_TAGS or name in suggested:
-            continue
-        suggested.append(name)
+        _push_tag(suggested, str(item))
+        if len(suggested) >= 5:
+            return suggested
+    for item in _url_tags(base_url, domain_from_url(base_url)):
+        _push_tag(suggested, item)
         if len(suggested) >= 5:
             break
     return suggested
+
+
+def _url_tags(url: str, domain: str | None) -> list[str]:
+    tags: list[str] = []
+    host = (domain or "").removeprefix("www.")
+    label = host.split(".")[0] if host else ""
+    _push_tag(tags, label)
+    path = urlparse(url).path
+    for segment in reversed(path.split("/")):
+        if not segment or "." in segment:
+            continue
+        name = normalize_tag_name(segment.replace("-", " "))
+        if name in _SKIP_PATH:
+            continue
+        before = len(tags)
+        _push_tag(tags, name)
+        if len(tags) > before:
+            break
+    return tags
+
+
+def _push_tag(suggested: list[str], raw: str) -> None:
+    name = normalize_tag_name(raw)
+    if (
+        2 <= len(name) <= 32
+        and name not in _SKIP_TAGS
+        and name not in suggested
+        and re.search(r"[a-z0-9]", name)
+        and not name.startswith(".")
+    ):
+        suggested.append(name)
+
+
+def tag_appears_in(name: str, haystack: str) -> bool:
+    if len(name) < 2:
+        return False
+    if " " in name:
+        return name in haystack
+    return re.search(rf"(?<![a-z0-9]){re.escape(name)}(?![a-z0-9])", haystack) is not None

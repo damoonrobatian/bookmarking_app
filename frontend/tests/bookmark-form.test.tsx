@@ -77,7 +77,62 @@ describe("bookmark creation", () => {
       </QueryClientProvider>,
     );
     expect(screen.getByDisplayValue("https://react.dev/learn")).toBeInTheDocument();
-    expect(await screen.findByDisplayValue("React Docs", {}, { timeout: 2000 })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "javascript ×" })).toBeInTheDocument();
+    expect(screen.getByDisplayValue("React")).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "javascript ×" }, { timeout: 2000 })).toBeInTheDocument();
+  });
+
+  it("creates a folder from the form", async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn().mockResolvedValue({});
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    const folders: Array<Record<string, unknown>> = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((path: string, init?: RequestInit) => {
+        if (path === "/api/folders" && init?.method === "POST") {
+          const folder = {
+            id: "folder-1",
+            parent_id: null,
+            name: "Reading",
+            position: 0,
+            created_at: "",
+            updated_at: "",
+          };
+          folders.push(folder);
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            headers: { get: () => "application/json" },
+            json: async () => folder,
+          });
+        }
+        if (path === "/api/folders") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            headers: { get: () => "application/json" },
+            json: async () => folders,
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          headers: { get: () => "application/json" },
+          json: async () => [],
+        });
+      }),
+    );
+    render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter>
+          <BookmarkFormDialog open onOpenChange={() => undefined} title="Add Bookmark" onSubmit={onSubmit} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    await user.click(screen.getByRole("button", { name: "New Folder" }));
+    await user.type(screen.getByLabelText("New Folder Name"), "Reading");
+    await user.click(screen.getByRole("button", { name: "Add" }));
+    expect(await screen.findByRole("option", { name: "Reading" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Folder")).toHaveValue("folder-1");
   });
 });

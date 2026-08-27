@@ -49,7 +49,14 @@ See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and
 
 Your bookmark library is **https://neshanak.ca** only. Do not run `make backend` / `make frontend` or local Docker as a second copy of your bookmarks.
 
-To save a page you are looking at, sign in at https://neshanak.ca, open Settings, and drag **Save To Neshanak** onto the bookmarks bar. Click that button on any site to open a popup with the URL filled in and a suggested title and tags. For a toolbar button next to the address bar, load the unpacked `extension/` folder (Chrome: Load Unpacked; Firefox: Load Temporary Add-On). Install steps are also in [docs/development.md](docs/development.md).
+To save a page you are looking at:
+
+1. Sign in at https://neshanak.ca and open **Settings**.
+2. Show the browser bookmarks bar if it is hidden: Chrome, Edge, and Firefox use Ctrl+Shift+B (Mac: Command+Shift+B). You can also right-click under the address bar and enable Bookmarks Bar / Bookmarks Toolbar.
+3. Drag the orange **Save To Neshanak** button onto that bar. Clicking it on the Settings page does nothing; it only works from the bar.
+4. On any site, click **Save To Neshanak** on the bar. A popup opens with the address filled in and a suggested title and tags.
+
+For a button next to the address bar instead, load the unpacked `extension/` folder (Chrome: Load Unpacked; Firefox: Load Temporary Add-On). Full steps are in [docs/development.md](docs/development.md).
 
 ## Changing the code
 
