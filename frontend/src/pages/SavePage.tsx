@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { BrandMark } from "@/components/BrandMark";
 import { BookmarkFormDialog } from "@/features/bookmarks/BookmarkFormDialog";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { createBookmark } from "@/services/bookmarks";
@@ -38,8 +39,8 @@ export function SavePage() {
 
   return (
     <div className="min-h-screen bg-paper px-5 py-6">
-      <Link to="/app" className="font-serif text-2xl">
-        Neshanak
+      <Link to="/app" className="text-ink">
+        <BrandMark />
       </Link>
       <h1 className="mt-6 font-serif text-3xl">Save Bookmark</h1>
       <p className="mt-1 mb-6 text-sm text-ink-muted">The Page Address Was Filled In From Your Browser. Title And Tags Are Suggested When Possible.</p>

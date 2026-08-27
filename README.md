@@ -1,5 +1,9 @@
 # Neshanak
 
+<p align="center">
+  <img src="frontend/public/logo.png" width="96" height="96" alt="Neshanak logo" />
+</p>
+
 A personal bookmark manager for saving, organizing, searching, and revisiting the pages you want to keep.
 
 Neshanak is similar in spirit to a dedicated bookmarking tool: folders, tags, favorites, archive, import/export, and automatic page metadata — without social features.

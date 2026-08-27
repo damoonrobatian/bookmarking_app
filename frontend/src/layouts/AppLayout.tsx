@@ -1,6 +1,7 @@
 import { Archive, Bookmark as BookmarkIcon, Clock, Menu, Plus, Search, Settings, Star, Tag, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import { BrandMark } from "@/components/BrandMark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AddBookmarkDialog } from "@/features/bookmarks/BookmarkFormDialog";
@@ -57,8 +58,8 @@ export function AppLayout() {
         )}
       >
         <div className="mb-6 flex items-center justify-between">
-          <Link to="/app" className="font-serif text-2xl">
-            Neshanak
+          <Link to="/app" className="text-ink">
+            <BrandMark size="sm" />
           </Link>
           {!isDesktop ? (
             <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close Menu">

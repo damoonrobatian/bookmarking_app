@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
+import { BrandMark } from "@/components/BrandMark";
 
 export function AuthLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle: string }) {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="hidden flex-col justify-between bg-ink px-12 py-10 text-paper lg:flex">
-        <Link to="/" className="font-serif text-3xl">
-          Neshanak
+        <Link to="/" className="text-paper">
+          <BrandMark size="lg" />
         </Link>
         <div>
           <p className="max-w-sm font-serif text-4xl leading-tight">A Quiet Place For The Pages You Want To Keep.</p>
@@ -18,8 +19,8 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
       </div>
       <div className="flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
-          <Link to="/" className="mb-8 block font-serif text-3xl lg:hidden">
-            Neshanak
+          <Link to="/" className="mb-8 block text-ink lg:hidden">
+            <BrandMark size="lg" />
           </Link>
           <h1 className="font-serif text-3xl">{title}</h1>
           <p className="mt-2 mb-6 text-sm text-ink-muted">{subtitle}</p>
