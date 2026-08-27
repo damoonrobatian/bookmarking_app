@@ -12,6 +12,18 @@ export type Tag = {
   created_at: string;
 };
 
+export type FolderTag = {
+  id: string;
+  name: string;
+  bookmark_count: number;
+};
+
+export type FolderTagGroup = {
+  folder_id: string | null;
+  folder_name: string;
+  tags: FolderTag[];
+};
+
 export type Folder = {
   id: string;
   parent_id: string | null;

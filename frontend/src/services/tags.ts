@@ -1,8 +1,12 @@
 import { apiFetch } from "@/services/api";
-import type { ImportReport, Tag } from "@/types";
+import type { FolderTagGroup, ImportReport, Tag } from "@/types";
 
 export function listTags() {
   return apiFetch<Tag[]>("/api/tags");
+}
+
+export function listTagsGrouped() {
+  return apiFetch<FolderTagGroup[]>("/api/tags/grouped");
 }
 
 export function createTag(name: string) {

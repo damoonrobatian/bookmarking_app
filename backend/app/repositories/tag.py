@@ -1,8 +1,10 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from app.models.bookmark import Bookmark, bookmark_tags
+from app.models.folder import Folder
 from app.models.tag import Tag
 
 
@@ -22,6 +24,18 @@ class TagRepository:
 
     def list_for_user(self, user_id: UUID) -> list[Tag]:
         return list(self.db.scalars(select(Tag).where(Tag.user_id == user_id).order_by(Tag.name.asc())))
+
+    def list_grouped_by_folder(self, user_id: UUID) -> list[tuple[UUID | None, str, UUID, str, int]]:
+        stmt = (
+            select(Bookmark.folder_id, Folder.name, Tag.id, Tag.name, func.count(Bookmark.id))
+            .select_from(Bookmark)
+            .join(bookmark_tags, bookmark_tags.c.bookmark_id == Bookmark.id)
+            .join(Tag, Tag.id == bookmark_tags.c.tag_id)
+            .outerjoin(Folder, Folder.id == Bookmark.folder_id)
+            .where(Bookmark.user_id == user_id, Bookmark.is_archived.is_(False))
+            .group_by(Bookmark.folder_id, Folder.name, Tag.id, Tag.name)
+        )
+        return [(row[0], row[1] or "No Folder", row[2], row[3], int(row[4])) for row in self.db.execute(stmt)]
 
     def get_or_create(self, user_id: UUID, name: str) -> Tag:
         normalized = normalize_tag_name(name)

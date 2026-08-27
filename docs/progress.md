@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (38) and frontend tests (22)
+- Backend tests (39) and frontend tests (25)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -23,9 +23,10 @@
 - Product rename: **Neshanak** in the UI, API title, and docs (Postgres user/db on the droplet remain `nook`)
 - Remember Me on login: checked by default (persistent cookies, up to `REFRESH_TOKEN_EXPIRE_DAYS`). Unchecked uses session cookies. `GET /api/auth/me` refreshes an expired access cookie. Refresh rotation keeps that choice.
 - Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
-- Change password and delete account on Settings; Show Password on password fields
+- Change password and delete account from Settings (one section open at a time); Show Password on password fields
 - Copy URL on each bookmark card (clipboard + toast)
 - Save the current page from a Settings bookmarklet or the unpacked `extension/` toolbar button; `/save` popup auto-fills URL, a real title (not SEO keyword dumps), suggested tags, and can create a folder on the spot
+- Tags page groups tags by folder; the sidebar no longer lists every tag
 
 ## Remaining
 

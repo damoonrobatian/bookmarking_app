@@ -67,6 +67,18 @@ class TagUpdate(BaseModel):
     name: str = Field(min_length=1, max_length=80)
 
 
+class FolderTagRead(BaseModel):
+    id: UUID
+    name: str
+    bookmark_count: int
+
+
+class FolderTagGroup(BaseModel):
+    folder_id: UUID | None
+    folder_name: str
+    tags: list[FolderTagRead]
+
+
 class FolderRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

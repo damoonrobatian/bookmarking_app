@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.models.tag import Tag
 from app.models.user import User
 from app.repositories.tag import TagRepository, normalize_tag_name
+from app.schemas import FolderTagGroup, FolderTagRead
 
 
 class TagService:
@@ -14,6 +15,19 @@ class TagService:
 
     def list_tags(self, user: User) -> list[Tag]:
         return self.tags.list_for_user(user.id)
+
+    def list_grouped_by_folder(self, user: User) -> list[FolderTagGroup]:
+        groups: dict[UUID | None, FolderTagGroup] = {}
+        for folder_id, folder_name, tag_id, tag_name, count in self.tags.list_grouped_by_folder(user.id):
+            group = groups.get(folder_id)
+            if group is None:
+                group = FolderTagGroup(folder_id=folder_id, folder_name=folder_name, tags=[])
+                groups[folder_id] = group
+            group.tags.append(FolderTagRead(id=tag_id, name=tag_name, bookmark_count=count))
+        ordered = sorted(groups.values(), key=lambda item: (item.folder_id is None, item.folder_name.lower()))
+        for group in ordered:
+            group.tags.sort(key=lambda tag: tag.name)
+        return ordered
 
     def create(self, user: User, name: str) -> Tag:
         normalized = normalize_tag_name(name)

@@ -11,11 +11,11 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 ## Features
 
 - Account registration, login with Remember Me (on by default), and logout
-- Change password and delete account from Settings
+- Change password and delete account from Settings (one section at a time)
 - Show Password on password fields
 - Save, edit, delete, favorite, archive, restore, and copy a bookmark URL
 - Nested folders with move and rename
-- Tags with autocomplete
+- Tags grouped by folder on a Tags page, with autocomplete when saving
 - Search across title, URL, domain, description, notes, and tags
 - Sorting and pagination
 - Recently added and recently visited views
@@ -51,7 +51,7 @@ Your bookmark library is **https://neshanak.ca** only. Do not run `make backend`
 
 To save a page you are looking at:
 
-1. Sign in at https://neshanak.ca and open **Settings**.
+1. Sign in at https://neshanak.ca, open **Settings**, then **Save From The Browser**.
 2. Show the browser bookmarks bar if it is hidden: Chrome, Edge, and Firefox use Ctrl+Shift+B (Mac: Command+Shift+B). You can also right-click under the address bar and enable Bookmarks Bar / Bookmarks Toolbar.
 3. Drag the orange **Save To Neshanak** button onto that bar. Clicking it on the Settings page does nothing; it only works from the bar.
 4. On any site, click **Save To Neshanak** on the bar. A popup opens with the address filled in and a suggested title and tags.

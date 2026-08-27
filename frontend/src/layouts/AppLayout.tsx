@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { Archive, Bookmark as BookmarkIcon, Clock, Menu, Plus, Search, Settings, Star, X } from "lucide-react";
+import { Archive, Bookmark as BookmarkIcon, Clock, Menu, Plus, Search, Settings, Star, Tag, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, NavLink, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,6 @@ import { FolderTree } from "@/features/folders/FolderTree";
 import { useCurrentUser, useLogout } from "@/hooks/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { listTags } from "@/services/tags";
 import { cn } from "@/utils/cn";
 
 export function AppLayout() {
@@ -81,15 +79,25 @@ export function AppLayout() {
           <SideLink to="/app/archive" icon={<Archive className="h-4 w-4" />}>
             Archive
           </SideLink>
+          <SideLink to="/app/tags" icon={<Tag className="h-4 w-4" />}>
+            Tags
+          </SideLink>
         </nav>
         <div className="mt-6 flex-1 overflow-y-auto">
           <FolderTree />
-          <TagList />
         </div>
-        <Link to="/settings" className="mt-4 flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-ink-muted hover:bg-paper-sunken">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            cn(
+              "mt-4 flex items-center gap-2 rounded-lg px-2 py-2 text-sm",
+              isActive ? "bg-accent-soft font-medium text-accent-hover" : "text-ink-muted hover:bg-paper-sunken",
+            )
+          }
+        >
           <Settings className="h-4 w-4" />
           Settings
-        </Link>
+        </NavLink>
       </aside>
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-10 flex items-center gap-3 border-b border-line bg-paper/90 px-4 py-3 backdrop-blur">
@@ -153,27 +161,5 @@ function SideLink({
       {icon}
       {children}
     </NavLink>
-  );
-}
-
-function TagList() {
-  const tags = useQuery({ queryKey: ["tags"], queryFn: listTags });
-  if (!tags.data?.length) return null;
-  return (
-    <div className="mt-6">
-      <p className="mb-2 px-2 text-xs font-semibold tracking-wide text-ink-faint">Tags</p>
-      <ul className="space-y-1">
-        {tags.data.map((tag) => (
-          <li key={tag.id}>
-            <NavLink
-              to={`/app?tag=${encodeURIComponent(tag.name)}`}
-              className="block truncate rounded-lg px-2 py-1.5 text-sm text-ink-muted hover:bg-paper-sunken"
-            >
-              {tag.name}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

@@ -51,7 +51,7 @@ When using Docker Compose these URLs are available through the frontend origin a
 
 `POST /api/bookmarks/preview` returns `{ url, title, description, favicon_url, page_domain, metadata_status, suggested_tags }`. Title prefers Open Graph, Twitter, or the main heading, and drops comma-separated SEO keyword lists. `suggested_tags` uses real `meta keywords` / `article:tag` values (not keyword dumps), the site name from the host, a meaningful URL path segment, and the user's existing tags that appear as whole words in the title, description, or URL, capped at five.
 
-The `/save` page and the toolbar extension create bookmarks with the same `POST /api/bookmarks` call as the library dialog. Session cookies on `https://neshanak.ca` are enough; there is no separate extension credential.
+`GET /api/tags/grouped` returns tags used on unarchived bookmarks, grouped by folder (`folder_id`, `folder_name`, `tags` with `bookmark_count`). Bookmarks with no folder appear under `folder_name: "No Folder"`.
 
 ## Folders and tags
 
@@ -61,6 +61,7 @@ The `/save` page and the toolbar extension create bookmarks with the same `POST 
 | PATCH/DELETE | `/api/folders/{id}` |
 | POST | `/api/folders/{id}/move` |
 | GET/POST | `/api/tags` |
+| GET | `/api/tags/grouped` |
 | PATCH/DELETE | `/api/tags/{id}` |
 
 ## Import and export

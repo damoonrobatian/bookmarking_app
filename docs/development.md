@@ -83,7 +83,7 @@ This adds a clickable **Save To Neshanak** control on pages you want to keep. It
 
 ### Bookmarks bar button
 
-1. Sign in at https://neshanak.ca and open **Settings**.
+1. Sign in at https://neshanak.ca, open **Settings**, then **Save From The Browser**.
 2. Show the bookmarks bar if you cannot see it:
    - Chrome, Edge, and Firefox: **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
    - Or right-click the empty area under the address bar and enable **Bookmarks Bar** / **Bookmarks Toolbar**.

@@ -61,4 +61,8 @@ The SPA uses React Router for pages and TanStack Query for server state. Feature
 
 The Settings bookmarklet and the unpacked extension in `extension/` open that popup on `https://neshanak.ca` so existing login cookies apply (`SameSite=Lax`).
 
+Settings is a menu of one action at a time (`/settings/password`, and so on) so password fields are not mounted until that action is chosen.
+
+Tags live on `/app/tags`, grouped by folder. The sidebar lists folders only.
+
 Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a Show Password control.

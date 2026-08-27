@@ -30,3 +30,27 @@ def test_tag_crud_and_filter(client: TestClient) -> None:
 
     client.delete(f"/api/tags/{tag_id}")
     assert len(client.get("/api/tags").json()) == 1
+
+
+def test_tags_grouped_by_folder(client: TestClient) -> None:
+    register_user(client)
+    folder = client.post("/api/folders", json={"name": "Work"}).json()
+    client.post(
+        "/api/bookmarks",
+        json={
+            "url": "https://docs.python.org/",
+            "title": "Python",
+            "folder_id": folder["id"],
+            "tags": ["docs", "python"],
+            "fetch_metadata": False,
+        },
+    )
+    client.post(
+        "/api/bookmarks",
+        json={"url": "https://news.ycombinator.com/", "title": "HN", "tags": ["news"], "fetch_metadata": False},
+    )
+    grouped = client.get("/api/tags/grouped")
+    assert grouped.status_code == 200
+    by_name = {item["folder_name"]: item for item in grouped.json()}
+    assert {tag["name"] for tag in by_name["Work"]["tags"]} == {"docs", "python"}
+    assert {tag["name"] for tag in by_name["No Folder"]["tags"]} == {"news"}

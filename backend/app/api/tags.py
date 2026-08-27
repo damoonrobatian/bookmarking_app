@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.dependencies import get_current_user
 from app.models.user import User
-from app.schemas import TagCreate, TagRead, TagUpdate
+from app.schemas import FolderTagGroup, TagCreate, TagRead, TagUpdate
 from app.services.tag import TagService
 
 router = APIRouter(prefix="/tags", tags=["tags"])
@@ -18,6 +18,14 @@ def list_tags(
     user: User = Depends(get_current_user),
 ) -> list[TagRead]:
     return [TagRead.model_validate(item) for item in TagService(db).list_tags(user)]
+
+
+@router.get("/grouped", response_model=list[FolderTagGroup])
+def list_tags_grouped(
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list[FolderTagGroup]:
+    return TagService(db).list_grouped_by_folder(user)
 
 
 @router.post("", response_model=TagRead, status_code=status.HTTP_201_CREATED)

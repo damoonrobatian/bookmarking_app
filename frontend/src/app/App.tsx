@@ -14,6 +14,7 @@ import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { SavePage } from "@/pages/SavePage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { TagsPage } from "@/pages/TagsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 15_000, refetchOnWindowFocus: false } },
@@ -33,12 +34,16 @@ const router = createBrowserRouter([
       { path: "recent", element: <RecentPage /> },
       { path: "archive", element: <ArchivePage /> },
       { path: "folder/:id", element: <FolderPage /> },
+      { path: "tags", element: <TagsPage /> },
     ],
   },
   {
     path: "/settings",
     element: <AppLayout />,
-    children: [{ index: true, element: <SettingsPage /> }],
+    children: [
+      { index: true, element: <SettingsPage /> },
+      { path: ":section", element: <SettingsPage /> },
+    ],
   },
 ]);
 

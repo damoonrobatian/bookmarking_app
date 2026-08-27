@@ -68,12 +68,13 @@ export function FolderPage() {
   const folders = useQuery({ queryKey: ["folders"], queryFn: listFolders });
   const folder = folders.data?.find((item) => item.id === id);
   const [params] = useSearchParams();
+  const tag = params.get("tag") ?? undefined;
   return (
     <BookmarkCollection
-      title={folder?.name ?? "Folder"}
+      title={tag ? `${folder?.name ?? "Folder"} · ${tag}` : folder?.name ?? "Folder"}
       emptyTitle="This Folder Is Empty."
       emptyDescription="Move A Bookmark Here Or Add A New One."
-      filters={{ folder_id: id, archived: false, search: params.get("q") ?? undefined }}
+      filters={{ folder_id: id, tag, archived: false, search: params.get("q") ?? undefined }}
     />
   );
 }
