@@ -275,7 +275,7 @@ Public **8080** is closed. Use **https://neshanak.ca** only. Sign-in cookies are
 
 ## Continuous deployment
 
-A push to `main` runs GitHub Actions: tests, then SSH to the droplet and rebuild Compose. Pull requests run tests only.
+A push to `main` runs `.github/workflows/ci-cd.yml`: tests, then SSH to the droplet and rebuild Compose. Pull requests run tests only.
 
 The droplet is reset to `origin/main` on each deploy (`git reset --hard`). Keep secrets in the droplet `.env` (gitignored), not in the repo. The deploy key is the GitHub Actions secret `DROPLET_SSH_KEY`; it is not the laptop SSH key.
 

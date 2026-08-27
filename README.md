@@ -116,7 +116,7 @@ make lint
 
 Backend tests use SQLite and do not require PostgreSQL.
 
-Pushes to `main` run GitHub Actions (lint, tests, frontend build) and then deploy to the droplet. Pull requests run the checks without deploying.
+Pushes to `main` run the **CI/CD** workflow (`.github/workflows/ci-cd.yml`): lint, tests, frontend build, then deploy to the droplet. Pull requests run the checks without deploying.
 
 ## Project structure
 
