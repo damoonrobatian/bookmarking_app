@@ -16,7 +16,7 @@ export function BrandMark({
       <img
         src="/logo.svg"
         alt={wordmark ? "" : "Neshanak"}
-        className={cn("rounded-lg", icon)}
+        className={icon}
         width={32}
         height={32}
       />
