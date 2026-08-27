@@ -18,7 +18,7 @@ These are the choices and results from the first live deploy:
 | Auth | Existing laptop SSH key (no root password) |
 | Automated backups | Enabled (~20% extra) |
 | Public IPv4 | `159.89.125.246` |
-| App URL (until HTTPS) | http://159.89.125.246:8080 |
+| App URL (until HTTPS) | http://neshanak.ca:8080 (also http://159.89.125.246:8080) |
 | Domain | `neshanak.ca` (CIRA; registrar Namespro Solutions Inc.) |
 | API docs | http://159.89.125.246:8080/docs (via nginx; port 8000 is firewalled) |
 | Docker | Official install script on the droplet (`Docker Compose` v2) |
@@ -26,7 +26,7 @@ These are the choices and results from the first live deploy:
 | `.env` | `SECRET_KEY` only (gitignored; Compose interpolates it) |
 | Compose | `docker compose up --build -d` — `db` healthy, `backend` 8000, `frontend` 8080 |
 | Firewall | `ufw` active: OpenSSH + `8080/tcp` only |
-| TLS | Not yet. Domain is registered; live DNS was still Namespro parking as of 26 Aug 2026 evening. HTTPS waits until `neshanak.ca` resolves to `159.89.125.246`. |
+| TLS | Not yet. DNS for `neshanak.ca` / `www` is `159.89.125.246` (Namespro confirmed 26 Aug 2026 21:15). HTTPS is the next step. |
 
 Verified: sign-in and save work from a laptop and a phone against that URL.
 
@@ -195,7 +195,7 @@ Confirm the site still loads on port **8080** after enabling the firewall. `/doc
 
 Do not add `5432` or `8000` to `ufw` unless you have a short-term reason.
 
-## 9. Domain (`neshanak.ca`) — in progress
+## 9. Domain (`neshanak.ca`) — DNS live; HTTPS not yet
 
 HTTPS needs a **name** at CIRA, not only the droplet IP. Let's Encrypt will not issue a certificate for `159.89.125.246`.
 
@@ -213,7 +213,7 @@ HTTPS needs a **name** at CIRA, not only the droplet IP. Let's Encrypt will not 
 
 The product name in the app is **Neshanak**. The public hostname is `neshanak.ca`. The Ubuntu droplet hostname and PostgreSQL user/database remain `nook` from the first deploy; renaming those would break the running volume.
 
-Until DNS and TLS are working, keep using **http://159.89.125.246:8080**.
+Until TLS is on, the app is **http://neshanak.ca:8080** (port **8080** only; `ufw` does not allow 80 or 443 yet). `http://neshanak.ca` without a port is not the app.
 
 ### Registry vs shop list
 
@@ -243,7 +243,14 @@ You want `159.89.125.246`. `51.222.143.2` is Namespro parking.
 
 **TTL** is how many seconds a resolver may cache an answer (here often 3600). If `htns1` itself still returns parking, waiting on TTL will not help; the published zone is wrong. If `htns1` is already the droplet IP, public resolvers can take up to one TTL to catch up.
 
-As of the evening of 26 Aug 2026, the Namespro panel listed the droplet A records while `htns1` still answered parking. That is a publish lag or a Namespro bug (possibly related to the duplicate domain row). Recheck `dig`; if it stays parking for more than an hour, open a **technical** ticket asking them to publish the zone.
+Namespro support ticket **790542899** (26 Aug 2026, 21:15) confirmed the zone is pointed at `159.89.125.246`. Rechecked the same evening:
+
+- `dig @htns1.namespro.ca neshanak.ca A` → `159.89.125.246`
+- `www.neshanak.ca` → `159.89.125.246`
+- After flushing the laptop resolver cache, `http://neshanak.ca:8080` served Neshanak
+- Some public resolvers (Google anycast) can still answer parking for a few minutes while TTL burns down
+
+`http://neshanak.ca` and `https://neshanak.ca` (ports 80 and 443) are **not** the app yet. If a resolver still has parking, those ports show Namespro’s IIS page. After DNS is the droplet, those ports time out until `ufw` allows 80/443 and nginx/TLS is set up.
 
 ### After DNS matches the droplet
 
