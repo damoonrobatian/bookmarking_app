@@ -28,4 +28,13 @@ describe("settings", () => {
     expect(screen.getByLabelText("Current Password")).toBeInTheDocument();
     expect(screen.queryByLabelText("Email")).not.toBeInTheDocument();
   });
+
+  it("shows the logo on the bookmarklet you drag to the bar", () => {
+    renderSettings("/settings/save-from-browser");
+    const link = screen.getByRole("link", { name: "Save To Neshanak" });
+    expect(link.querySelector("img")).toHaveAttribute("src", "/favicon-32.png");
+    const href = link.getAttribute("href") ?? "";
+    expect(href.startsWith("javascript:")).toBe(true);
+    expect(href).toContain("https://neshanak.ca/favicon.ico");
+  });
 });

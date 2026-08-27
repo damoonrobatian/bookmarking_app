@@ -9,6 +9,7 @@ import { DeleteAccountForm } from "@/features/auth/DeleteAccountForm";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { exportBookmarks, importBookmarks } from "@/services/tags";
 import type { ImportReport } from "@/types";
+import { saveBookmarkletHref, setBookmarkletDragImage } from "@/utils/bookmarklet";
 import { cn } from "@/utils/cn";
 
 type SettingsSection = {
@@ -190,15 +191,25 @@ function SaveFromBrowserBody() {
           Show The Bookmarks Bar If It Is Hidden. Chrome, Edge, And Firefox: Ctrl+Shift+B (Mac: Command+Shift+B). Or Right-Click Below The Address Bar And Enable Bookmarks Bar / Bookmarks Toolbar.
         </li>
         <li>
-          Drag The Orange Button Below Onto That Bar. Clicking It On This Settings Page Does Nothing — It Only Works After It Lives On The Bar.
+          Drag The Button Below Onto That Bar. The Logo Travels With It. Clicking It On This Settings Page Does Nothing — It Only Works After It Lives On The Bar. If A Blank Icon Is Already On The Bar, Remove It And Drag This Button Again.
         </li>
         <li>Open The Page You Want To Save, Then Click Save To Neshanak On The Bar.</li>
       </ol>
       <a
-        className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
-        href={`javascript:void((function(){var u=encodeURIComponent(location.href);var t=encodeURIComponent(document.title||'');window.open(${JSON.stringify(typeof window === "undefined" ? "https://neshanak.ca" : window.location.origin)}+'/save?url='+u+'&title='+t,'neshanak-save','popup=yes,width=520,height=760');})())`}
+        className="mt-4 inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
+        href={saveBookmarkletHref()}
         onClick={(event) => event.preventDefault()}
+        onDragStart={setBookmarkletDragImage}
       >
+        <img
+          data-bookmarklet-mark
+          src="/favicon-32.png"
+          alt=""
+          width={32}
+          height={32}
+          className="h-5 w-5 rounded-sm"
+          draggable={false}
+        />
         Save To Neshanak
       </a>
       <p className="mt-4 text-sm text-ink-muted">
