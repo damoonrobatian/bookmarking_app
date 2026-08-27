@@ -222,15 +222,15 @@ function SaveFromBrowserBody() {
       <p className="mt-4 text-sm font-medium">Firefox</p>
       <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
         <li>Show The Bookmarks Toolbar If It Is Hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
-        <li>Download Bar Button.</li>
+        <li>Download Bar Button Again After This Fix. Delete Any Blank Save To Neshanak Already On The Toolbar Or In The Bookmarks Menu.</li>
         <li>
-          Click The Three Lines At The Top Right → Bookmarks → Manage Bookmarks. Or Press Ctrl+Shift+O (Mac: Command+Shift+O).
+          Click The Three Lines At The Top Right → Bookmarks → Manage Bookmarks. Or Press Ctrl+Shift+O (Mac: Command+Shift+O). Do Not Use Settings → Import Data; That Path Skips The Logo.
         </li>
         <li>
-          In That Window, Click Import And Backup → Import Bookmarks From HTML. Open Save To Neshanak.html From Downloads.
+          In That Window, Click Import And Backup → Import Bookmarks From HTML. Open The New Save To Neshanak.html From Downloads.
         </li>
         <li>
-          Open The Bookmarks Menu (Bookmarks → Bookmarks Menu). Drag Save To Neshanak Onto The Bookmarks Toolbar.
+          Open Bookmarks → Bookmarks Menu. Drag Save To Neshanak Onto The Bookmarks Toolbar. Restart Firefox If The Mark Still Does Not Appear.
         </li>
       </ol>
       <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>

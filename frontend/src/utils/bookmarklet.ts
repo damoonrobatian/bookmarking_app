@@ -1,5 +1,4 @@
 export const NESHANAK_ORIGIN = "https://neshanak.ca";
-export const BOOKMARKLET_FAVICON = `${NESHANAK_ORIGIN}/favicon.ico`;
 export const BOOKMARKLET_TITLE = "Save To Neshanak";
 
 export function saveBookmarkletHref(origin?: string): string {
@@ -41,7 +40,7 @@ export function bookmarkletNetscapeHtml(href: string, iconDataUri: string): stri
     "<DL><p>",
     '    <DT><H3 PERSONAL_TOOLBAR_FOLDER="true">Bookmarks Bar</H3>',
     "    <DL><p>",
-    `        <DT><A HREF="${escapeAttr(href)}" ICON="${escapeAttr(iconDataUri)}" ICON_URI="${escapeAttr(BOOKMARKLET_FAVICON)}">${BOOKMARKLET_TITLE}</A>`,
+    `        <DT><A HREF="${escapeAttr(href)}" ICON="${escapeAttr(iconDataUri)}">${BOOKMARKLET_TITLE}</A>`,
     "    </DL><p>",
     "</DL><p>",
     "",

@@ -16,6 +16,7 @@ describe("bookmarkletNetscapeHtml", () => {
     expect(html).toContain("NETSCAPE-Bookmark-file-1");
     expect(html).toContain('PERSONAL_TOOLBAR_FOLDER="true"');
     expect(html).toContain('ICON="data:image/png;base64,AAA"');
+    expect(html).not.toContain("ICON_URI");
     expect(html).toContain(BOOKMARKLET_TITLE);
     expect(html).toContain("&amp;title=");
   });
