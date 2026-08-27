@@ -17,12 +17,13 @@ export function DeleteAccountForm() {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="mt-4 space-y-3">
+      <form onSubmit={onSubmit} className="mt-4 space-y-3" autoComplete="off">
         <div className="space-y-1.5">
           <Label htmlFor="delete-password">Password</Label>
           <PasswordInput
             id="delete-password"
-            autoComplete="current-password"
+            name="neshanak-delete-password"
+            preventAutofill
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}

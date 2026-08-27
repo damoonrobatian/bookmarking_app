@@ -9,4 +9,5 @@ https://neshanak.ca is updated by GitHub Actions after a green push to `main` (S
 
 - After `git push` to `main`, do not SSH to the droplet to `git pull` unless the **CI/CD** workflow's **deploy** job failed.
 - Do not ask whether to pull on the droplet. Watch the Action if the live site must be verified.
+- After finishing a requested change, commit and `git push` to `main`. Do not ask whether to push.
 - The deploy key is repository secret `DROPLET_SSH_KEY`. Do not commit private keys or put the laptop SSH key in GitHub.

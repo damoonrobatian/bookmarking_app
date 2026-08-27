@@ -32,12 +32,13 @@ export function ChangePasswordForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 space-y-3">
+    <form onSubmit={onSubmit} className="mt-4 space-y-3" autoComplete="off">
       <div className="space-y-1.5">
         <Label htmlFor="current-password">Current Password</Label>
         <PasswordInput
           id="current-password"
-          autoComplete="current-password"
+          name="neshanak-current-password"
+          preventAutofill
           required
           value={currentPassword}
           onChange={(event) => setCurrentPassword(event.target.value)}

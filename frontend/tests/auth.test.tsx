@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { MemoryRouter } from "react-router-dom";
+import { ChangePasswordForm } from "@/features/auth/ChangePasswordForm";
 import { LoginForm } from "@/features/auth/LoginForm";
 import { RegisterForm } from "@/features/auth/RegisterForm";
 
@@ -86,5 +87,18 @@ describe("register form", () => {
     expect(screen.getByLabelText("Name")).toBeRequired();
     expect(screen.getByLabelText("Email")).toBeRequired();
     expect(screen.getByLabelText("Password")).toBeRequired();
+  });
+});
+
+describe("change password form", () => {
+  it("does not invite the browser to fill the current password", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ChangePasswordForm />, "/settings");
+    const current = screen.getByLabelText("Current Password");
+    expect(current).toHaveValue("");
+    expect(current).toHaveAttribute("autocomplete", "off");
+    expect(current).toHaveAttribute("readonly");
+    await user.click(current);
+    expect(current).not.toHaveAttribute("readonly");
   });
 });
