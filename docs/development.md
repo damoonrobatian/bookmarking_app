@@ -47,6 +47,8 @@ make test-frontend
 
 Backend tests use an in-memory SQLite database and do not need PostgreSQL.
 
+GitHub Actions runs the same backend and frontend checks on every push and pull request. A green `main` push then SSHs to the droplet and rebuilds Compose. See [deployment.md](deployment.md).
+
 End-to-end tests live in `e2e/` and expect the app to already be running:
 
 ```bash

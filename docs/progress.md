@@ -13,7 +13,7 @@
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
 - Backend tests (35) and frontend tests (13)
 - Playwright happy-path spec
-- Documentation and GitHub Actions CI
+- Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
 - Live HTTPS app at `https://neshanak.ca` (public HTTP on port 8080 is closed)
 - Host firewall (`ufw`): OpenSSH + 80/tcp + 443; 5432, 8000, and 8080 not public

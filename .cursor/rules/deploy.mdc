@@ -1,0 +1,12 @@
+---
+description: Deploy Neshanak via GitHub Actions, not manual SSH pull
+alwaysApply: true
+---
+
+# Live deploy
+
+https://neshanak.ca is updated by GitHub Actions after a green push to `main` (SSH + `docker compose up --build -d`).
+
+- After `git push` to `main`, do not SSH to the droplet to `git pull` unless the **CI** workflow's **deploy** job failed.
+- Do not ask whether to pull on the droplet. Watch the Action if the live site must be verified.
+- The deploy key is repository secret `DROPLET_SSH_KEY`. Do not commit private keys or put the laptop SSH key in GitHub.

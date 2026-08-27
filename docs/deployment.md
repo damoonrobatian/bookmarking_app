@@ -273,7 +273,22 @@ Caddy obtains certificates for `neshanak.ca` and `www.neshanak.ca`, redirects `w
 
 Public **8080** is closed. Use **https://neshanak.ca** only. Sign-in cookies are Secure.
 
-## Useful commands (on the droplet)
+## Continuous deployment
+
+A push to `main` runs GitHub Actions: tests, then SSH to the droplet and rebuild Compose. Pull requests run tests only.
+
+The droplet is reset to `origin/main` on each deploy (`git reset --hard`). Keep secrets in the droplet `.env` (gitignored), not in the repo. The deploy key is the GitHub Actions secret `DROPLET_SSH_KEY`; it is not the laptop SSH key.
+
+Manual deploy (if the Action fails):
+
+```bash
+cd ~/bookmarking_app
+git fetch origin main
+git reset --hard origin/main
+docker compose up --build -d
+```
+
+To rotate the deploy key: generate a new ed25519 key, append the public half to `/root/.ssh/authorized_keys` on the droplet, set repository secret `DROPLET_SSH_KEY` to the private half, then remove the old public key from `authorized_keys`.
 
 ```bash
 cd ~/bookmarking_app
@@ -283,15 +298,9 @@ docker compose restart
 docker compose down          # stop containers; data volume is kept
 ```
 
-To pull later code changes:
-
-```bash
-cd ~/bookmarking_app
-git pull
-docker compose up --build -d
-```
-
 The droplet `.env` must include `COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml` so Caddy is included.
+
+Routine updates go through GitHub Actions on `main`. The commands above are for the droplet shell if you need to inspect or recover.
 
 ## Security notes
 

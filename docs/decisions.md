@@ -141,3 +141,21 @@ Default off (shared-computer caution); lengthen the access cookie to 14 days.
 ### Date
 
 2026-08-27
+
+---
+
+## Decision
+
+Deploy the droplet from GitHub Actions after CI on `main`, using a dedicated SSH key in repository secrets.
+
+### Reason
+
+The live library is this one machine. A push should update https://neshanak.ca without a manual `git pull`. The laptop key stays off GitHub; Actions uses `DROPLET_SSH_KEY`.
+
+### Alternatives considered
+
+Manual SSH after every push; a webhook listener on the droplet; DigitalOcean App Platform.
+
+### Date
+
+2026-08-27
