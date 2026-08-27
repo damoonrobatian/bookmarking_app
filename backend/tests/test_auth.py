@@ -35,6 +35,37 @@ def test_login_logout(client: TestClient) -> None:
     assert client.get("/api/auth/me").status_code == 200
 
 
+def _set_cookie_headers(response) -> str:
+    getter = getattr(response.headers, "get_list", None) or response.headers.getlist
+    return " ".join(getter("set-cookie"))
+
+
+def test_remember_me_sets_persistent_cookies(client: TestClient) -> None:
+    register_user(client)
+    client.post("/api/auth/logout")
+    login = client.post(
+        "/api/auth/login",
+        json={"email": "ada@example.com", "password": "correct-horse", "remember_me": True},
+    )
+    assert login.status_code == 200
+    cookies = _set_cookie_headers(login)
+    assert "Max-Age=" in cookies
+    assert client.get("/api/auth/me").status_code == 200
+
+
+def test_login_without_remember_me_uses_session_cookies(client: TestClient) -> None:
+    register_user(client)
+    client.post("/api/auth/logout")
+    login = client.post(
+        "/api/auth/login",
+        json={"email": "ada@example.com", "password": "correct-horse", "remember_me": False},
+    )
+    assert login.status_code == 200
+    cookies = _set_cookie_headers(login)
+    assert "Max-Age=" not in cookies
+    assert client.get("/api/auth/me").status_code == 200
+
+
 def test_invalid_login(client: TestClient) -> None:
     register_user(client)
     client.post("/api/auth/logout")

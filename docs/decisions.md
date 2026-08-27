@@ -69,3 +69,39 @@ Require PostgreSQL for every pytest run.
 ### Date
 
 2026-08-25
+
+---
+
+## Decision
+
+Login Remember Me controls cookie lifetime, not token expiry.
+
+### Reason
+
+An unchecked box should drop the session when the browser closes. The JWT still has an `exp` claim; persistence is only the cookie `Max-Age`. The refresh token payload stores `remember` so rotation does not silently upgrade a session cookie to a persistent one.
+
+### Alternatives considered
+
+Always persist cookies; store Remember Me only in localStorage.
+
+### Date
+
+2026-08-26
+
+---
+
+## Decision
+
+UI chrome is Title Case on every word; user content is not rewritten.
+
+### Reason
+
+The product copy should read consistently across buttons, headings, and empty states. Bookmark titles, folder names, tags, emails, and URLs belong to the user and stay as entered.
+
+### Alternatives considered
+
+Sentence case; Title Case that leaves articles lowercase.
+
+### Date
+
+2026-08-26

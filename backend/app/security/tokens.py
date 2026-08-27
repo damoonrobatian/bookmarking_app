@@ -13,18 +13,20 @@ def _now() -> datetime:
     return datetime.now(UTC)
 
 
-def create_token(user_id: UUID, token_type: TokenType) -> str:
+def create_token(user_id: UUID, token_type: TokenType, *, remember: bool = True) -> str:
     settings = get_settings()
     if token_type == "access":
         expires = timedelta(minutes=settings.access_token_expire_minutes)
     else:
         expires = timedelta(days=settings.refresh_token_expire_days)
-    payload = {
+    payload: dict[str, Any] = {
         "sub": str(user_id),
         "type": token_type,
         "iat": _now(),
         "exp": _now() + expires,
     }
+    if token_type == "refresh":
+        payload["remember"] = remember
     return jwt.encode(payload, settings.secret_key, algorithm="HS256")
 
 

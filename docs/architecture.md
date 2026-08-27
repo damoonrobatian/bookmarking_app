@@ -28,6 +28,10 @@ Access and refresh tokens are JWTs stored in HTTP-only cookies.
 
 - Access cookie: short-lived, sent to all `/api` routes
 - Refresh cookie: longer-lived, scoped to `/api/auth`
+- Login `remember_me: false` (the default) sets **session** cookies that the browser drops when it closes
+- Login `remember_me: true` sets **persistent** cookies (`Max-Age` from `ACCESS_TOKEN_EXPIRE_MINUTES` and `REFRESH_TOKEN_EXPIRE_DAYS`)
+- The refresh JWT stores that choice so `POST /api/auth/refresh` reissues cookies the same way
+- Register always uses persistent cookies
 - Logout clears both cookies
 - The frontend retries once with `POST /api/auth/refresh` after a 401
 
@@ -48,3 +52,5 @@ User-supplied URLs are treated as untrusted. Before fetching a page, the backend
 ## Frontend
 
 The SPA uses React Router for pages and TanStack Query for server state. Feature folders keep bookmark, folder, tag, and auth UI separate from shared layout and primitives.
+
+Chrome copy (buttons, headings, labels, empty states, errors) uses Title Case on every word. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored.

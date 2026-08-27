@@ -80,7 +80,7 @@ export function BookmarkItem({
         <button
           type="button"
           className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-accent"
-          aria-label={bookmark.is_favorite ? "Remove favorite" : "Add favorite"}
+          aria-label={bookmark.is_favorite ? "Remove Favorite" : "Add Favorite"}
           onClick={onFavorite}
         >
           <Star className={cn("h-4 w-4", bookmark.is_favorite && "fill-accent text-accent")} />
@@ -90,7 +90,7 @@ export function BookmarkItem({
             <button
               type="button"
               className="rounded-md p-1.5 text-ink-faint hover:bg-paper-sunken hover:text-ink"
-              aria-label="Bookmark actions"
+              aria-label="Bookmark Actions"
             >
               <MoreHorizontal className="h-4 w-4" />
             </button>
@@ -104,7 +104,7 @@ export function BookmarkItem({
                 Move
               </MenuItem>
               <MenuItem icon={<Star className="h-4 w-4" />} onSelect={onFavorite}>
-                {bookmark.is_favorite ? "Remove favorite" : "Add favorite"}
+                {bookmark.is_favorite ? "Remove Favorite" : "Add Favorite"}
               </MenuItem>
               {bookmark.is_archived ? (
                 <MenuItem icon={<Archive className="h-4 w-4" />} onSelect={onRestore}>

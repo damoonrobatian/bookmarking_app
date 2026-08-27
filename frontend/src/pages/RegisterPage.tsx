@@ -3,7 +3,7 @@ import { AuthLayout } from "@/layouts/AuthLayout";
 
 export function RegisterPage() {
   return (
-    <AuthLayout title="Create your Neshanak" subtitle="A personal library for the web, kept just for you.">
+    <AuthLayout title="Create Your Neshanak" subtitle="A Personal Library For The Web, Kept Just For You.">
       <RegisterForm />
     </AuthLayout>
   );

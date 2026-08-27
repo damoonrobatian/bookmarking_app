@@ -27,8 +27,8 @@ def register(
 ) -> User:
     service = AuthService(db)
     user = service.register(payload.email, payload.password, payload.display_name)
-    access, refresh = service.issue_tokens(user)
-    set_auth_cookies(response, access, refresh)
+    access, refresh = service.issue_tokens(user, remember=True)
+    set_auth_cookies(response, access, refresh, remember=True)
     return user
 
 
@@ -42,8 +42,8 @@ def login(
 ) -> User:
     service = AuthService(db)
     user = service.authenticate(payload.email, payload.password)
-    access, refresh = service.issue_tokens(user)
-    set_auth_cookies(response, access, refresh)
+    access, refresh = service.issue_tokens(user, remember=payload.remember_me)
+    set_auth_cookies(response, access, refresh, remember=payload.remember_me)
     return user
 
 
@@ -64,14 +64,15 @@ def refresh(
     db: Session = Depends(get_db),
 ) -> User:
     if not refresh_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.")
     try:
         payload = decode_token(refresh_token, "refresh")
     except InvalidTokenError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.") from exc
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.") from exc
     user = UserRepository(db).get_by_id(UUID(str(payload["sub"])))
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.")
-    access, new_refresh = AuthService(db).issue_tokens(user)
-    set_auth_cookies(response, access, new_refresh)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.")
+    remember = bool(payload.get("remember", True))
+    access, new_refresh = AuthService(db).issue_tokens(user, remember=remember)
+    set_auth_cookies(response, access, new_refresh, remember=remember)
     return user

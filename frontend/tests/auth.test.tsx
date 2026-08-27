@@ -21,14 +21,38 @@ describe("login form", () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,
       status: 401,
-      json: async () => ({ detail: "Invalid email or password." }),
+      json: async () => ({ detail: "Invalid Email Or Password." }),
     });
     vi.stubGlobal("fetch", fetchMock);
     renderWithProviders(<LoginForm />);
     await user.type(screen.getByLabelText("Email"), "ada@example.com");
     await user.type(screen.getByLabelText("Password"), "wrong-password");
-    await user.click(screen.getByRole("button", { name: "Sign in" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Invalid email or password.");
+    await user.click(screen.getByRole("button", { name: "Sign In" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Invalid Email Or Password.");
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toMatchObject({
+      email: "ada@example.com",
+      password: "wrong-password",
+      remember_me: false,
+    });
+  });
+
+  it("sends remember_me when the checkbox is checked", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 401,
+      json: async () => ({ detail: "Invalid Email Or Password." }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    renderWithProviders(<LoginForm />);
+    await user.type(screen.getByLabelText("Email"), "ada@example.com");
+    await user.type(screen.getByLabelText("Password"), "secret-password");
+    await user.click(screen.getByLabelText("Remember Me"));
+    await user.click(screen.getByRole("button", { name: "Sign In" }));
+    await screen.findByRole("alert");
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toMatchObject({
+      remember_me: true,
+    });
   });
 });
 

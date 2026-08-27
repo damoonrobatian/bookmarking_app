@@ -40,9 +40,9 @@ function renderCollection(items: Bookmark[]) {
     <QueryClientProvider client={client}>
       <MemoryRouter>
         <BookmarkCollection
-          title="All bookmarks"
-          emptyTitle="You haven't saved any bookmarks yet."
-          emptyDescription="Add your first bookmark to start building your collection."
+          title="All Bookmarks"
+          emptyTitle="You Haven't Saved Any Bookmarks Yet."
+          emptyDescription="Add Your First Bookmark To Start Building Your Collection."
           filters={{ archived: false }}
         />
       </MemoryRouter>
@@ -60,7 +60,7 @@ describe("bookmark list", () => {
 
   it("shows an empty state", async () => {
     renderCollection([]);
-    expect(await screen.findByText("You haven't saved any bookmarks yet.")).toBeInTheDocument();
+    expect(await screen.findByText("You Haven't Saved Any Bookmarks Yet.")).toBeInTheDocument();
   });
 
   it("can render a search empty state", async () => {
@@ -79,13 +79,13 @@ describe("bookmark list", () => {
         <MemoryRouter>
           <BookmarkCollection
             title="Search"
-            emptyTitle="No bookmarks match your search."
-            emptyDescription="Try a different title, URL, note, or tag."
+            emptyTitle="No Bookmarks Match Your Search."
+            emptyDescription="Try A Different Title, URL, Note, Or Tag."
             filters={{ search: "missing", archived: false }}
           />
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(await screen.findByText("No bookmarks match your search.")).toBeInTheDocument();
+    expect(await screen.findByText("No Bookmarks Match Your Search.")).toBeInTheDocument();
   });
 });

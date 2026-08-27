@@ -45,7 +45,7 @@ export function TagInput({
       <Input
         className="mt-2"
         value={draft}
-        placeholder="Add a tag and press Enter"
+        placeholder="Add A Tag And Press Enter"
         onChange={(event) => setDraft(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
@@ -53,7 +53,7 @@ export function TagInput({
             add(draft);
           }
         }}
-        aria-label="Add tag"
+        aria-label="Add Tag"
       />
       {matches.length > 0 ? (
         <ul className="mt-1 overflow-hidden rounded-lg border border-line bg-paper-raised">

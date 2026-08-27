@@ -11,7 +11,7 @@ describe("loading and error states", () => {
       <QueryClientProvider client={client}>
         <MemoryRouter>
           <BookmarkCollection
-            title="All bookmarks"
+            title="All Bookmarks"
             emptyTitle="empty"
             emptyDescription="empty"
             filters={{}}
@@ -19,7 +19,7 @@ describe("loading and error states", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(screen.getByText("Loading your library")).toBeInTheDocument();
+    expect(screen.getByText("Loading Your Library")).toBeInTheDocument();
   });
 
   it("shows an error state", async () => {
@@ -36,7 +36,7 @@ describe("loading and error states", () => {
       <QueryClientProvider client={client}>
         <MemoryRouter>
           <BookmarkCollection
-            title="All bookmarks"
+            title="All Bookmarks"
             emptyTitle="empty"
             emptyDescription="empty"
             filters={{}}
@@ -44,6 +44,6 @@ describe("loading and error states", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(await screen.findByRole("alert")).toHaveTextContent("Unable to load bookmarks");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Unable To Load Bookmarks");
   });
 });

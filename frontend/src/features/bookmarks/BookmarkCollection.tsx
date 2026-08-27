@@ -86,7 +86,7 @@ export function BookmarkCollection({
         <div>
           <h1 className="font-serif text-3xl text-ink">{title}</h1>
           <p className="mt-1 text-sm text-ink-muted">
-            {bookmarks.data ? `${bookmarks.data.total} saved` : "Loading your library"}
+            {bookmarks.data ? `${bookmarks.data.total} Saved` : "Loading Your Library"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -104,16 +104,16 @@ export function BookmarkCollection({
               setSearchParams(next);
             }}
           >
-            <option value="created_at">Recently added</option>
-            <option value="last_visited_at">Recently visited</option>
+            <option value="created_at">Recently Added</option>
+            <option value="last_visited_at">Recently Visited</option>
             <option value="title">Title</option>
-            <option value="visit_count">Most visited</option>
+            <option value="visit_count">Most Visited</option>
           </select>
           <div className="flex rounded-lg border border-line bg-paper-raised p-0.5">
             <Button
               variant="ghost"
               size="icon"
-              aria-label="List view"
+              aria-label="List View"
               aria-pressed={view === "list"}
               onClick={() => changeView("list")}
             >
@@ -122,7 +122,7 @@ export function BookmarkCollection({
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Grid view"
+              aria-label="Grid View"
               aria-pressed={view === "grid"}
               onClick={() => changeView("grid")}
             >
@@ -140,7 +140,7 @@ export function BookmarkCollection({
         </div>
       ) : bookmarks.isError ? (
         <p role="alert" className="rounded-2xl border border-line bg-paper-raised p-8 text-ink-muted">
-          Unable to load bookmarks. The server may be unavailable.
+          Unable To Load Bookmarks. The Server May Be Unavailable.
         </p>
       ) : items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-line bg-paper-raised px-6 py-16 text-center">
@@ -183,7 +183,7 @@ export function BookmarkCollection({
             Previous
           </Button>
           <span className="text-sm text-ink-muted">
-            Page {page} of {totalPages}
+            Page {page} Of {totalPages}
           </span>
           <Button
             variant="secondary"
@@ -203,15 +203,15 @@ export function BookmarkCollection({
         open={Boolean(editing)}
         onOpenChange={(open) => !open && setEditing(null)}
         bookmark={editing}
-        title="Edit bookmark"
+        title="Edit Bookmark"
         onSubmit={(payload) => saveEdit.mutateAsync({ id: editing!.id, payload })}
       />
       <MoveBookmarkDialog bookmark={moving} onClose={() => setMoving(null)} />
       <ConfirmDialog
         open={Boolean(deleting)}
         onOpenChange={(open) => !open && setDeleting(null)}
-        title="Delete bookmark?"
-        description="This permanently removes the bookmark from your library. Consider archiving it instead if you might need it later."
+        title="Delete Bookmark?"
+        description="This Permanently Removes The Bookmark From Your Library. Consider Archiving It Instead If You Might Need It Later."
         onConfirm={() => deleting && remove.mutate(deleting.id)}
       />
     </section>

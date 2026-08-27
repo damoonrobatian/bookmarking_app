@@ -9,12 +9,12 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
           Neshanak
         </Link>
         <div>
-          <p className="max-w-sm font-serif text-4xl leading-tight">A quiet place for the pages you want to keep.</p>
+          <p className="max-w-sm font-serif text-4xl leading-tight">A Quiet Place For The Pages You Want To Keep.</p>
           <p className="mt-4 max-w-sm text-sm text-paper/70">
-            Save, organize, and find bookmarks without the clutter of a social network.
+            Save, Organize, And Find Bookmarks Without The Clutter Of A Social Network.
           </p>
         </div>
-        <p className="text-xs text-paper/50">Personal bookmark library</p>
+        <p className="text-xs text-paper/50">Personal Bookmark Library</p>
       </div>
       <div className="flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">

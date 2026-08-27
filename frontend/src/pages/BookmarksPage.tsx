@@ -9,12 +9,12 @@ export function BookmarksPage() {
   const tag = params.get("tag") ?? undefined;
   return (
     <BookmarkCollection
-      title={tag ? `Tag · ${tag}` : search ? "Search" : "All bookmarks"}
-      emptyTitle={search ? "No bookmarks match your search." : "You haven't saved any bookmarks yet."}
+      title={tag ? `Tag · ${tag}` : search ? "Search" : "All Bookmarks"}
+      emptyTitle={search ? "No Bookmarks Match Your Search." : "You Haven't Saved Any Bookmarks Yet."}
       emptyDescription={
         search
-          ? "Try a different title, URL, note, or tag."
-          : "Add your first bookmark to start building your collection."
+          ? "Try A Different Title, URL, Note, Or Tag."
+          : "Add Your First Bookmark To Start Building Your Collection."
       }
       filters={{ search, tag, archived: false }}
     />
@@ -26,8 +26,8 @@ export function FavoritesPage() {
   return (
     <BookmarkCollection
       title="Favorites"
-      emptyTitle="No favorites yet."
-      emptyDescription="Star a bookmark to keep it close at hand."
+      emptyTitle="No Favorites Yet."
+      emptyDescription="Star A Bookmark To Keep It Close At Hand."
       filters={{ favorite: true, archived: false, search: params.get("q") ?? undefined }}
     />
   );
@@ -38,9 +38,9 @@ export function RecentPage() {
   const view = params.get("view") === "visited" ? "visited" : "added";
   return (
     <BookmarkCollection
-      title={view === "visited" ? "Recently visited" : "Recently added"}
-      emptyTitle="Nothing here yet."
-      emptyDescription="New and revisited pages will appear in this list."
+      title={view === "visited" ? "Recently Visited" : "Recently Added"}
+      emptyTitle="Nothing Here Yet."
+      emptyDescription="New And Revisited Pages Will Appear In This List."
       filters={{
         archived: false,
         search: params.get("q") ?? undefined,
@@ -56,8 +56,8 @@ export function ArchivePage() {
   return (
     <BookmarkCollection
       title="Archive"
-      emptyTitle="The archive is empty."
-      emptyDescription="Archived bookmarks are hidden from your regular folders until you restore them."
+      emptyTitle="The Archive Is Empty."
+      emptyDescription="Archived Bookmarks Are Hidden From Your Regular Folders Until You Restore Them."
       filters={{ archived: true, search: params.get("q") ?? undefined }}
     />
   );
@@ -71,8 +71,8 @@ export function FolderPage() {
   return (
     <BookmarkCollection
       title={folder?.name ?? "Folder"}
-      emptyTitle="This folder is empty."
-      emptyDescription="Move a bookmark here or add a new one."
+      emptyTitle="This Folder Is Empty."
+      emptyDescription="Move A Bookmark Here Or Add A New One."
       filters={{ folder_id: id, archived: false, search: params.get("q") ?? undefined }}
     />
   );

@@ -17,7 +17,7 @@ class AuthService:
         if existing:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="An account with this email already exists.",
+                detail="An Account With This Email Already Exists.",
             )
         user = User(
             email=email.lower(),
@@ -31,10 +31,13 @@ class AuthService:
         if user is None or not verify_password(password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid email or password.",
+                detail="Invalid Email Or Password.",
             )
         user.last_login_at = utcnow()
         return user
 
-    def issue_tokens(self, user: User) -> tuple[str, str]:
-        return create_token(user.id, "access"), create_token(user.id, "refresh")
+    def issue_tokens(self, user: User, *, remember: bool = True) -> tuple[str, str]:
+        return (
+            create_token(user.id, "access", remember=remember),
+            create_token(user.id, "refresh", remember=remember),
+        )

@@ -21,13 +21,13 @@ describe("bookmark creation", () => {
     render(
       <QueryClientProvider client={client}>
         <MemoryRouter>
-          <BookmarkFormDialog open onOpenChange={() => undefined} title="Add bookmark" onSubmit={onSubmit} />
+          <BookmarkFormDialog open onOpenChange={() => undefined} title="Add Bookmark" onSubmit={onSubmit} />
         </MemoryRouter>
       </QueryClientProvider>,
     );
     await user.type(screen.getByLabelText("URL"), "https://fastapi.tiangolo.com/");
     await user.type(screen.getByLabelText("Title"), "FastAPI");
-    await user.click(screen.getByRole("button", { name: "Save bookmark" }));
+    await user.click(screen.getByRole("button", { name: "Save Bookmark" }));
     expect(onSubmit).toHaveBeenCalled();
   });
 });

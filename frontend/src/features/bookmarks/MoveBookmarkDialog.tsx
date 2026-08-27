@@ -33,8 +33,8 @@ export function MoveBookmarkDialog({
     <Modal
       open={Boolean(bookmark)}
       onOpenChange={(open) => !open && onClose()}
-      title="Move bookmark"
-      description="Choose a folder for this bookmark."
+      title="Move Bookmark"
+      description="Choose A Folder For This Bookmark."
     >
       <div className="space-y-3">
         <Label htmlFor="move-folder">Folder</Label>
@@ -44,7 +44,7 @@ export function MoveBookmarkDialog({
           value={folderId}
           onChange={(event) => setFolderId(event.target.value)}
         >
-          <option value="">No folder</option>
+          <option value="">No Folder</option>
           {(Array.isArray(folders.data) ? folders.data : []).map((folder) => (
             <option key={folder.id} value={folder.id}>
               {folder.name}

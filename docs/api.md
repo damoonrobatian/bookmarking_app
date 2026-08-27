@@ -19,11 +19,13 @@ When using Docker Compose these URLs are available through the frontend origin a
 
 | Method | Path | Notes |
 | --- | --- | --- |
-| POST | `/api/auth/register` | Creates the user and sets cookies |
-| POST | `/api/auth/login` | Sets cookies |
+| POST | `/api/auth/register` | Creates the user and sets persistent cookies |
+| POST | `/api/auth/login` | Sets cookies. Body may include `remember_me` (default `false`) |
 | POST | `/api/auth/logout` | Clears cookies |
 | GET | `/api/auth/me` | Current user |
-| POST | `/api/auth/refresh` | Rotates tokens using the refresh cookie |
+| POST | `/api/auth/refresh` | Rotates tokens using the refresh cookie, keeping the original Remember Me choice |
+
+`POST /api/auth/login` accepts `{ "email", "password", "remember_me" }`. Omit `remember_me` or send `false` for session cookies; send `true` to persist cookies until the configured token lifetimes.
 
 ## Bookmarks
 

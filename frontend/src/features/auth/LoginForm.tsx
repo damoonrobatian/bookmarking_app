@@ -10,11 +10,12 @@ export function LoginForm() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     try {
-      await login.mutateAsync({ email, password });
+      await login.mutateAsync({ email, password, remember_me: rememberMe });
       navigate("/app");
     } catch {
       // error rendered below
@@ -45,18 +46,27 @@ export function LoginForm() {
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          id="remember-me"
+          type="checkbox"
+          checked={rememberMe}
+          onChange={(event) => setRememberMe(event.target.checked)}
+        />
+        Remember Me
+      </label>
       {login.isError ? (
         <p role="alert" className="text-sm text-red-700">
-          {errorMessage(login.error, "Invalid email or password.")}
+          {errorMessage(login.error, "Invalid Email Or Password.")}
         </p>
       ) : null}
       <Button type="submit" className="w-full" disabled={login.isPending}>
-        {login.isPending ? "Signing in…" : "Sign in"}
+        {login.isPending ? "Signing In…" : "Sign In"}
       </Button>
       <p className="text-center text-sm text-ink-muted">
-        New here?{" "}
+        New Here?{" "}
         <Link className="font-medium text-accent hover:underline" to="/register">
-          Create an account
+          Create An Account
         </Link>
       </p>
     </form>

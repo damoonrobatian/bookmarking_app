@@ -13,7 +13,7 @@ export function SettingsPage() {
   const importMutation = useMutation({
     mutationFn: importBookmarks,
     onSuccess: setReport,
-    onError: () => setError("Invalid bookmark file."),
+    onError: () => setError("Invalid Bookmark File."),
   });
   const exportMutation = useMutation({
     mutationFn: async () => {
@@ -31,7 +31,7 @@ export function SettingsPage() {
     <div className="mx-auto max-w-2xl space-y-8">
       <header>
         <h1 className="font-serif text-3xl">Settings</h1>
-        <p className="mt-1 text-sm text-ink-muted">Account details and library portability.</p>
+        <p className="mt-1 text-sm text-ink-muted">Account Details And Library Portability.</p>
       </header>
       <section className="rounded-2xl border border-line bg-paper-raised p-6">
         <h2 className="font-medium">Account</h2>
@@ -47,12 +47,12 @@ export function SettingsPage() {
         </dl>
       </section>
       <section className="rounded-2xl border border-line bg-paper-raised p-6">
-        <h2 className="font-medium">Import bookmarks</h2>
+        <h2 className="font-medium">Import Bookmarks</h2>
         <p className="mt-1 text-sm text-ink-muted">
-          Upload a Netscape bookmark HTML file exported from Chrome, Firefox, or Edge.
+          Upload A Netscape Bookmark HTML File Exported From Chrome, Firefox, Or Edge.
         </p>
         <Label htmlFor="import-file" className="mt-4 block">
-          Bookmark file
+          Bookmark File
         </Label>
         <input
           id="import-file"
@@ -69,17 +69,17 @@ export function SettingsPage() {
         {error ? <p className="mt-3 text-sm text-red-700">{error}</p> : null}
         {report ? (
           <ul className="mt-4 space-y-1 text-sm text-ink-muted">
-            <li>Bookmarks imported: {report.bookmarks_imported}</li>
-            <li>Folders created: {report.folders_created}</li>
-            <li>Duplicates detected: {report.duplicates_detected}</li>
-            <li>Invalid entries skipped: {report.invalid_entries_skipped}</li>
+            <li>Bookmarks Imported: {report.bookmarks_imported}</li>
+            <li>Folders Created: {report.folders_created}</li>
+            <li>Duplicates Detected: {report.duplicates_detected}</li>
+            <li>Invalid Entries Skipped: {report.invalid_entries_skipped}</li>
           </ul>
         ) : null}
       </section>
       <section className="rounded-2xl border border-line bg-paper-raised p-6">
-        <h2 className="font-medium">Export bookmarks</h2>
+        <h2 className="font-medium">Export Bookmarks</h2>
         <p className="mt-1 text-sm text-ink-muted">
-          Download a browser-compatible HTML file that preserves your folder hierarchy.
+          Download A Browser-Compatible HTML File That Preserves Your Folder Hierarchy.
         </p>
         <Button className="mt-4" variant="secondary" onClick={() => exportMutation.mutate()}>
           Export HTML

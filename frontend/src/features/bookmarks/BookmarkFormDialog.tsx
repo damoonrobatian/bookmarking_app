@@ -63,7 +63,7 @@ export function BookmarkFormDialog({
         if (!description && preview.description) setDescription(preview.description);
       })
       .catch(() => {
-        if (!cancelled) setError({ status: 0, message: "Unable to retrieve page information." });
+        if (!cancelled) setError({ status: 0, message: "Unable To Retrieve Page Information." });
       });
     return () => {
       cancelled = true;
@@ -95,7 +95,7 @@ export function BookmarkFormDialog({
       open={open}
       onOpenChange={onOpenChange}
       title={title}
-      description="Save a page to your library. Title and favicon can be filled in automatically."
+      description="Save A Page To Your Library. Title And Favicon Can Be Filled In Automatically."
       className="max-w-xl"
     >
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -129,7 +129,7 @@ export function BookmarkFormDialog({
               value={folderId}
               onChange={(event) => setFolderId(event.target.value)}
             >
-              <option value="">No folder</option>
+              <option value="">No Folder</option>
               {(Array.isArray(folders.data) ? folders.data : []).map((folder) => (
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
@@ -156,7 +156,7 @@ export function BookmarkFormDialog({
             id="bookmark-description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            placeholder="What this page is about"
+            placeholder="What This Page Is About"
           />
         </div>
         <div className="space-y-1.5">
@@ -165,7 +165,7 @@ export function BookmarkFormDialog({
             id="bookmark-notes"
             value={notes}
             onChange={(event) => setNotes(event.target.value)}
-            placeholder="Your private notes"
+            placeholder="Your Private Notes"
           />
         </div>
         {error ? (
@@ -180,7 +180,7 @@ export function BookmarkFormDialog({
                   navigate(`/app?highlight=${error.duplicate?.id}`);
                 }}
               >
-                Open the existing bookmark
+                Open The Existing Bookmark
               </button>
             ) : null}
           </div>
@@ -189,7 +189,7 @@ export function BookmarkFormDialog({
           <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button type="submit">Save bookmark</Button>
+          <Button type="submit">Save Bookmark</Button>
         </div>
       </form>
     </Modal>
@@ -215,7 +215,7 @@ export function AddBookmarkDialog({
     <BookmarkFormDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Add bookmark"
+      title="Add Bookmark"
       onSubmit={(payload) => mutation.mutateAsync(payload)}
     />
   );

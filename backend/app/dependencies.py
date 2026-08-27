@@ -16,13 +16,13 @@ def get_current_user(
     db: Session = Depends(get_db),
 ) -> User:
     if not access_token:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authenticated.")
     try:
         payload = decode_token(access_token, "access")
         user_id = payload.get("sub")
     except InvalidTokenError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired.") from exc
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session Expired.") from exc
     user = UserRepository(db).get_by_id(UUID(str(user_id)))
     if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authenticated.")
     return user

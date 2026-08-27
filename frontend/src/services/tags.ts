@@ -20,6 +20,6 @@ export function importBookmarks(file: File) {
 
 export async function exportBookmarks() {
   const response = await fetch("/api/export/bookmarks", { credentials: "include" });
-  if (!response.ok) throw new Error("Unable to export bookmarks.");
+  if (!response.ok) throw new Error("Unable To Export Bookmarks.");
   return response.blob();
 }

@@ -47,18 +47,18 @@ export function FolderTree() {
   return (
     <div>
       <div className="mb-2 flex items-center justify-between px-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-ink-faint">Folders</p>
+        <p className="text-xs font-semibold tracking-wide text-ink-faint">Folders</p>
         <button
           type="button"
           className="rounded-md p-1 text-ink-faint hover:bg-paper-sunken hover:text-ink"
-          aria-label="Create folder"
+          aria-label="Create Folder"
           onClick={() => setCreating({ parentId: null })}
         >
           <FolderPlus className="h-4 w-4" />
         </button>
       </div>
       {tree.length === 0 ? (
-        <p className="px-2 text-xs text-ink-faint">No folders yet.</p>
+        <p className="px-2 text-xs text-ink-faint">No Folders Yet.</p>
       ) : (
         <ul>{tree.map((node) => (
           <FolderNode
@@ -76,7 +76,7 @@ export function FolderTree() {
       )}
       <FolderNameDialog
         open={Boolean(creating)}
-        title="New folder"
+        title="New Folder"
         onOpenChange={(open) => !open && setCreating(null)}
         onSubmit={async (name) => {
           await createFolder({ name, parent_id: creating?.parentId });
@@ -84,7 +84,7 @@ export function FolderTree() {
       />
       <FolderNameDialog
         open={Boolean(renaming)}
-        title="Rename folder"
+        title="Rename Folder"
         initialValue={renaming?.name}
         onOpenChange={(open) => !open && setRenaming(null)}
         onSubmit={async (name) => {
@@ -95,8 +95,8 @@ export function FolderTree() {
       <ConfirmDialog
         open={Boolean(deleting)}
         onOpenChange={(open) => !open && setDeleting(null)}
-        title="Delete this folder?"
-        description="Bookmarks and subfolders inside it will be moved to the parent folder (or to All Bookmarks if this is a top-level folder). This cannot be undone."
+        title="Delete This Folder?"
+        description="Bookmarks And Subfolders Inside It Will Be Moved To The Parent Folder (Or To All Bookmarks If This Is A Top-Level Folder). This Cannot Be Undone."
         onConfirm={async () => {
           if (deleting) {
             await deleteFolder(deleting.id);
@@ -137,7 +137,7 @@ function FolderNode({
           <button
             type="button"
             className="p-1 text-ink-faint"
-            aria-label={isOpen ? "Collapse folder" : "Expand folder"}
+            aria-label={isOpen ? "Collapse Folder" : "Expand Folder"}
             onClick={() => setExpanded({ ...expanded, [node.id]: !isOpen })}
           >
             <ChevronRight className={cn("h-3.5 w-3.5 transition", isOpen && "rotate-90")} />
@@ -158,7 +158,7 @@ function FolderNode({
             <button
               type="button"
               className="rounded p-1 text-ink-faint opacity-0 hover:text-ink group-hover:opacity-100"
-              aria-label={`${node.name} folder actions`}
+              aria-label={`${node.name} Folder Actions`}
             >
               <MoreHorizontal className="h-3.5 w-3.5" />
             </button>
@@ -166,7 +166,7 @@ function FolderNode({
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="z-50 min-w-40 rounded-xl border border-line bg-paper-raised p-1 shadow-card">
               <DropdownMenu.Item className="rounded-lg px-2 py-1.5 text-sm hover:bg-paper-sunken" onSelect={() => onCreate(node.id)}>
-                New subfolder
+                New Subfolder
               </DropdownMenu.Item>
               <DropdownMenu.Item className="rounded-lg px-2 py-1.5 text-sm hover:bg-paper-sunken" onSelect={() => onRename(node)}>
                 <span className="inline-flex items-center gap-2"><Pencil className="h-3.5 w-3.5" /> Rename</span>
@@ -266,16 +266,16 @@ function MoveFolderDialog({
     },
   });
   return (
-    <Modal open={Boolean(folder)} onOpenChange={(open) => !open && onClose()} title="Move folder">
+    <Modal open={Boolean(folder)} onOpenChange={(open) => !open && onClose()} title="Move Folder">
       <div className="space-y-3">
-        <Label htmlFor="folder-parent">New parent</Label>
+        <Label htmlFor="folder-parent">New Parent</Label>
         <select
           id="folder-parent"
           className="h-10 w-full rounded-lg border border-line bg-paper-raised px-3 text-sm"
           value={parentId}
           onChange={(event) => setParentId(event.target.value)}
         >
-          <option value="">Top level</option>
+          <option value="">Top Level</option>
           {folders
             .filter((item) => item.id !== folder?.id)
             .map((item) => (

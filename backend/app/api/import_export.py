@@ -26,13 +26,13 @@ async def import_bookmarks(
     ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid bookmark file. Please upload a Netscape HTML export.",
+            detail="Invalid Bookmark File. Please Upload A Netscape HTML Export.",
         )
     raw = await file.read(settings.import_max_bytes + 1)
     if len(raw) > settings.import_max_bytes:
         raise HTTPException(
             status_code=status.HTTP_413_CONTENT_TOO_LARGE,
-            detail="Import file is too large.",
+            detail="Import File Is Too Large.",
         )
     try:
         text = raw.decode("utf-8")

@@ -23,7 +23,7 @@ class FolderService:
         if self.folders.sibling_with_name(user.id, parent_id, clean_name):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="A folder with this name already exists here.",
+                detail="A Folder With This Name Already Exists Here.",
             )
         folder = Folder(
             user_id=user.id,
@@ -41,7 +41,7 @@ class FolderService:
             if sibling:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="A folder with this name already exists here.",
+                    detail="A Folder With This Name Already Exists Here.",
                 )
             folder.name = clean_name
         if position is not None:
@@ -53,7 +53,7 @@ class FolderService:
         if parent_id == folder.id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="A folder cannot be moved into itself.",
+                detail="A Folder Cannot Be Moved Into Itself.",
             )
         parent = self._require_parent(user.id, parent_id)
         if parent_id is not None:
@@ -61,12 +61,12 @@ class FolderService:
             if parent_id in descendants:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="A folder cannot be moved into one of its descendants.",
+                    detail="A Folder Cannot Be Moved Into One Of Its Descendants.",
                 )
         if self.folders.sibling_with_name(user.id, parent_id, folder.name, exclude_id=folder.id):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="A folder with this name already exists there.",
+                detail="A Folder With This Name Already Exists There.",
             )
         folder.parent_id = parent.id if parent else None
         folder.position = self.folders.next_position(user.id, folder.parent_id)
@@ -85,7 +85,7 @@ class FolderService:
     def _require(self, user_id: UUID, folder_id: UUID) -> Folder:
         folder = self.folders.get(user_id, folder_id)
         if folder is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Folder not found.")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Folder Not Found.")
         return folder
 
     def _require_parent(self, user_id: UUID, parent_id: UUID | None) -> Folder | None:

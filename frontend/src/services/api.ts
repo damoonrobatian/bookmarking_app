@@ -1,7 +1,7 @@
 import type { ApiError } from "@/types";
 
 async function parseError(response: Response, path: string): Promise<ApiError> {
-  let message = "Something went wrong.";
+  let message = "Something Went Wrong.";
   let duplicate;
   try {
     const body = await response.json();
@@ -15,10 +15,10 @@ async function parseError(response: Response, path: string): Promise<ApiError> {
       message = detail[0].msg;
     }
   } catch {
-    if (response.status >= 500) message = "Server unavailable.";
+    if (response.status >= 500) message = "Server Unavailable.";
   }
   const authForm = path.includes("/api/auth/login") || path.includes("/api/auth/register");
-  if (response.status === 401 && !authForm) message = "Session expired.";
+  if (response.status === 401 && !authForm) message = "Session Expired.";
   return { status: response.status, message, duplicate };
 }
 

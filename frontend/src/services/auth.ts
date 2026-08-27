@@ -12,10 +12,10 @@ export function register(payload: {
   });
 }
 
-export function login(payload: { email: string; password: string }) {
+export function login(payload: { email: string; password: string; remember_me?: boolean }) {
   return apiFetch<User>("/api/auth/login", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ remember_me: false, ...payload }),
   });
 }
 
