@@ -48,19 +48,18 @@ jobs:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Deploy to droplet
-        uses: appleboy/ssh-action@v1.2.2
-        with:
-          host: 159.89.125.246
-          username: root
-          key: ${{ secrets.DROPLET_SSH_KEY }}
-          fingerprint: SHA256:TUT74FyyXCJMdWELvlyHjntg1sSV727mDuCDMG+NYnM
-          command_timeout: 15m
-          script_stop: true
-          script: |
-            set -euo pipefail
-            cd /root/bookmarking_app
-            git fetch origin main
-            git reset --hard origin/main
-            docker compose up --build -d
-            docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile || true
+        env:
+          SSH_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cp .github/known_hosts ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            root@159.89.125.246 \
+            'set -euo pipefail; cd /root/bookmarking_app; git fetch origin main; git reset --hard origin/main; docker compose up --build -d; docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile || true'
