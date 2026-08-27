@@ -15,10 +15,11 @@
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
-- Live HTTP app at `http://neshanak.ca:8080` and `http://159.89.125.246:8080` (laptop and phone verified on the IP)
-- Host firewall (`ufw`): OpenSSH + 8080/tcp; 5432 and 8000 not public
+- Live HTTPS app at `https://neshanak.ca` (`http://neshanak.ca:8080` still published)
+- Host firewall (`ufw`): OpenSSH + 80/tcp + 443 + 8080/tcp; 5432 and 8000 not public
 - Domain `neshanak.ca` registered at Namespro / CIRA (3 years, to 2029-08-26)
 - Namespro DNS Hosting - Free; A records `@` and `www` → `159.89.125.246` (ticket 790542899 confirmed 26 Aug 2026 21:15; htns1 and this laptop verified)
+- HTTPS for `neshanak.ca` via Caddy / Let's Encrypt; `www` redirects to the apex; Secure cookies
 - Product rename: **Neshanak** in the UI, API title, and docs (Postgres user/db on the droplet remain `nook`)
 - Remember Me on login: unchecked uses session cookies; checked uses persistent cookies. Refresh keeps that choice.
 - Title Case on every word in UI chrome; user-entered titles, folders, tags, emails, and URLs are unchanged
@@ -27,7 +28,6 @@
 ## Remaining
 
 - Namespro refund for the duplicate domain invoice (keep WHOIS and the first invoice)
-- HTTPS for `neshanak.ca` (open 80/443, certificate, serve without `:8080`); then `COOKIE_SECURE=true` and Compose URLs
 - Namespro domain list showed `neshanak.ca` twice (same expiry); CIRA has one object
 - Stop publishing Postgres (`5432`) in `docker-compose.yml`
 - Optional DigitalOcean cloud firewall in front of `ufw`

@@ -18,15 +18,15 @@ These are the choices and results from the first live deploy:
 | Auth | Existing laptop SSH key (no root password) |
 | Automated backups | Enabled (~20% extra) |
 | Public IPv4 | `159.89.125.246` |
-| App URL (until HTTPS) | http://neshanak.ca:8080 (also http://159.89.125.246:8080) |
+| App URL | https://neshanak.ca |
 | Domain | `neshanak.ca` (CIRA; registrar Namespro Solutions Inc.) |
-| API docs | http://159.89.125.246:8080/docs (via nginx; port 8000 is firewalled) |
+| API docs | https://neshanak.ca/docs (via Caddy → nginx; port 8000 is firewalled) |
 | Docker | Official install script on the droplet (`Docker Compose` v2) |
 | Repo path on droplet | `/root/bookmarking_app` |
 | `.env` | `SECRET_KEY` only (gitignored; Compose interpolates it) |
-| Compose | `docker compose up --build -d` — `db` healthy, `backend` 8000, `frontend` 8080 |
-| Firewall | `ufw` active: OpenSSH + `8080/tcp` only |
-| TLS | Not yet. DNS for `neshanak.ca` / `www` is `159.89.125.246` (Namespro confirmed 26 Aug 2026 21:15). HTTPS is the next step. |
+| Compose | `docker-compose.yml` + `docker-compose.prod.yml` — Caddy 80/443, frontend 8080, backend 8000, db |
+| Firewall | `ufw` active: OpenSSH + `80/tcp` + `443/tcp` + `443/udp` + `8080/tcp` |
+| TLS | Caddy (Let's Encrypt) for `neshanak.ca`; `www` redirects to the apex |
 
 Verified: sign-in and save work from a laptop and a phone against that URL.
 
@@ -36,10 +36,10 @@ The droplet database is **empty until you register there**. Laptop PostgreSQL (`
 
 One Ubuntu server running PostgreSQL, the API, and the website via Docker Compose.
 
-- Website: `http://YOUR.DROPLET.IP:8080`
-- API docs: `http://YOUR.DROPLET.IP:8080/docs`
+- Website: `https://neshanak.ca`
+- API docs: `https://neshanak.ca/docs`
 
-This deploy is **HTTP**, not HTTPS. Cookies work on that origin with `COOKIE_SECURE=false` (Compose default). Add a domain and TLS before treating this as a hardened public site.
+Local `docker compose up` (no prod overlay) still serves HTTP at `http://localhost:8080`. The droplet uses `docker-compose.prod.yml` so Caddy terminates TLS and the API sets `COOKIE_SECURE`.
 
 ## Cost (as of this write-up)
 
@@ -250,15 +250,28 @@ Namespro support ticket **790542899** (26 Aug 2026, 21:15) confirmed the zone is
 - After flushing the laptop resolver cache, `http://neshanak.ca:8080` served Neshanak
 - Some public resolvers (Google anycast) can still answer parking for a few minutes while TTL burns down
 
-`http://neshanak.ca` and `https://neshanak.ca` (ports 80 and 443) are **not** the app yet. If a resolver still has parking, those ports show Namespro’s IIS page. After DNS is the droplet, those ports time out until `ufw` allows 80/443 and nginx/TLS is set up.
+`http://neshanak.ca` without a port used to time out (or show Namespro parking if DNS was stale). With Caddy it redirects to HTTPS.
 
-### After DNS matches the droplet
+### HTTPS (Caddy + Let's Encrypt)
 
-Still to do (not done yet):
+Production overlay: `docker-compose.prod.yml` plus `Caddyfile`. Local Compose does **not** load that overlay.
 
-- Allow **443/tcp** (and **80/tcp** for HTTP-01) on `ufw`; obtain a certificate for `neshanak.ca`.
-- Serve the app on 443 so the URL is `https://neshanak.ca` without `:8080`.
-- Set `COOKIE_SECURE=true` and point `FRONTEND_URL` / `BACKEND_URL` at `https://neshanak.ca`.
+On the droplet:
+
+```bash
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 443/udp
+cd ~/bookmarking_app
+grep -q '^COMPOSE_FILE=' .env || echo 'COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml' >> .env
+git pull
+docker compose up --build -d
+docker compose logs caddy
+```
+
+Caddy obtains certificates for `neshanak.ca` and `www.neshanak.ca`, redirects `www` to the apex, and proxies to the frontend container. The prod overlay sets `ENVIRONMENT=production`, `COOKIE_SECURE=true`, and `FRONTEND_URL` / `BACKEND_URL` to `https://neshanak.ca`.
+
+Port **8080** stays published for now (`http://159.89.125.246:8080`). Sign-in cookies are Secure, so use **https://neshanak.ca** after TLS is on.
 
 ## Useful commands (on the droplet)
 
@@ -278,19 +291,21 @@ git pull
 docker compose up --build -d
 ```
 
+The droplet `.env` must include `COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml` so Caddy is included.
+
 ## Security notes
 
 Done on this droplet:
 
-- `ufw` allows SSH and **8080** only. Public access to **5432** and **8000** is denied even though Compose still maps those ports on localhost.
+- `ufw` allows SSH, **80**, **443**, and **8080**. Public access to **5432** and **8000** is denied even though Compose still maps those ports on localhost.
+- Caddy serves HTTPS for `neshanak.ca`. Auth cookies are Secure.
 
 Still open:
 
-- There is no HTTPS yet. Do not turn on `COOKIE_SECURE=true` until `neshanak.ca` has TLS.
-- `FRONTEND_URL` / `BACKEND_URL` in Compose are still `http://localhost:8080`. The browser talks to nginx on port 8080, which proxies `/api` to the backend, so login works over the droplet IP. Point those URLs at `https://neshanak.ca` when TLS is on.
 - Compose still publishes `5432:5432`. Removing that publish from `docker-compose.yml` is extra hardening on top of `ufw`.
-- A DigitalOcean cloud firewall (same ports: 22 and 8080) can sit in front of `ufw`.
+- A DigitalOcean cloud firewall (22, 80, 443; optionally 8080) can sit in front of `ufw`.
 - Apply Ubuntu security updates when you can: `apt update && apt upgrade`.
+- Closing public **8080** after HTTPS is trusted would remove the old HTTP URL.
 
 ## Local PostgreSQL vs this droplet
 

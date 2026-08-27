@@ -33,7 +33,7 @@ docker compose up --build
 - App: `http://localhost:8080`
 - API directly: `http://localhost:8000/docs`
 
-DigitalOcean droplet setup (create the VM, SSH, install Docker, clone, secret, Compose, `ufw`) and the `neshanak.ca` / Namespro DNS notes are in [deployment.md](deployment.md). Until HTTPS is on, the live instance is `http://neshanak.ca:8080` (also `http://159.89.125.246:8080`).
+DigitalOcean droplet setup (create the VM, SSH, install Docker, clone, secret, Compose, `ufw`) and the `neshanak.ca` / Namespro DNS notes are in [deployment.md](deployment.md). The live instance is `https://neshanak.ca`.
 
 ## Tests
 

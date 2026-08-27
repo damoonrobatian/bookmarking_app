@@ -1,0 +1,8 @@
+www.neshanak.ca {
+	redir https://neshanak.ca{uri} permanent
+}
+
+neshanak.ca {
+	encode gzip
+	reverse_proxy frontend:80
+}

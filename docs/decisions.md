@@ -105,3 +105,21 @@ Sentence case; Title Case that leaves articles lowercase.
 ### Date
 
 2026-08-26
+
+---
+
+## Decision
+
+Terminate TLS with Caddy in a production Compose overlay, not in the local Compose file.
+
+### Reason
+
+Let's Encrypt HTTP-01 needs ports 80 and 443 on the public hostname. Local `docker compose up` should stay HTTP on 8080. `docker-compose.prod.yml` adds Caddy and sets Secure cookies only on the droplet.
+
+### Alternatives considered
+
+Certbot on the host; Traefik; putting Caddy in the base Compose file.
+
+### Date
+
+2026-08-27

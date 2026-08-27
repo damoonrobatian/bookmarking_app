@@ -1,0 +1,32 @@
+# Production overlay for the DigitalOcean droplet.
+# Local `docker compose up` does not use this file.
+#
+# On the droplet:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml
+#   docker compose up --build -d
+
+services:
+  backend:
+    environment:
+      ENVIRONMENT: production
+      FRONTEND_URL: https://neshanak.ca
+      BACKEND_URL: https://neshanak.ca
+      COOKIE_SECURE: "true"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  caddy_data:
+  caddy_config:
