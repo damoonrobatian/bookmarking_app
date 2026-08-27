@@ -28,7 +28,7 @@
 - Copy URL on each bookmark card (clipboard + toast)
 - Save the current page from a Settings bookmarklet or the unpacked `extension/` toolbar button; `/save` popup auto-fills URL, a real title (not SEO keyword dumps), suggested tags, and can create a folder on the spot
 - Tags page groups tags by folder; the sidebar no longer lists every tag
-- App logo: vector landscape-in-a-page mark (terracotta) for the header, PNG/ICO favicons, imported bookmarks-bar button, and toolbar extension
+- App logo: GPT landscape-in-a-page mark (black knocked out) for the header, PNG/ICO favicons, imported bookmarks-bar button, and toolbar extension
 
 ## Remaining
 

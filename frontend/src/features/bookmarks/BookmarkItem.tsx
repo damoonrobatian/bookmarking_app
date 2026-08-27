@@ -47,11 +47,11 @@ export function BookmarkItem({
   const body = (
     <>
       <img
-        src={bookmark.favicon_url || "/favicon.svg"}
+        src={bookmark.favicon_url || "/logo.png"}
         alt=""
         className="h-5 w-5 rounded-sm"
         onError={(event) => {
-          event.currentTarget.src = "/favicon.svg";
+          event.currentTarget.src = "/logo.png";
         }}
       />
       <div className="min-w-0 flex-1">

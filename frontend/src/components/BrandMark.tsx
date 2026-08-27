@@ -14,7 +14,7 @@ export function BrandMark({
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <img
-        src="/logo.svg"
+        src="/logo.png"
         alt={wordmark ? "" : "Neshanak"}
         className={icon}
         width={32}
