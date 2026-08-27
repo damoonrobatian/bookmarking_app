@@ -32,11 +32,11 @@ describe("login form", () => {
     expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toMatchObject({
       email: "ada@example.com",
       password: "wrong-password",
-      remember_me: false,
+      remember_me: true,
     });
   });
 
-  it("sends remember_me when the checkbox is checked", async () => {
+  it("sends remember_me false when the checkbox is cleared", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,
@@ -51,7 +51,7 @@ describe("login form", () => {
     await user.click(screen.getByRole("button", { name: "Sign In" }));
     await screen.findByRole("alert");
     expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toMatchObject({
-      remember_me: true,
+      remember_me: false,
     });
   });
 

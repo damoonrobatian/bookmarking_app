@@ -6,6 +6,11 @@ ACCESS_COOKIE = "access_token"
 REFRESH_COOKIE = "refresh_token"
 
 
+def _expire_auth_cookies(response: Response, *, secure: bool) -> None:
+    response.delete_cookie(ACCESS_COOKIE, path="/", secure=secure, httponly=True, samesite="lax")
+    response.delete_cookie(REFRESH_COOKIE, path="/api/auth", secure=secure, httponly=True, samesite="lax")
+
+
 def set_auth_cookies(
     response: Response,
     access_token: str,
@@ -15,6 +20,9 @@ def set_auth_cookies(
 ) -> None:
     settings = get_settings()
     secure = settings.cookie_secure_flag
+    if secure:
+        # HTTP cookies from :8080 share this host and can shadow the Secure ones.
+        _expire_auth_cookies(response, secure=False)
     access_max_age = settings.access_token_expire_minutes * 60 if remember else None
     refresh_max_age = settings.refresh_token_expire_days * 24 * 60 * 60 if remember else None
     response.set_cookie(
@@ -39,6 +47,6 @@ def set_auth_cookies(
 
 def clear_auth_cookies(response: Response) -> None:
     settings = get_settings()
-    secure = settings.cookie_secure_flag
-    response.delete_cookie(ACCESS_COOKIE, path="/", secure=secure, httponly=True, samesite="lax")
-    response.delete_cookie(REFRESH_COOKIE, path="/api/auth", secure=secure, httponly=True, samesite="lax")
+    _expire_auth_cookies(response, secure=settings.cookie_secure_flag)
+    if settings.cookie_secure_flag:
+        _expire_auth_cookies(response, secure=False)

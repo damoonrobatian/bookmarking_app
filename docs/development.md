@@ -14,7 +14,9 @@ cp .env.example .env
 make install
 ```
 
-Create a PostgreSQL database that matches `DATABASE_URL`, then:
+Your real bookmarks are at **https://neshanak.ca**. A local database is only for editing code.
+
+Create a throwaway PostgreSQL database that matches `DATABASE_URL`, then:
 
 ```bash
 make migrate
@@ -22,7 +24,7 @@ make backend    # terminal 1
 make frontend   # terminal 2
 ```
 
-The UI is at `http://localhost:5173`. API docs are at `http://localhost:8000/docs`.
+The UI is at `http://localhost:5173`. API docs are at `http://localhost:8000/docs`. Do not use that URL as a second library.
 
 ## Docker
 

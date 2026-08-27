@@ -28,12 +28,14 @@ Access and refresh tokens are JWTs stored in HTTP-only cookies.
 
 - Access cookie: short-lived, sent to all `/api` routes
 - Refresh cookie: longer-lived, scoped to `/api/auth`
-- Login `remember_me: false` (the default) sets **session** cookies that the browser drops when it closes
+- Login `remember_me: false` sets **session** cookies that the browser drops when it closes
 - Login `remember_me: true` sets **persistent** cookies (`Max-Age` from `ACCESS_TOKEN_EXPIRE_MINUTES` and `REFRESH_TOKEN_EXPIRE_DAYS`)
+- The login form sends `remember_me: true` unless the box is cleared
 - The refresh JWT stores that choice so `POST /api/auth/refresh` reissues cookies the same way
 - Register always uses persistent cookies
 - Logout clears both cookies
-- The frontend retries once with `POST /api/auth/refresh` after a 401
+- After a 401, the frontend retries once with `POST /api/auth/refresh`, including for `GET /api/auth/me`. It does not refresh after login, register, password change, account deletion, logout, or refresh itself
+- In production, login also expires leftover non-Secure cookies so an old HTTP `:8080` session cannot shadow HTTPS cookies
 - `POST /api/auth/password` updates the password hash after checking the current password
 - `DELETE /api/auth/account` verifies the password, deletes the user (cascading bookmarks, folders, and tags), and clears cookies
 

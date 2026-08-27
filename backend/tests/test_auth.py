@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from tests.conftest import register_user
@@ -51,6 +52,23 @@ def test_remember_me_sets_persistent_cookies(client: TestClient) -> None:
     cookies = _set_cookie_headers(login)
     assert "Max-Age=" in cookies
     assert client.get("/api/auth/me").status_code == 200
+
+
+def test_secure_cookies_expire_insecure_duplicates(monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.config import Settings
+    from app.security.cookies import set_auth_cookies
+    from fastapi import Response
+
+    monkeypatch.setattr(
+        "app.security.cookies.get_settings",
+        lambda: Settings(cookie_secure=True, environment="production"),
+    )
+    response = Response()
+    set_auth_cookies(response, "access", "refresh", remember=True)
+    setter = getattr(response.headers, "get_list", None) or response.headers.getlist
+    headers = setter("set-cookie")
+    assert any("access_token=" in item and "Max-Age=0" in item and "Secure" not in item for item in headers)
+    assert any(item.startswith("access_token=access") and "Secure" in item for item in headers)
 
 
 def test_login_without_remember_me_uses_session_cookies(client: TestClient) -> None:

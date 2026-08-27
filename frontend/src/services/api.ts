@@ -36,7 +36,14 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     headers,
     credentials: "include",
   });
-  if (response.status === 401 && !path.includes("/api/auth/")) {
+  const skipRefresh =
+    path.includes("/api/auth/login") ||
+    path.includes("/api/auth/register") ||
+    path.includes("/api/auth/password") ||
+    path.includes("/api/auth/account") ||
+    path.includes("/api/auth/logout") ||
+    path.includes("/api/auth/refresh");
+  if (response.status === 401 && !skipRefresh) {
     const refreshed = await fetch("/api/auth/refresh", {
       method: "POST",
       credentials: "include",

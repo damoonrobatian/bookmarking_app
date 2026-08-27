@@ -13,6 +13,9 @@ services:
       BACKEND_URL: https://neshanak.ca
       COOKIE_SECURE: "true"
 
+  frontend:
+    ports: !override []
+
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped

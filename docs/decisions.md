@@ -114,11 +114,29 @@ Terminate TLS with Caddy in a production Compose overlay, not in the local Compo
 
 ### Reason
 
-Let's Encrypt HTTP-01 needs ports 80 and 443 on the public hostname. Local `docker compose up` should stay HTTP on 8080. `docker-compose.prod.yml` adds Caddy and sets Secure cookies only on the droplet.
+Let's Encrypt HTTP-01 needs ports 80 and 443 on the public hostname. Local `docker compose up` should stay HTTP on 8080. `docker-compose.prod.yml` adds Caddy, sets Secure cookies, and unpublishes frontend 8080 on the droplet.
 
 ### Alternatives considered
 
-Certbot on the host; Traefik; putting Caddy in the base Compose file.
+Certbot on the host; Traefik; putting Caddy in the base Compose file; leaving public `:8080` next to HTTPS.
+
+### Date
+
+2026-08-27
+
+---
+
+## Decision
+
+The login Remember Me box is checked by default. `GET /api/auth/me` may refresh an expired access cookie.
+
+### Reason
+
+A personal library should stay signed in across browser restarts unless the user opts out. Access cookies still expire in 30 minutes; without refreshing `/me`, a reload sent people back to login even with Remember Me on.
+
+### Alternatives considered
+
+Default off (shared-computer caution); lengthen the access cookie to 14 days.
 
 ### Date
 

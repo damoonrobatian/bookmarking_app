@@ -10,7 +10,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 
 ## Features
 
-- Account registration, login with optional Remember Me, and logout
+- Account registration, login with Remember Me (on by default), and logout
 - Change password and delete account from Settings
 - Show Password on password fields
 - Save, edit, delete, favorite, archive, and restore bookmarks
@@ -43,39 +43,26 @@ See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and
 
 **Tooling:** Docker Compose, GitHub Actions, pytest, Vitest, React Testing Library, ESLint, Prettier, Playwright
 
-## Local installation
+## Use the app
 
-1. Copy environment defaults:
+Your bookmark library is **https://neshanak.ca** only. Do not run `make backend` / `make frontend` or local Docker as a second copy of your bookmarks.
 
-   ```bash
-   cp .env.example .env
-   ```
+## Changing the code
 
-2. Set `SECRET_KEY` to a long random value. Point `DATABASE_URL` at a local PostgreSQL database.
-
-3. Install dependencies and run migrations:
-
-   ```bash
-   make install
-   make migrate
-   ```
-
-4. Start the API and UI:
-
-   ```bash
-   make backend
-   make frontend
-   ```
-
-Open `http://localhost:5173`. The Vite dev server proxies `/api` to `http://localhost:8000`.
-
-Optional demo data (development only):
+Backend tests use SQLite and do not need PostgreSQL:
 
 ```bash
-make seed
+make test
 ```
 
-Then sign in as `demo@example.com` / `demopassword`.
+A local Postgres database is optional and is **not** your library. If you need it while editing code:
+
+1. Copy environment defaults: `cp .env.example .env`
+2. Set `SECRET_KEY`. Point `DATABASE_URL` at a throwaway local database, not the droplet.
+3. `make install` then `make migrate`
+4. `make backend` and `make frontend` → `http://localhost:5173` (dev server only)
+
+Optional throwaway demo user: `make seed` → `demo@example.com` / `demopassword`.
 
 ## Docker installation
 
@@ -86,7 +73,7 @@ docker compose up --build
 - Application: http://localhost:8080
 - API docs: http://localhost:8080/docs or http://localhost:8000/docs
 
-Docker Compose starts PostgreSQL, the API, and the nginx-hosted frontend. Do not use the bundled development `SECRET_KEY` in production.
+Docker Compose starts PostgreSQL, the API, and the nginx-hosted frontend. That local stack is for development only. Do not use the bundled development `SECRET_KEY` in production. Your bookmarks stay at **https://neshanak.ca**.
 
 The first DigitalOcean deploy is live at **https://neshanak.ca**. **`neshanak.ca`** is registered at Namespro / CIRA. TLS is terminated by Caddy. Steps, firewall, domain, and DNS notes are in [docs/deployment.md](docs/deployment.md).
 

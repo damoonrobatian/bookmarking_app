@@ -3,6 +3,7 @@ www.neshanak.ca {
 }
 
 neshanak.ca {
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
 	encode gzip
 	reverse_proxy frontend:80
 }

@@ -24,13 +24,13 @@ These are the choices and results from the first live deploy:
 | Docker | Official install script on the droplet (`Docker Compose` v2) |
 | Repo path on droplet | `/root/bookmarking_app` |
 | `.env` | `SECRET_KEY` only (gitignored; Compose interpolates it) |
-| Compose | `docker-compose.yml` + `docker-compose.prod.yml` — Caddy 80/443, frontend 8080, backend 8000, db |
-| Firewall | `ufw` active: OpenSSH + `80/tcp` + `443/tcp` + `443/udp` + `8080/tcp` |
+| Compose | `docker-compose.yml` + `docker-compose.prod.yml` — Caddy 80/443; frontend 8080 is not published on the droplet |
+| Firewall | `ufw` active: OpenSSH + `80/tcp` + `443/tcp` + `443/udp` |
 | TLS | Caddy (Let's Encrypt) for `neshanak.ca`; `www` redirects to the apex |
 
 Verified: sign-in and save work from a laptop and a phone against that URL.
 
-The droplet database is **empty until you register there**. Laptop PostgreSQL (`make backend` / `make frontend`) is a separate library.
+The only bookmark library is **https://neshanak.ca**. Do not keep a second copy on the laptop.
 
 ## What you get
 
@@ -271,7 +271,7 @@ docker compose logs caddy
 
 Caddy obtains certificates for `neshanak.ca` and `www.neshanak.ca`, redirects `www` to the apex, and proxies to the frontend container. The prod overlay sets `ENVIRONMENT=production`, `COOKIE_SECURE=true`, and `FRONTEND_URL` / `BACKEND_URL` to `https://neshanak.ca`.
 
-Port **8080** stays published for now (`http://159.89.125.246:8080`). Sign-in cookies are Secure, so use **https://neshanak.ca** after TLS is on.
+Public **8080** is closed. Use **https://neshanak.ca** only. Sign-in cookies are Secure.
 
 ## Useful commands (on the droplet)
 
@@ -297,16 +297,15 @@ The droplet `.env` must include `COMPOSE_FILE=docker-compose.yml:docker-compose.
 
 Done on this droplet:
 
-- `ufw` allows SSH, **80**, **443**, and **8080**. Public access to **5432** and **8000** is denied even though Compose still maps those ports on localhost.
+- `ufw` allows SSH, **80**, and **443**. Public access to **5432**, **8000**, and **8080** is denied.
 - Caddy serves HTTPS for `neshanak.ca`. Auth cookies are Secure.
 
 Still open:
 
-- Compose still publishes `5432:5432`. Removing that publish from `docker-compose.yml` is extra hardening on top of `ufw`.
-- A DigitalOcean cloud firewall (22, 80, 443; optionally 8080) can sit in front of `ufw`.
+- Compose still publishes `5432:5432` and `8000:8000`. Removing those publishes from `docker-compose.yml` is extra hardening on top of `ufw`.
+- A DigitalOcean cloud firewall (22, 80, 443) can sit in front of `ufw`.
 - Apply Ubuntu security updates when you can: `apt update && apt upgrade`.
-- Closing public **8080** after HTTPS is trusted would remove the old HTTP URL.
 
-## Local PostgreSQL vs this droplet
+## One library
 
-Running Neshanak on your laptop (`make backend` / `make frontend`) uses your **local** database. The droplet is a **second** instance. Syncing across machines means everyone uses the droplet URL, not the laptop.
+Bookmarks, accounts, and passwords live only on this droplet. Use **https://neshanak.ca**. `make backend` / `make frontend` on the laptop is for editing code, not for the real library.
