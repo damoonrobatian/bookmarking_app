@@ -150,12 +150,40 @@ def _meta(soup: BeautifulSoup, *, property: str | None = None, name: str | None 
 
 
 def _favicon(soup: BeautifulSoup, base_url: str) -> str | None:
-    icon = soup.find("link", rel=lambda value: value and "icon" in value.lower())  # type: ignore[arg-type]
-    href = icon.get("href") if icon else None
-    if href:
-        return urljoin(base_url, str(href))
+    candidates: list[tuple[int, str]] = []
+    for tag in soup.find_all("link"):
+        if not isinstance(tag, Tag):
+            continue
+        href = tag.get("href")
+        if not href:
+            continue
+        rels = _link_rels(tag)
+        if not any("icon" in rel for rel in rels):
+            continue
+        href_str = str(href)
+        type_hint = str(tag.get("type") or "").lower()
+        score = 0
+        if "apple-touch-icon" in rels:
+            score += 3
+        if "svg" in type_hint or href_str.endswith(".svg"):
+            score += 2
+        if "png" in type_hint or href_str.endswith(".png"):
+            score += 1
+        candidates.append((score, urljoin(base_url, href_str)))
+    if candidates:
+        candidates.sort(key=lambda item: item[0], reverse=True)
+        return candidates[0][1]
     parsed = urlparse(base_url)
     return f"{parsed.scheme}://{parsed.netloc}/favicon.ico"
+
+
+def _link_rels(tag: Tag) -> list[str]:
+    rel = tag.get("rel")
+    if rel is None:
+        return []
+    if isinstance(rel, list):
+        return [str(item).lower() for item in rel]
+    return str(rel).lower().split()
 
 
 _SKIP_TAGS = {

@@ -1,5 +1,5 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Archive, Check, Copy, FolderInput, MoreHorizontal, Pencil, Star, Trash2 } from "lucide-react";
+import { Archive, Check, Copy, FolderInput, Globe, MoreHorizontal, Pencil, Star, Trash2 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import type { Bookmark } from "@/types";
@@ -46,14 +46,7 @@ export function BookmarkItem({
 
   const body = (
     <>
-      <img
-        src={bookmark.favicon_url || "/logo.png"}
-        alt=""
-        className="h-5 w-5 rounded-sm"
-        onError={(event) => {
-          event.currentTarget.src = "/logo.png";
-        }}
-      />
+      <BookmarkFavicon bookmark={bookmark} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="truncate font-medium">{bookmark.title}</p>
@@ -153,6 +146,35 @@ export function BookmarkItem({
         </DropdownMenu.Root>
       </div>
     </article>
+  );
+}
+
+function siteFaviconUrl(bookmark: Bookmark): string | null {
+  if (bookmark.favicon_url) return bookmark.favicon_url;
+  if (bookmark.page_domain) return `https://${bookmark.page_domain}/favicon.ico`;
+  try {
+    return `${new URL(bookmark.url).origin}/favicon.ico`;
+  } catch {
+    return null;
+  }
+}
+
+function BookmarkFavicon({ bookmark }: { bookmark: Bookmark }) {
+  const siteIcon = siteFaviconUrl(bookmark);
+  const [broken, setBroken] = useState(false);
+  useEffect(() => {
+    setBroken(false);
+  }, [bookmark.id, siteIcon]);
+  if (!siteIcon || broken) {
+    return <Globe className="h-5 w-5 shrink-0 text-ink-faint" aria-hidden />;
+  }
+  return (
+    <img
+      src={siteIcon}
+      alt=""
+      className="h-5 w-5 shrink-0 rounded-sm"
+      onError={() => setBroken(true)}
+    />
   );
 }
 

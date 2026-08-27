@@ -19,6 +19,19 @@ def test_parse_html_suggests_keyword_and_article_tags() -> None:
     assert "hooks" in tags
 
 
+def test_parse_html_prefers_apple_touch_icon() -> None:
+    html = """
+    <html>
+      <head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
+    </html>
+    """
+    _title, _description, favicon, _tags = _parse_html(html, "https://outlook.office.com/")
+    assert favicon == "https://outlook.office.com/apple-touch-icon.png"
+
+
 def test_parse_html_rejects_keyword_stuffed_titles() -> None:
     stuffed = (
         "Register Domain, .ca Domain, Domain Registration Canada, "

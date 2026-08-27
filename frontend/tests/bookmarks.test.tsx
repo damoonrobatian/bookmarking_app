@@ -58,6 +58,17 @@ describe("bookmark list", () => {
     expect(screen.getByText("react.dev")).toBeInTheDocument();
     expect(screen.getByText("docs")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Copy URL" })).toBeInTheDocument();
+    expect(document.querySelector("img")?.getAttribute("src")).toBe("https://react.dev/favicon.ico");
+    expect(document.querySelector("img")?.getAttribute("src")).not.toContain("logo");
+  });
+
+  it("uses a stored site favicon instead of the Neshanak logo", async () => {
+    renderCollection([{ ...sample, favicon_url: "https://outlook.office.com/apple-touch-icon.png" }]);
+    expect(await screen.findByText("React documentation")).toBeInTheDocument();
+    expect(document.querySelector("img")).toHaveAttribute(
+      "src",
+      "https://outlook.office.com/apple-touch-icon.png",
+    );
   });
 
   it("copies the bookmark URL", async () => {
