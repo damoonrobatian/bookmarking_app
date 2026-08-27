@@ -10,6 +10,7 @@ import { useCurrentUser } from "@/hooks/useAuth";
 import { exportBookmarks, importBookmarks } from "@/services/tags";
 import type { ImportReport } from "@/types";
 import {
+  BOOKMARKLET_TITLE,
   bookmarkletIconDataUri,
   bookmarkletNetscapeHtml,
   downloadBookmarkletHtml,
@@ -221,11 +222,12 @@ function SaveFromBrowserBody() {
           <li>Open a page you want to save, then click +Neshanak on the bar.</li>
         </ol>
         <a
-          className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 text-sm font-medium text-white hover:bg-accent-hover"
+          className="mt-4 inline-flex h-10 items-center rounded-lg bg-accent px-3.5 font-medium text-white [font-size:0] after:text-sm after:leading-5 after:content-[attr(data-drag-label)] hover:bg-accent-hover"
+          data-drag-label="Drag me to the bookmarks bar"
           href={href}
           onClick={(event) => event.preventDefault()}
         >
-          Drag me to the bookmarks bar
+          {BOOKMARKLET_TITLE}
         </a>
       </Method>
 

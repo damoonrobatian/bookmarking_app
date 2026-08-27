@@ -40,7 +40,9 @@ describe("settings", () => {
     expect(screen.getByRole("heading", { name: "3. Bookmarks Bar Button With Icon" })).toBeInTheDocument();
     expect(screen.getByText(/It works in Google Chrome and Mozilla Firefox/)).toBeInTheDocument();
 
-    const link = screen.getByRole("link", { name: "Drag me to the bookmarks bar" });
+    const link = screen.getByRole("link", { name: "+Neshanak" });
+    expect(link).toHaveTextContent("+Neshanak");
+    expect(link).toHaveAttribute("data-drag-label", "Drag me to the bookmarks bar");
     expect(link.querySelector("img")).toBeNull();
     expect(link.getAttribute("href") ?? "").toMatch(/^javascript:/);
 
