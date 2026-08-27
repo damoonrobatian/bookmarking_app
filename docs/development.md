@@ -87,7 +87,7 @@ This adds a clickable **Save To Neshanak** control on pages you want to keep. It
 2. Show the bookmarks bar if you cannot see it:
    - Chrome, Edge, and Firefox: **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
    - Or right-click the empty area under the address bar and enable **Bookmarks Bar** / **Bookmarks Toolbar**.
-3. Download **Bar Button**. Open Bookmark Manager (**Ctrl+Shift+O**), then **Import Bookmarks** from the three-dot menu and choose `Save To Neshanak.html`. Chrome and Edge never attach a custom icon to a `javascript:` bookmark you drag; the import is how those browsers get the terracotta mark. If the item lands in an Imported folder, drag it onto the bar — the logo stays. Importing also paints the logo onto a blank bar button you already dragged; you can delete the extra copy.
+3. Download **Bar Button**. Chrome and Edge: the three dots at the top right of the **browser window** (beside the profile), then **Bookmarks and lists** → **Import bookmarks and settings**. Pick **Bookmarks HTML File** if asked, and open `Save To Neshanak.html`. Drag **Save To Neshanak** from **Other bookmarks** onto the bar. Firefox: **Manage Bookmarks** (Ctrl+Shift+O) → **Import and Backup** → **Import Bookmarks from HTML**. Firefox puts the item in the Bookmarks Menu; drag it onto the toolbar.
 4. Visit the page you want to save. Click **Save To Neshanak** on the bar. A popup opens `https://neshanak.ca/save` with the address filled in. Title and tags are suggested from the tab title, the page heading, and your existing tags when they match.
 
 If popups are blocked, allow popups for `neshanak.ca` and try again.

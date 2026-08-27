@@ -203,19 +203,35 @@ function SaveFromBrowserBody() {
   return (
     <>
       <p className="text-sm text-ink-muted">
-        Add A Button To Your Browser Bookmarks Bar, Then Click It On Any Page You Want To Keep. A Popup Opens With The Address Filled In. Chrome And Edge Will Not Show The Logo If You Only Drag A Script; Import The File Below.
+        Download The File, Then Import It As Bookmarks. Chrome And Edge Hide The Import Command In The Browser Menu, Not In Bookmark Manager. Firefox Puts The Imported Button In The Bookmarks Menu, Not On The Bar, Until You Drag It There.
       </p>
-      <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+      <p className="mt-4 text-sm font-medium">Chrome Or Edge</p>
+      <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+        <li>Show The Bookmarks Bar If It Is Hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+        <li>Download Bar Button.</li>
         <li>
-          Show The Bookmarks Bar If It Is Hidden. Chrome, Edge, And Firefox: Ctrl+Shift+B (Mac: Command+Shift+B). Or Right-Click Below The Address Bar And Enable Bookmarks Bar / Bookmarks Toolbar.
+          Click The Three Dots At The Top Right Of The Whole Browser Window, Next To Your Profile. Not The Dots Inside Ctrl+Shift+O. Then Bookmarks And Lists → Import Bookmarks And Settings.
         </li>
         <li>
-          Download Bar Button. Open Bookmark Manager (Ctrl+Shift+O). Three Dots → Import Bookmarks → Bookmarks HTML File → Choose Save To Neshanak.html.
+          If It Asks What To Import From, Choose Bookmarks HTML File. Open Save To Neshanak.html From Downloads.
         </li>
         <li>
-          If It Lands In An Imported Folder, Drag It Onto The Bar. The Logo Stays. If A Blank Button Is Already On The Bar, Importing Paints The Logo On That Same Script; You Can Delete The Extra Copy.
+          Look In Other Bookmarks (A Folder At The End Of The Bar). Drag Save To Neshanak Onto The Bar.
         </li>
-        <li>Open The Page You Want To Save, Then Click Save To Neshanak On The Bar.</li>
+      </ol>
+      <p className="mt-4 text-sm font-medium">Firefox</p>
+      <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+        <li>Show The Bookmarks Toolbar If It Is Hidden: Ctrl+Shift+B (Mac: Command+Shift+B).</li>
+        <li>Download Bar Button.</li>
+        <li>
+          Click The Three Lines At The Top Right → Bookmarks → Manage Bookmarks. Or Press Ctrl+Shift+O (Mac: Command+Shift+O).
+        </li>
+        <li>
+          In That Window, Click Import And Backup → Import Bookmarks From HTML. Open Save To Neshanak.html From Downloads.
+        </li>
+        <li>
+          Open The Bookmarks Menu (Bookmarks → Bookmarks Menu). Drag Save To Neshanak Onto The Bookmarks Toolbar.
+        </li>
       </ol>
       <Button className="mt-4" type="button" onClick={() => void downloadBarButton()}>
         Download Bar Button
