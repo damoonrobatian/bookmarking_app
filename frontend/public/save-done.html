@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#C45C26" />
+    <title>Saved</title>
+    <script>
+      function dismiss() {
+        try {
+          window.close();
+        } catch (e) {}
+        try {
+          history.back();
+        } catch (e) {}
+      }
+      dismiss();
+      addEventListener("load", dismiss);
+      addEventListener("pageshow", dismiss);
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 2rem 1.25rem;
+        background: #f6f1e8;
+        color: #2c241c;
+        font-family: system-ui, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Saved. You can close this page.</p>
+  </body>
+</html>

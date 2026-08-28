@@ -1,16 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { BrandMark } from "@/components/BrandMark";
 import { BookmarkFormDialog } from "@/features/bookmarks/BookmarkFormDialog";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { createBookmark } from "@/services/bookmarks";
-import { savePageFromSearch } from "@/utils/saveShare";
-
-function closeOrGoToLibrary(navigate: ReturnType<typeof useNavigate>) {
-  window.close();
-  window.setTimeout(() => navigate("/app"), 200);
-}
+import { dismissSaveWindow, savePageFromSearch } from "@/utils/saveShare";
 
 export function SavePage() {
   const user = useCurrentUser();
@@ -18,6 +13,7 @@ export function SavePage() {
   const [params] = useSearchParams();
   const { url, title } = savePageFromSearch(params);
   const next = `/save?${params.toString()}`;
+  const saved = useRef(false);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: createBookmark,
@@ -51,10 +47,11 @@ export function SavePage() {
         initialUrl={url}
         initialTitle={title}
         onOpenChange={(open) => {
-          if (!open) closeOrGoToLibrary(navigate);
+          if (!open) dismissSaveWindow((to) => navigate(to), window, { saved: saved.current });
         }}
         onSubmit={async (payload) => {
           await mutation.mutateAsync(payload);
+          saved.current = true;
         }}
       />
     </div>
