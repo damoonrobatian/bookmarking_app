@@ -182,6 +182,24 @@ A browser-store extension with its own OAuth client; a content-script overlay; c
 
 ## Decision
 
+On Android, save a page through the system share sheet into `/save`, not a mobile toolbar button.
+
+### Reason
+
+Chrome on Android will not load the unpacked `extension/` or a bookmarks-bar bookmarklet the way a computer does. If the site is installed as a small PWA, `share_target` can receive the current URL and open the same `/save` form. iPhone Safari does not support share targets.
+
+### Alternatives considered
+
+An iOS Shortcut; a Safari bookmarklet; a Play Store wrapper.
+
+### Date
+
+2026-08-28
+
+---
+
+## Decision
+
 Store theme on the account. Change accent color and the header mark only; keep the tab favicon and unpacked extension terracotta.
 
 ### Reason

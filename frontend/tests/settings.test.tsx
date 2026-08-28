@@ -48,6 +48,7 @@ describe("settings", () => {
     expect(screen.getByRole("heading", { name: "1. Drag To The Bookmarks Bar" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "2. Button Next To The Address Bar" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "3. Bookmarks Bar Button With Icon" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "4. Share From Chrome On Android" })).toBeInTheDocument();
     expect(screen.getByText(/It works in Google Chrome and Mozilla Firefox/)).toBeInTheDocument();
 
     const link = screen.getByRole("link", { name: "+Neshanak" });

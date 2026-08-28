@@ -256,8 +256,8 @@ function SaveFromBrowserBody() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-ink-muted">
-        There are three ways to add a save button to your browser. The first way is the easiest: you drag a
-        button onto the bookmarks bar.
+        There are three ways to add a save button on a computer. The first way is the easiest: you drag a
+        button onto the bookmarks bar. On an Android phone, there is a fourth way: share the page to Neshanak.
       </p>
 
       <Method
@@ -359,6 +359,19 @@ function SaveFromBrowserBody() {
           Download bar button
         </Button>
         {downloadError ? <p className="mt-2 text-sm text-red-800">{downloadError}</p> : null}
+      </Method>
+
+      <Method
+        step={4}
+        title="Share From Chrome On Android"
+        note="This puts Neshanak in the Android share list. It works in Google Chrome on Android after you add Neshanak to your home screen. It does not work on iPhone."
+      >
+        <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
+          <li>On the phone, open https://neshanak.ca in Chrome and sign in.</li>
+          <li>Tap the three dots at the top right, then Add to Home screen or Install app.</li>
+          <li>Open a page you want to save, tap Share, then Neshanak.</li>
+          <li>Check the title and tags, then save.</li>
+        </ol>
       </Method>
     </div>
   );

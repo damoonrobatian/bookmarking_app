@@ -5,6 +5,7 @@ import { BrandMark } from "@/components/BrandMark";
 import { BookmarkFormDialog } from "@/features/bookmarks/BookmarkFormDialog";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { createBookmark } from "@/services/bookmarks";
+import { savePageFromSearch } from "@/utils/saveShare";
 
 function closeOrGoToLibrary(navigate: ReturnType<typeof useNavigate>) {
   window.close();
@@ -15,8 +16,7 @@ export function SavePage() {
   const user = useCurrentUser();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const url = params.get("url") ?? "";
-  const title = params.get("title") ?? "";
+  const { url, title } = savePageFromSearch(params);
   const next = `/save?${params.toString()}`;
   const queryClient = useQueryClient();
   const mutation = useMutation({

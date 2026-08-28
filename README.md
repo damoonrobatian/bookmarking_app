@@ -27,7 +27,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Visit counts
 - Duplicate URL detection
 - Automatic title, favicon, and tag suggestions when a page is saved
-- Save the current tab from a bookmarks-bar button or a small toolbar extension
+- Save the current tab from a bookmarks-bar button, a small toolbar extension, or Android Chrome share
 - Netscape HTML import and export
 - Responsive layout for desktop, tablet, and mobile; the overlay menu closes after you pick a destination
 
@@ -54,7 +54,7 @@ See [docs/architecture.md](docs/architecture.md) for layering, auth, search, and
 
 Your bookmark library is **https://neshanak.ca** only. Do not run `make backend` / `make frontend` or local Docker as a second copy of your bookmarks.
 
-To save a page you are looking at, open **Settings → Save From The Browser**. There are three ways; the first is the easiest.
+To save a page you are looking at, open **Settings → Save From The Browser**. On a computer there are three ways; the first is the easiest. On an Android phone, share the page to Neshanak after you add the site to your home screen.
 
 1. **Drag to the bookmarks bar.** Works in Google Chrome and Mozilla Firefox. Drag **Drag me to the bookmarks bar** onto the bar. The button on the bar is named **+Neshanak**.
 2. **Button next to the address bar.** Load the `extension/` folder (Chrome/Edge: Load unpacked; Firefox: Load Temporary Add-on).

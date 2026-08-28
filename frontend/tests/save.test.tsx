@@ -58,4 +58,40 @@ describe("save page", () => {
     expect(await screen.findByRole("button", { name: "javascript ×" }, { timeout: 2000 })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "react ×" })).toBeInTheDocument();
   });
+
+  it("fills the URL when Android share puts the address in text", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((path: string) => {
+        if (path === "/api/auth/me") return Promise.resolve(jsonResponse({ ...user, theme: "terracotta" }));
+        if (path === "/api/folders" || path === "/api/tags") return Promise.resolve(jsonResponse([]));
+        if (path === "/api/bookmarks/preview") {
+          return Promise.resolve(
+            jsonResponse({
+              url: "https://react.dev/learn",
+              title: "React Docs",
+              description: "Learn React",
+              favicon_url: null,
+              page_domain: "react.dev",
+              metadata_status: "ok",
+              suggested_tags: [],
+            }),
+          );
+        }
+        return Promise.resolve(jsonResponse({}));
+      }),
+    );
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={["/save?title=React%20Docs&text=https://react.dev/learn"]}>
+          <Routes>
+            <Route path="/save" element={<SavePage />} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    expect(await screen.findByDisplayValue("https://react.dev/learn")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("React Docs")).toBeInTheDocument();
+  });
 });

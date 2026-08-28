@@ -89,7 +89,7 @@ Below `1024px` wide, including a zoomed desktop window, the left menu is an over
 
 ## Save from the browser
 
-Settings → **Save From The Browser** lists three ways to add a save button. The first way is the easiest. Methods 2 and 3 each have their own Chrome/Edge or Firefox buttons.
+Settings → **Save From The Browser** lists three ways to add a save button on a computer. The first way is the easiest. Methods 2 and 3 each have their own Chrome/Edge or Firefox buttons. Method 4 is for Google Chrome on Android: add Neshanak to the home screen, then Share → Neshanak.
 
 ### 1. Drag to the bookmarks bar
 
@@ -115,3 +115,12 @@ The extension always opens `https://neshanak.ca/save`. You must already be signe
 ### 3. Bookmarks bar button with icon
 
 This adds a **+Neshanak** button to the bookmarks bar with the Neshanak picture. Download **Bar button**, then import the HTML file. Chrome and Edge: the three dots at the top right of the **browser window** (beside the profile), then **Bookmarks and lists** → **Import bookmarks and settings**. Pick **Bookmarks HTML file** if asked, and open `Save To Neshanak.html`. Drag **+Neshanak** from **Other bookmarks** onto the bar. Firefox: delete any blank copy first, then **Manage Bookmarks** (Ctrl+Shift+O) → **Import and Backup** → **Import Bookmarks from HTML** (not Settings → Import data). Firefox puts the item in the Bookmarks Menu; drag it onto the toolbar.
+
+### 4. Share from Chrome on Android
+
+This puts Neshanak in the Android share list. It does not work on iPhone.
+
+1. On the phone, open https://neshanak.ca in Chrome and sign in.
+2. Tap the three dots, then **Add to Home screen** or **Install app**.
+3. Open a page you want to save, tap **Share**, then **Neshanak**.
+4. Check the title and tags, then save.
