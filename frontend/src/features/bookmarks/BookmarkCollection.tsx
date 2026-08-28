@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LayoutGrid, List, ListCollapse } from "lucide-react";
+import { AlignJustify, Check, LayoutGrid, Minimize2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { cn } from "@/utils/cn";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkFormDialog } from "@/features/bookmarks/BookmarkFormDialog";
@@ -123,37 +124,43 @@ export function BookmarkCollection({
             <option value="title">Title</option>
             <option value="visit_count">Most Visited</option>
           </select>
-          <div className="flex rounded-lg border border-line bg-paper-raised p-0.5">
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="List view"
-              aria-pressed={view === "list"}
-              className={view === "list" ? "bg-paper-sunken text-ink" : undefined}
-              onClick={() => changeView("list")}
-            >
-              <List className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Grid view"
-              aria-pressed={view === "grid"}
-              className={view === "grid" ? "bg-paper-sunken text-ink" : undefined}
-              onClick={() => changeView("grid")}
-            >
-              <LayoutGrid className="h-4 w-4" />
-            </Button>
-            <span className="mx-0.5 w-px self-stretch bg-line" aria-hidden />
+          <div className="flex items-center gap-1.5">
+            <div className="flex rounded-lg border border-line bg-paper-raised p-0.5">
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="List view"
+                aria-pressed={view === "list"}
+                className={view === "list" ? "bg-paper-sunken text-ink" : undefined}
+                onClick={() => changeView("list")}
+              >
+                <AlignJustify className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Grid view"
+                aria-pressed={view === "grid"}
+                className={view === "grid" ? "bg-paper-sunken text-ink" : undefined}
+                onClick={() => changeView("grid")}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+            </div>
             <Button
               variant="ghost"
               size="icon"
               aria-label="Compact format"
               aria-pressed={compact}
-              className={compact ? "bg-paper-sunken text-ink" : undefined}
+              className={cn(
+                "rounded-lg border border-line",
+                compact
+                  ? "bg-accent text-white hover:bg-accent-hover hover:text-white"
+                  : "bg-paper-raised text-ink-muted",
+              )}
               onClick={toggleCompact}
             >
-              <ListCollapse className="h-4 w-4" />
+              {compact ? <Check className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
             </Button>
           </div>
         </div>
