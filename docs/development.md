@@ -85,7 +85,7 @@ Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is on
 
 ## Library cards
 
-The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle beside those layouts: it keeps the current layout and shows only the favicon and title on each card. When compact is on, that button fills with the accent color and a check. Both choices stay in this browser (`localStorage`).
+The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle beside those layouts: it keeps the current layout and shows only the favicon and title on each card. When compact is on, that button fills with the accent color and a check. Both choices stay in this browser (`localStorage`). Sort by title is A to Z; recently added, recently visited, and most visited stay newest or highest first.
 
 Tags on the save form can be added with **Add**, Enter / Done on the keyboard, or a comma. Phone keyboards often have no Enter key on that field.
 

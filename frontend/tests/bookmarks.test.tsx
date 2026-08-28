@@ -127,6 +127,15 @@ describe("bookmark list", () => {
     expect(screen.getByText("docs")).toBeInTheDocument();
   });
 
+  it("sorts titles A to Z", async () => {
+    const user = userEvent.setup();
+    renderCollection([sample]);
+    await screen.findByText("React documentation");
+    await user.selectOptions(screen.getByLabelText("Sort"), "title");
+    const urls = vi.mocked(fetch).mock.calls.map(([input]) => String(input));
+    expect(urls.some((url) => url.includes("sort=title") && url.includes("order=asc"))).toBe(true);
+  });
+
   it("shows an empty state", async () => {
     renderCollection([]);
     expect(await screen.findByText("You haven't saved any bookmarks yet.")).toBeInTheDocument();

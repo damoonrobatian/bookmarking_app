@@ -44,7 +44,13 @@ export function BookmarkCollection({
   const [moving, setMoving] = useState<Bookmark | null>(null);
   const [deleting, setDeleting] = useState<Bookmark | null>(null);
   const queryClient = useQueryClient();
-  const queryFilters = { ...filters, page, page_size: 50, sort, order: "desc" as const };
+  const queryFilters = {
+    ...filters,
+    page,
+    page_size: 50,
+    sort,
+    order: sort === "title" ? ("asc" as const) : ("desc" as const),
+  };
   const bookmarks = useQuery({
     queryKey: ["bookmarks", queryFilters],
     queryFn: () => listBookmarks(queryFilters),
