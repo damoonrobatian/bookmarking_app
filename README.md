@@ -16,6 +16,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 
 - Account registration, login with Remember Me (on by default), and logout
 - Change password and delete account from Settings (one section at a time)
+- Theme in Settings: six palettes that change the accent color and the header mark for the account
 - Show Password on password fields
 - Save, edit, delete, favorite, archive, restore, and copy a bookmark URL
 - Nested folders with move and rename
@@ -28,7 +29,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Automatic title, favicon, and tag suggestions when a page is saved
 - Save the current tab from a bookmarks-bar button or a small toolbar extension
 - Netscape HTML import and export
-- Responsive layout for desktop, tablet, and mobile
+- Responsive layout for desktop, tablet, and mobile; the overlay menu closes after you pick a destination
 
 ## Architecture
 

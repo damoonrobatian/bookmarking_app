@@ -177,3 +177,21 @@ A browser-store extension with its own OAuth client; a content-script overlay; c
 ### Date
 
 2026-08-27
+
+---
+
+## Decision
+
+Store theme on the account. Change accent color and the header mark only; keep the tab favicon and unpacked extension terracotta.
+
+### Reason
+
+The library is one person's, so the palette should follow the account, not only this browser. Six named marks in `frontend/public/themes/` are enough. Recoloring the tab icon and the toolbar extension per theme would mean a set of favicons and a rebuilt `extension/` for each palette, for little benefit on a tiny chrome control.
+
+### Alternatives considered
+
+Device-only `localStorage` with no API field; recolor the favicon and extension for every palette.
+
+### Date
+
+2026-08-27

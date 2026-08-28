@@ -77,6 +77,16 @@ Normalized URLs are unique per user. Creating a duplicate returns HTTP 409 and t
 
 `DELETE /api/auth/account` requires the current password. It removes the user and every bookmark, folder, and tag they own. Folder deletion in the library still reparents contents; account deletion does not.
 
+## Theme
+
+Settings → **Theme** lists six palettes: Terracotta, Gray, Teal, Green, Purple, and Blue. The choice is saved on the account and used for buttons and the header mark. The browser tab icon and the unpacked `extension/` button stay terracotta.
+
+Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is only the toolbar button for Load unpacked.
+
+## Overlay menu
+
+Below `1024px` wide, including a zoomed desktop window, the left menu is an overlay. Open it with the menu button. Choosing All Bookmarks, a folder, Settings, or another destination closes it. Expanding a folder or using folder actions leaves it open. Tap the dimmed page or the close control to dismiss it without navigating.
+
 ## Save from the browser
 
 Settings → **Save From The Browser** lists three ways to add a save button. The first way is the easiest. Methods 2 and 3 each have their own Chrome/Edge or Firefox buttons.
