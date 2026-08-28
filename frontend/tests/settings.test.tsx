@@ -49,6 +49,7 @@ describe("settings", () => {
     expect(screen.getByRole("heading", { name: "2. Button Next To The Address Bar" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "3. Bookmarks Bar Button With Icon" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "4. Share From Chrome On Android" })).toBeInTheDocument();
+    expect(screen.getByText(/Cast, save and share/)).toBeInTheDocument();
     expect(screen.getByText(/It works in Google Chrome and Mozilla Firefox/)).toBeInTheDocument();
 
     const link = screen.getByRole("link", { name: "+Neshanak" });
@@ -80,6 +81,17 @@ describe("settings", () => {
     expect(firefoxButtons[1]).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText(/Import Bookmarks from HTML/)).toBeInTheDocument();
     expect(screen.queryByText(/Other Bookmarks/)).not.toBeInTheDocument();
+  });
+
+  it("offers Add to this phone when Chrome can install the app", async () => {
+    renderSettings("/settings/save-from-browser");
+    const event = new Event("beforeinstallprompt");
+    Object.assign(event, {
+      prompt: vi.fn(),
+      userChoice: Promise.resolve({ outcome: "accepted" }),
+    });
+    window.dispatchEvent(event);
+    expect(await screen.findByRole("button", { name: "Add to this phone" })).toBeInTheDocument();
   });
 
   it("lets you pick a theme", async () => {

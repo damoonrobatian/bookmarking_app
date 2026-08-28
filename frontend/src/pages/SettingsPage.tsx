@@ -8,6 +8,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { ChangePasswordForm } from "@/features/auth/ChangePasswordForm";
 import { DeleteAccountForm } from "@/features/auth/DeleteAccountForm";
 import { useCurrentUser, useUpdateTheme } from "@/hooks/useAuth";
+import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 import { exportBookmarks, importBookmarks } from "@/services/tags";
 import { THEMES, type ThemeId } from "@/theme";
 import type { ImportReport } from "@/types";
@@ -242,6 +243,7 @@ function SaveFromBrowserBody() {
   const [addressBarBrowser, setAddressBarBrowser] = useState<"chrome" | "firefox">("chrome");
   const [iconBarBrowser, setIconBarBrowser] = useState<"chrome" | "firefox">("chrome");
   const [downloadError, setDownloadError] = useState("");
+  const installPrompt = useInstallPrompt();
 
   async function downloadBarButton() {
     setDownloadError("");
@@ -364,11 +366,22 @@ function SaveFromBrowserBody() {
       <Method
         step={4}
         title="Share From Chrome On Android"
-        note="This puts Neshanak in the Android share list. It works in Google Chrome on Android after you add Neshanak to your home screen. It does not work on iPhone."
+        note="This puts Neshanak in the Android share list. Open this page in Google Chrome on the phone. It does not work on iPhone, in Samsung Internet, or inside another app’s browser."
       >
+        {installPrompt.installed ? (
+          <p className="mb-3 text-sm text-ink-muted">This phone already has Neshanak. Share a page and pick Neshanak.</p>
+        ) : null}
+        {installPrompt.canInstall ? (
+          <Button className="mb-3" type="button" onClick={() => void installPrompt.install()}>
+            Add to this phone
+          </Button>
+        ) : null}
         <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
           <li>On the phone, open https://neshanak.ca in Chrome and sign in.</li>
-          <li>Tap the three dots at the top right, then Add to Home screen or Install app.</li>
+          <li>
+            If you see Add to this phone above, tap it. Otherwise tap the three dots, then Cast, save and share,
+            then Install app or Add to Home screen.
+          </li>
           <li>Open a page you want to save, tap Share, then Neshanak.</li>
           <li>Check the title and tags, then save.</li>
         </ol>
