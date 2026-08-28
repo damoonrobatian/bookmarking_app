@@ -12,9 +12,9 @@ export function BrandMark({
   size?: "sm" | "md" | "lg";
 }) {
   const { theme } = useTheme();
-  const icon = size === "lg" ? "h-16 w-16" : size === "sm" ? "h-8 w-8" : "h-10 w-10";
-  const type = size === "lg" ? "text-4xl" : "text-2xl";
-  const pixels = size === "lg" ? 64 : size === "sm" ? 32 : 40;
+  const icon = size === "lg" ? "h-20 w-20" : size === "sm" ? "h-10 w-10" : "h-12 w-12";
+  const type = size === "lg" ? "text-5xl" : "text-2xl";
+  const pixels = size === "lg" ? 80 : size === "sm" ? 40 : 48;
   return (
     <span className={cn("inline-flex items-center", size === "lg" ? "gap-3.5" : "gap-2.5", className)}>
       <img

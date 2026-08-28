@@ -163,7 +163,7 @@ function ThemeBody() {
                 selected ? "border-accent ring-2 ring-accent/40" : "border-line",
               )}
             >
-              <img src={item.logo} alt="" width={48} height={48} className="h-12 w-12" />
+              <img src={item.logo} alt="" width={56} height={56} className="h-14 w-14" />
               {item.label}
             </button>
           );
