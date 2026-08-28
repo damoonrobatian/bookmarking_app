@@ -26,21 +26,14 @@ describe("firstHttpUrl", () => {
 function fakeSaveWindow(overrides: {
   opener?: unknown;
   closed?: boolean;
-  standalone?: boolean;
-  android?: boolean;
-  visibilityState?: DocumentVisibilityState;
+  historyLength?: number;
 } = {}): SaveDismissWindow {
   return {
     close: vi.fn(),
     opener: overrides.opener ?? null,
     closed: overrides.closed ?? false,
-    history: { back: vi.fn() },
+    history: { back: vi.fn(), length: overrides.historyLength ?? 1 },
     location: { replace: vi.fn() },
-    matchMedia: (query) => ({ matches: Boolean(overrides.standalone && query.includes("standalone")) }),
-    navigator: {
-      userAgent: overrides.android ? "Mozilla/5.0 (Linux; Android 14)" : "Mozilla/5.0",
-    },
-    document: { visibilityState: overrides.visibilityState ?? "visible" },
     setTimeout: (handler, timeout) => window.setTimeout(handler, timeout),
   };
 }
@@ -59,7 +52,6 @@ describe("dismissSaveWindow", () => {
     const win = fakeSaveWindow({ opener: {} });
     dismissSaveWindow(navigate, win);
     expect(win.close).toHaveBeenCalled();
-    expect(win.history.back).not.toHaveBeenCalled();
     expect(win.location.replace).not.toHaveBeenCalled();
     vi.advanceTimersByTime(200);
     expect(navigate).toHaveBeenCalledWith("/app");
@@ -73,22 +65,22 @@ describe("dismissSaveWindow", () => {
     expect(navigate).not.toHaveBeenCalled();
   });
 
-  it("goes back and replaces the form after an Android share save", () => {
+  it("leaves the save form before closing after a successful save", () => {
     const navigate = vi.fn();
-    const win = fakeSaveWindow({ android: true });
+    const win = fakeSaveWindow();
     dismissSaveWindow(navigate, win, { saved: true });
-    expect(win.close).toHaveBeenCalled();
-    expect(win.history.back).toHaveBeenCalled();
     expect(win.location.replace).toHaveBeenCalledWith("/save-done.html");
-    vi.advanceTimersByTime(300);
+    expect(win.close).not.toHaveBeenCalled();
+    expect(win.history.back).not.toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
   });
 
-  it("does not open the library when a share window has already been hidden", () => {
+  it("goes back from a share window on cancel when there is history", () => {
     const navigate = vi.fn();
-    const win = fakeSaveWindow({ android: true, visibilityState: "hidden" });
+    const win = fakeSaveWindow({ historyLength: 2 });
     dismissSaveWindow(navigate, win);
-    vi.advanceTimersByTime(300);
+    expect(win.close).not.toHaveBeenCalled();
+    expect(win.history.back).toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
   });
 });

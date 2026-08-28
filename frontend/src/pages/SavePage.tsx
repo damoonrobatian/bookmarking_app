@@ -52,6 +52,7 @@ export function SavePage() {
         onSubmit={async (payload) => {
           await mutation.mutateAsync(payload);
           saved.current = true;
+          dismissSaveWindow((to) => navigate(to), window, { saved: true });
         }}
       />
     </div>

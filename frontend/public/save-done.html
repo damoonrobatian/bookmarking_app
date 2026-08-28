@@ -10,13 +10,16 @@
         try {
           window.close();
         } catch (e) {}
+      }
+      function dismissWithGesture() {
         try {
-          history.back();
+          var opened = window.open("", "_self");
+          if (opened) opened.close();
         } catch (e) {}
+        dismiss();
       }
       dismiss();
       addEventListener("load", dismiss);
-      addEventListener("pageshow", dismiss);
     </script>
     <style>
       body {
@@ -26,9 +29,40 @@
         color: #2c241c;
         font-family: system-ui, sans-serif;
       }
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        margin: 0 0 1.25rem;
+        color: #5c534a;
+      }
+      button,
+      a {
+        display: inline-block;
+        margin-right: 0.75rem;
+        margin-top: 0.25rem;
+        border-radius: 0.5rem;
+        font: inherit;
+        text-decoration: none;
+      }
+      button {
+        border: 0;
+        background: #c45c26;
+        color: #fff;
+        padding: 0.55rem 1rem;
+      }
+      a {
+        color: #c45c26;
+        padding: 0.55rem 0;
+      }
     </style>
   </head>
   <body>
-    <p>Saved. You can close this page.</p>
+    <h1>Saved</h1>
+    <p>The bookmark is in your library.</p>
+    <button type="button" onclick="dismissWithGesture()">Close</button>
+    <a href="/app">Open library</a>
   </body>
 </html>
