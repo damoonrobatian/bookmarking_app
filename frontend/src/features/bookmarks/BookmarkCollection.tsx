@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, LayoutGrid, Minimize2, StretchHorizontal } from "lucide-react";
+import { LayoutGrid, Maximize2, Minimize2, StretchHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { cn } from "@/utils/cn";
@@ -166,7 +166,7 @@ export function BookmarkCollection({
               )}
               onClick={toggleCompact}
             >
-              {compact ? <Check className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+              {compact ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
             </Button>
           </div>
         </div>
