@@ -120,7 +120,7 @@ This adds a **+Neshanak** button to the bookmarks bar with the Neshanak picture.
 
 This puts Neshanak in the Android share list. It does not work on iPhone.
 
-1. On the phone, open https://neshanak.ca in **Google Chrome** and sign in.
-2. If Settings shows **Add to this phone**, tap it. Otherwise tap the three dots, then **Cast, save and share**, then **Install app** or **Add to Home screen**.
-3. Open a page you want to save, tap **Share**, then **Neshanak**.
-4. Check the title and tags, then save.
+1. If Neshanak is already on the home screen, long-press the icon and remove it. Uninstall it from Android **Settings → Apps** if it is listed there.
+2. Open https://neshanak.ca in **Google Chrome** and sign in. Stay on **Settings → Save From The Browser**.
+3. If **Add to this phone** appears, tap it. If not, tap the three dots, then **Cast, save and share**, then **Install app**. Do not use **Add to Home screen**; that only makes a shortcut, and Share will not include Neshanak.
+4. Open a page you want to save, tap **Share**, then **Neshanak**.

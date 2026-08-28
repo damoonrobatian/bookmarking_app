@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 
-type BeforeInstallPromptEvent = Event & {
+export type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
+
+declare global {
+  interface Window {
+    __neshanakInstallPrompt?: BeforeInstallPromptEvent | null;
+  }
+}
 
 export function useInstallPrompt() {
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
@@ -13,18 +19,27 @@ export function useInstallPrompt() {
     if (window.matchMedia?.("(display-mode: standalone)").matches) {
       setInstalled(true);
     }
-    const onPrompt = (event: Event) => {
-      event.preventDefault();
-      setPromptEvent(event as BeforeInstallPromptEvent);
+    if (window.__neshanakInstallPrompt) {
+      setPromptEvent(window.__neshanakInstallPrompt);
+    }
+    const takePrompt = (event?: Event) => {
+      if (event) {
+        event.preventDefault();
+        window.__neshanakInstallPrompt = event as BeforeInstallPromptEvent;
+      }
+      if (window.__neshanakInstallPrompt) setPromptEvent(window.__neshanakInstallPrompt);
     };
     const onInstalled = () => {
+      window.__neshanakInstallPrompt = null;
       setPromptEvent(null);
       setInstalled(true);
     };
-    window.addEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("beforeinstallprompt", takePrompt);
+    window.addEventListener("neshanak-can-install", takePrompt);
     window.addEventListener("appinstalled", onInstalled);
     return () => {
-      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("beforeinstallprompt", takePrompt);
+      window.removeEventListener("neshanak-can-install", takePrompt);
       window.removeEventListener("appinstalled", onInstalled);
     };
   }, []);
@@ -34,6 +49,7 @@ export function useInstallPrompt() {
     await promptEvent.prompt();
     const choice = await promptEvent.userChoice;
     if (choice.outcome === "accepted") setInstalled(true);
+    window.__neshanakInstallPrompt = null;
     setPromptEvent(null);
   }
 

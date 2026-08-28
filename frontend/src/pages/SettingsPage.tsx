@@ -366,10 +366,10 @@ function SaveFromBrowserBody() {
       <Method
         step={4}
         title="Share From Chrome On Android"
-        note="This puts Neshanak in the Android share list. Open this page in Google Chrome on the phone. It does not work on iPhone, in Samsung Internet, or inside another app’s browser."
+        note="This puts Neshanak in the Android share list. A Chrome home-screen shortcut is not enough; Chrome must install Neshanak as an app. It does not work on iPhone, in Samsung Internet, or inside another app’s browser."
       >
         {installPrompt.installed ? (
-          <p className="mb-3 text-sm text-ink-muted">This phone already has Neshanak. Share a page and pick Neshanak.</p>
+          <p className="mb-3 text-sm text-ink-muted">Neshanak is installed on this phone. Share a page and pick Neshanak.</p>
         ) : null}
         {installPrompt.canInstall ? (
           <Button className="mb-3" type="button" onClick={() => void installPrompt.install()}>
@@ -377,13 +377,17 @@ function SaveFromBrowserBody() {
           </Button>
         ) : null}
         <ol className="list-decimal space-y-2 pl-5 text-sm text-ink-muted">
-          <li>On the phone, open https://neshanak.ca in Chrome and sign in.</li>
           <li>
-            If you see Add to this phone above, tap it. Otherwise tap the three dots, then Cast, save and share,
-            then Install app or Add to Home screen.
+            If Neshanak is already on the home screen, long-press the icon and remove it. Also open Android
+            Settings → Apps, and uninstall Neshanak if it is listed there.
+          </li>
+          <li>Open https://neshanak.ca in Google Chrome and sign in. Stay on this Settings page.</li>
+          <li>
+            If Add to this phone appears above, tap it. If not, tap the three dots, then Cast, save and share,
+            then Install app. Do not use Add to Home screen; that only makes a shortcut, and Share will not
+            include Neshanak.
           </li>
           <li>Open a page you want to save, tap Share, then Neshanak.</li>
-          <li>Check the title and tags, then save.</li>
         </ol>
       </Method>
     </div>

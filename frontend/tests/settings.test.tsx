@@ -26,6 +26,7 @@ describe("settings", () => {
   afterEach(() => {
     localStorage.removeItem(THEME_STORAGE_KEY);
     document.documentElement.removeAttribute("data-theme");
+    window.__neshanakInstallPrompt = null;
   });
 
   it("lists options without password fields until one is chosen", async () => {
@@ -50,6 +51,7 @@ describe("settings", () => {
     expect(screen.getByRole("heading", { name: "3. Bookmarks Bar Button With Icon" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "4. Share From Chrome On Android" })).toBeInTheDocument();
     expect(screen.getByText(/Cast, save and share/)).toBeInTheDocument();
+    expect(screen.getByText(/Do not use Add to Home screen/)).toBeInTheDocument();
     expect(screen.getByText(/It works in Google Chrome and Mozilla Firefox/)).toBeInTheDocument();
 
     const link = screen.getByRole("link", { name: "+Neshanak" });
@@ -92,6 +94,18 @@ describe("settings", () => {
     });
     window.dispatchEvent(event);
     expect(await screen.findByRole("button", { name: "Add to this phone" })).toBeInTheDocument();
+  });
+
+  it("offers Add to this phone when Chrome queued the install prompt before Settings opened", async () => {
+    const event = new Event("beforeinstallprompt");
+    Object.assign(event, {
+      prompt: vi.fn(),
+      userChoice: Promise.resolve({ outcome: "accepted" }),
+    });
+    window.__neshanakInstallPrompt = event as never;
+    renderSettings("/settings/save-from-browser");
+    expect(await screen.findByRole("button", { name: "Add to this phone" })).toBeInTheDocument();
+    window.__neshanakInstallPrompt = null;
   });
 
   it("lets you pick a theme", async () => {

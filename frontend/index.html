@@ -15,6 +15,15 @@
         var theme = localStorage.getItem("neshanak-theme");
         if (theme) document.documentElement.setAttribute("data-theme", theme);
       } catch (e) {}
+      window.__neshanakInstallPrompt = null;
+      window.addEventListener("beforeinstallprompt", function (event) {
+        event.preventDefault();
+        window.__neshanakInstallPrompt = event;
+        window.dispatchEvent(new Event("neshanak-can-install"));
+      });
+      window.addEventListener("appinstalled", function () {
+        window.__neshanakInstallPrompt = null;
+      });
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
