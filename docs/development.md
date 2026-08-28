@@ -85,7 +85,7 @@ Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is on
 
 ## Library cards
 
-The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle beside those layouts: it keeps the current layout and shows only the favicon and title on each card. When compact is on, that button fills with the accent color and shows maximize; when off it shows minimize. Both choices stay in this browser (`localStorage`). Sort by title is A to Z; recently added, recently visited, and most visited stay newest or highest first.
+The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle beside those layouts: it keeps the current layout and shows only the favicon and title on each card. When compact is on, that button fills with the accent color and shows maximize; when off it shows minimize. Both choices stay in this browser (`localStorage`). Bookmark sort is Recently Added, Recently Visited, Title (A to Z), and Most Visited. The sidebar folder list uses the same options where they apply (Recently Added and Title) and stores the choice as `neshanak.folderSort`.
 
 Tags on the save form can be added with **Add**, Enter / Done on the keyboard, or a comma. Phone keyboards often have no Enter key on that field.
 
@@ -103,7 +103,7 @@ This adds a **+Neshanak** button to the bookmarks bar (the strip under the addre
 
 1. Sign in at https://neshanak.ca, open **Settings**, then **Save From The Browser**.
 2. If the bookmarks bar is hidden, press **Ctrl+Shift+B** (Mac: **Command+Shift+B**).
-3. Drag the orange button onto the bar.
+3. Drag the orange button below onto the bar.
 4. Open a page you want to save and click **+Neshanak**. A popup opens `https://neshanak.ca/save` with the address filled in. Title and tags are suggested from the tab title, the page heading, and your existing tags when they match.
 
 If popups are blocked, allow popups for `neshanak.ca` and try again.
@@ -130,3 +130,4 @@ This puts Neshanak in the Android share list. It does not work on iPhone.
 2. Open https://neshanak.ca in **Google Chrome** and sign in. Stay on **Settings → Save From The Browser**.
 3. If **Add to this phone** appears, tap it. If not, tap the three dots, then **Cast, save and share**, then **Install app**. Do not use **Add to Home screen**; that only makes a shortcut, and Share will not include Neshanak.
 4. Open a page you want to save, tap **Share**, then **Neshanak**.
+5. After you save, the form is replaced by a short **Saved** page that tries to close. If that window stays in Recents, tap **Close**.

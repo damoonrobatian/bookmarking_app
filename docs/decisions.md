@@ -186,7 +186,7 @@ On Android, save a page through the system share sheet into `/save`, not a mobil
 
 ### Reason
 
-Chrome on Android will not load the unpacked `extension/` or a bookmarks-bar bookmarklet the way a computer does. If the site is installed as a small PWA, `share_target` can receive the current URL and open the same `/save` form. iPhone Safari does not support share targets.
+Chrome on Android will not load the unpacked `extension/` or a bookmarks-bar bookmarklet the way a computer does. If the site is installed as a small PWA, `share_target` can receive the current URL and open the same `/save` form. After a successful save, `/save` is replaced by `save-done.html` before `window.close()`, because close on that window often only returns focus to the previous app and freezes the form in Recents. iPhone Safari does not support share targets.
 
 ### Alternatives considered
 

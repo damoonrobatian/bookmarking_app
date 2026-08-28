@@ -271,7 +271,7 @@ function SaveFromBrowserBody() {
           <li>
             If you cannot see the bookmarks bar, press Ctrl+Shift+B (on a Mac, Command+Shift+B).
           </li>
-          <li>Drag the orange button onto the bookmarks bar.</li>
+          <li>Drag the orange button below onto the bookmarks bar.</li>
           <li>Open a page you want to save, then click +Neshanak on the bar.</li>
         </ol>
         <a
@@ -388,6 +388,9 @@ function SaveFromBrowserBody() {
             include Neshanak.
           </li>
           <li>Open a page you want to save, tap Share, then Neshanak.</li>
+          <li>
+            After you save, a short Saved page tries to close. If that window stays in Recents, tap Close.
+          </li>
         </ol>
       </Method>
     </div>

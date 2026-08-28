@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (42) and frontend tests (48)
+- Backend tests (42) and frontend tests (59)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -27,7 +27,7 @@
 - Change password and delete account from Settings (one section open at a time); Show Password on password fields
 - Copy URL on each bookmark card (clipboard + toast)
 - Save the current page from a Settings bookmarklet or the unpacked `extension/` toolbar button; `/save` popup auto-fills URL, a real title (not SEO keyword dumps), suggested tags, and can create a folder on the spot
-- Android Chrome: install Neshanak to the home screen, then Share → Neshanak (`share_target`)
+- Android Chrome: install Neshanak to the home screen, then Share → Neshanak (`share_target`); after save, `/save` is replaced by `save-done.html` before `window.close()` so the form is not frozen in Recents
 - Tags page groups tags by folder; the sidebar no longer lists every tag
 - App logo: GPT landscape-in-a-page mark (black knocked out) for the header, PNG/ICO favicons, imported bookmarks-bar button, and toolbar extension
 - Account themes: Settings → Theme; six palettes change accent color and the header mark (`PATCH /api/auth/theme`); tab favicon and unpacked extension stay terracotta

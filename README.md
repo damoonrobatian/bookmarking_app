@@ -19,7 +19,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Theme in Settings: six palettes that change the accent color and the header mark for the account
 - Show Password on password fields
 - Save, edit, delete, favorite, archive, restore, and copy a bookmark URL
-- Nested folders with move and rename
+- Nested folders with move, rename, and the same Recently Added / Title sort as bookmarks
 - Tags grouped by folder on a Tags page, with autocomplete when saving
 - Search across title, URL, domain, description, notes, and tags
 - Sorting, pagination, list or grid layout, and compact cards (icon and title only)
