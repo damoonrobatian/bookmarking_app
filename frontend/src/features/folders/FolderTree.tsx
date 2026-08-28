@@ -66,13 +66,12 @@ export function FolderTree() {
           </label>
           <select
             id="folder-sort"
-            className="h-8 w-full rounded-lg border border-line bg-paper px-2 text-xs"
+            className="h-9 w-full rounded-lg border border-line bg-paper-raised px-2 text-sm"
             value={sort}
             onChange={(event) => setSort(event.target.value as FolderSort)}
           >
-            <option value="position">Added Order</option>
-            <option value="name">Name</option>
             <option value="created_at">Recently Added</option>
+            <option value="name">Title</option>
           </select>
         </div>
       ) : null}

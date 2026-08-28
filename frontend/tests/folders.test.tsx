@@ -54,7 +54,7 @@ describe("folder navigation", () => {
     expect(screen.getByText("Docs")).toBeInTheDocument();
   });
 
-  it("sorts sibling folders by name", async () => {
+  it("sorts sibling folders like bookmarks: recently added, then title", async () => {
     const user = userEvent.setup();
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     vi.stubGlobal(
@@ -64,7 +64,7 @@ describe("folder navigation", () => {
           {
             id: "1",
             parent_id: null,
-            name: "Zebra",
+            name: "Apple",
             position: 0,
             created_at: "2026-01-01T00:00:00Z",
             updated_at: "2026-01-01T00:00:00Z",
@@ -72,7 +72,7 @@ describe("folder navigation", () => {
           {
             id: "2",
             parent_id: null,
-            name: "Apple",
+            name: "Banana",
             position: 1,
             created_at: "2026-06-01T00:00:00Z",
             updated_at: "2026-06-01T00:00:00Z",
@@ -87,12 +87,12 @@ describe("folder navigation", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    const zebra = await screen.findByRole("link", { name: "Zebra" });
-    const apple = screen.getByRole("link", { name: "Apple" });
-    expect(zebra.compareDocumentPosition(apple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    await user.selectOptions(screen.getByLabelText("Sort folders"), "Name");
-    expect(apple.compareDocumentPosition(zebra) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const apple = await screen.findByRole("link", { name: "Apple" });
+    const banana = screen.getByRole("link", { name: "Banana" });
+    expect(banana.compareDocumentPosition(apple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    await user.selectOptions(screen.getByLabelText("Sort folders"), "Title");
+    expect(apple.compareDocumentPosition(banana) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     await user.selectOptions(screen.getByLabelText("Sort folders"), "Recently Added");
-    expect(apple.compareDocumentPosition(zebra) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(banana.compareDocumentPosition(apple) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });

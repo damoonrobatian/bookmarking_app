@@ -12,19 +12,15 @@ function folder(overrides: Partial<Folder> & Pick<Folder, "id" | "name">): Folde
 }
 
 describe("compareFolders", () => {
-  const zebra = folder({ id: "z", name: "Zebra", position: 0, created_at: "2026-01-01T00:00:00Z" });
-  const apple = folder({ id: "a", name: "Apple", position: 1, created_at: "2026-06-01T00:00:00Z" });
-
-  it("keeps added order by position", () => {
-    expect(sortedFolders([apple, zebra], "position").map((item) => item.name)).toEqual(["Zebra", "Apple"]);
-  });
-
-  it("sorts names A to Z", () => {
-    expect(sortedFolders([zebra, apple], "name").map((item) => item.name)).toEqual(["Apple", "Zebra"]);
-  });
+  const apple = folder({ id: "a", name: "Apple", position: 0, created_at: "2026-01-01T00:00:00Z" });
+  const banana = folder({ id: "b", name: "Banana", position: 1, created_at: "2026-06-01T00:00:00Z" });
 
   it("sorts recently added newest first", () => {
-    expect(sortedFolders([zebra, apple], "created_at").map((item) => item.name)).toEqual(["Apple", "Zebra"]);
+    expect(sortedFolders([apple, banana], "created_at").map((item) => item.name)).toEqual(["Banana", "Apple"]);
+  });
+
+  it("sorts titles A to Z", () => {
+    expect(sortedFolders([banana, apple], "name").map((item) => item.name)).toEqual(["Apple", "Banana"]);
   });
 });
 
@@ -33,8 +29,8 @@ describe("folderSortFromStorage", () => {
     localStorage.removeItem("neshanak.folderSort");
   });
 
-  it("defaults to added order", () => {
-    expect(folderSortFromStorage()).toBe("position");
+  it("defaults to recently added, like bookmarks", () => {
+    expect(folderSortFromStorage()).toBe("created_at");
   });
 
   it("reads a stored sort", () => {
@@ -42,10 +38,11 @@ describe("folderSortFromStorage", () => {
     expect(folderSortFromStorage()).toBe("name");
   });
 
-  it("ignores unknown values", () => {
+  it("ignores unknown values, including the old added-order key", () => {
     expect(isFolderSort("title")).toBe(false);
-    localStorage.setItem("neshanak.folderSort", "nope");
-    expect(folderSortFromStorage()).toBe("position");
+    expect(isFolderSort("position")).toBe(false);
+    localStorage.setItem("neshanak.folderSort", "position");
+    expect(folderSortFromStorage()).toBe("created_at");
   });
 });
 

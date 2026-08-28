@@ -4,10 +4,10 @@ import type { Folder } from "@/types";
 export const FOLDER_SORT_KEY = "neshanak.folderSort";
 const FOLDER_SORT_EVENT = "neshanak-folder-sort";
 
-export type FolderSort = "name" | "created_at" | "position";
+export type FolderSort = "name" | "created_at";
 
 export function isFolderSort(value: string | null): value is FolderSort {
-  return value === "name" || value === "created_at" || value === "position";
+  return value === "name" || value === "created_at";
 }
 
 export function folderSortFromStorage(): FolderSort {
@@ -17,14 +17,13 @@ export function folderSortFromStorage(): FolderSort {
   } catch {
     /* private mode */
   }
-  return "position";
+  return "created_at";
 }
 
 export function compareFolders(a: Folder, b: Folder, sort: FolderSort): number {
   const byName = a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
   if (sort === "name") return byName;
-  if (sort === "created_at") return b.created_at.localeCompare(a.created_at) || byName;
-  return a.position - b.position || byName;
+  return b.created_at.localeCompare(a.created_at) || byName;
 }
 
 export function sortedFolders<T extends Folder>(folders: T[], sort: FolderSort): T[] {
