@@ -11,10 +11,11 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { createFolder, deleteFolder, listFolders, moveFolder, updateFolder } from "@/services/folders";
 import type { Folder } from "@/types";
 import { cn } from "@/utils/cn";
+import { compareFolders, sortedFolders, useFolderSort, type FolderSort } from "@/utils/folderSort";
 
 type TreeNode = Folder & { children: TreeNode[] };
 
-function buildTree(folders: Folder[]): TreeNode[] {
+function buildTree(folders: Folder[], sort: FolderSort): TreeNode[] {
   const nodes = new Map<string, TreeNode>(
     folders.map((folder) => [folder.id, { ...folder, children: [] }]),
   );
@@ -27,7 +28,7 @@ function buildTree(folders: Folder[]): TreeNode[] {
     }
   });
   const sortNodes = (items: TreeNode[]) => {
-    items.sort((a, b) => a.position - b.position || a.name.localeCompare(b.name));
+    items.sort((a, b) => compareFolders(a, b, sort));
     items.forEach((item) => sortNodes(item.children));
   };
   sortNodes(roots);
@@ -42,7 +43,8 @@ export function FolderTree() {
   const [renaming, setRenaming] = useState<Folder | null>(null);
   const [moving, setMoving] = useState<Folder | null>(null);
   const [deleting, setDeleting] = useState<Folder | null>(null);
-  const tree = useMemo(() => buildTree(folders.data ?? []), [folders.data]);
+  const [sort, setSort] = useFolderSort();
+  const tree = useMemo(() => buildTree(folders.data ?? [], sort), [folders.data, sort]);
 
   return (
     <div>
@@ -57,6 +59,23 @@ export function FolderTree() {
           <FolderPlus className="h-4 w-4" />
         </button>
       </div>
+      {(folders.data?.length ?? 0) > 0 ? (
+        <div className="mb-2 px-2">
+          <label className="sr-only" htmlFor="folder-sort">
+            Sort folders
+          </label>
+          <select
+            id="folder-sort"
+            className="h-8 w-full rounded-lg border border-line bg-paper px-2 text-xs"
+            value={sort}
+            onChange={(event) => setSort(event.target.value as FolderSort)}
+          >
+            <option value="position">Added Order</option>
+            <option value="name">Name</option>
+            <option value="created_at">Recently Added</option>
+          </select>
+        </div>
+      ) : null}
       {tree.length === 0 ? (
         <p className="px-2 text-xs text-ink-faint">No folders yet.</p>
       ) : (
@@ -255,6 +274,7 @@ function MoveFolderDialog({
   onClose: () => void;
 }) {
   const [parentId, setParentId] = useState("");
+  const [sort] = useFolderSort();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const move = useMutation({
@@ -276,13 +296,14 @@ function MoveFolderDialog({
           onChange={(event) => setParentId(event.target.value)}
         >
           <option value="">Top level</option>
-          {folders
-            .filter((item) => item.id !== folder?.id)
-            .map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
+          {sortedFolders(
+            folders.filter((item) => item.id !== folder?.id),
+            sort,
+          ).map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
         </select>
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose}>

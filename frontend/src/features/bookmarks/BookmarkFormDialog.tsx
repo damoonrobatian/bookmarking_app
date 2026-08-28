@@ -13,6 +13,7 @@ import { createBookmark, previewBookmark } from "@/services/bookmarks";
 import { createFolder, listFolders } from "@/services/folders";
 import { listTags } from "@/services/tags";
 import type { ApiError, Bookmark } from "@/types";
+import { sortedFolders, useFolderSort } from "@/utils/folderSort";
 import { displayTitle, looksLikeKeywordList } from "@/utils/title";
 
 export function BookmarkFormDialog({
@@ -50,6 +51,7 @@ export function BookmarkFormDialog({
   const debouncedUrl = useDebounce(url, 500);
   const queryClient = useQueryClient();
   const folders = useQuery({ queryKey: ["folders"], queryFn: listFolders, enabled: open });
+  const [folderSort] = useFolderSort();
   const tagList = useQuery({ queryKey: ["tags"], queryFn: listTags, enabled: open });
   const navigate = useNavigate();
 
@@ -168,7 +170,7 @@ export function BookmarkFormDialog({
               onChange={(event) => setFolderId(event.target.value)}
             >
               <option value="">No Folder</option>
-              {(Array.isArray(folders.data) ? folders.data : []).map((folder) => (
+              {sortedFolders(Array.isArray(folders.data) ? folders.data : [], folderSort).map((folder) => (
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
                 </option>

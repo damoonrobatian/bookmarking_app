@@ -35,6 +35,7 @@
 - Compact bookmark cards (favicon and title only) that work with list and grid
 - Tag field has an Add button so a phone keyboard does not need Enter
 - Title sort is A to Z; other sorts stay newest or most visited first
+- Sidebar folders can be sorted by added order, name, or recently added
 - Subdomain bookmarks with a blank site icon use the parent domain favicon (Athena / McGill)
 
 ## Remaining

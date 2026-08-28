@@ -5,6 +5,7 @@ import { listFolders } from "@/services/folders";
 import { listTagsGrouped } from "@/services/tags";
 import type { Folder, FolderTagGroup } from "@/types";
 import { cn } from "@/utils/cn";
+import { sortedFolders, useFolderSort } from "@/utils/folderSort";
 
 const UNFILED = "unfiled";
 
@@ -20,8 +21,9 @@ function choicesFrom(folders: Folder[]): FolderChoice[] {
 export function TagsPage() {
   const folders = useQuery({ queryKey: ["folders"], queryFn: listFolders });
   const grouped = useQuery({ queryKey: ["tags", "grouped"], queryFn: listTagsGrouped });
+  const [sort] = useFolderSort();
   const [selected, setSelected] = useState<string[]>([]);
-  const options = useMemo(() => choicesFrom(folders.data ?? []), [folders.data]);
+  const options = useMemo(() => choicesFrom(sortedFolders(folders.data ?? [], sort)), [folders.data, sort]);
   const groupsByFolder = useMemo(() => {
     const map = new Map<string, FolderTagGroup>();
     for (const group of grouped.data ?? []) {

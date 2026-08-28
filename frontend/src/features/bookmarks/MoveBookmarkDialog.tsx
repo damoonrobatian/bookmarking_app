@@ -5,6 +5,7 @@ import { Modal } from "@/components/ui/modal";
 import { updateBookmark } from "@/services/bookmarks";
 import { listFolders } from "@/services/folders";
 import type { Bookmark } from "@/types";
+import { sortedFolders, useFolderSort } from "@/utils/folderSort";
 import { useState } from "react";
 
 export function MoveBookmarkDialog({
@@ -20,6 +21,7 @@ export function MoveBookmarkDialog({
     enabled: Boolean(bookmark),
   });
   const [folderId, setFolderId] = useState(bookmark?.folder_id ?? "");
+  const [sort] = useFolderSort();
   const queryClient = useQueryClient();
   const move = useMutation({
     mutationFn: () => updateBookmark(bookmark!.id, { folder_id: folderId || null }),
@@ -45,7 +47,7 @@ export function MoveBookmarkDialog({
           onChange={(event) => setFolderId(event.target.value)}
         >
           <option value="">No Folder</option>
-          {(Array.isArray(folders.data) ? folders.data : []).map((folder) => (
+          {sortedFolders(Array.isArray(folders.data) ? folders.data : [], sort).map((folder) => (
             <option key={folder.id} value={folder.id}>
               {folder.name}
             </option>
