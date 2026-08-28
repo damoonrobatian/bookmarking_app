@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlignJustify, Check, LayoutGrid, Minimize2 } from "lucide-react";
+import { Check, LayoutGrid, Minimize2, StretchHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { cn } from "@/utils/cn";
@@ -134,7 +134,7 @@ export function BookmarkCollection({
                 className={view === "list" ? "bg-paper-sunken text-ink" : undefined}
                 onClick={() => changeView("list")}
               >
-                <AlignJustify className="h-4 w-4" />
+                <StretchHorizontal className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
