@@ -87,6 +87,8 @@ Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is on
 
 The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle beside those layouts: it keeps the current layout and shows only the favicon and title on each card. When compact is on, that button fills with the accent color and a check. Both choices stay in this browser (`localStorage`).
 
+Tags on the save form can be added with **Add**, Enter / Done on the keyboard, or a comma. Phone keyboards often have no Enter key on that field.
+
 ## Overlay menu
 
 Below `1024px` wide, including a zoomed desktop window, the left menu is an overlay. Open it with the menu button. The account name sits under the logo; Log out is at the bottom. Choosing All Bookmarks, a folder, Settings, or another destination closes it. Expanding a folder or using folder actions leaves it open. Tap the dimmed page or the close control to dismiss it without navigating.

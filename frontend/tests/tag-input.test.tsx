@@ -24,4 +24,13 @@ describe("tag input", () => {
     await user.keyboard("{Enter}");
     expect(onChange).toHaveBeenCalledWith(["reading"]);
   });
+
+  it("adds a tag with the Add button", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<TagInput value={[]} onChange={onChange} suggestions={suggestions} />);
+    await user.type(screen.getByLabelText("Add tag"), "docs");
+    await user.click(screen.getByRole("button", { name: "Add this tag" }));
+    expect(onChange).toHaveBeenCalledWith(["docs"]);
+  });
 });

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { Tag } from "@/types";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
 
@@ -30,6 +31,14 @@ export function TagInput({
     setHighlight(-1);
   }
 
+  function commit() {
+    if (highlight >= 0 && matches[highlight]) {
+      add(matches[highlight].name);
+    } else {
+      add(draft);
+    }
+  }
+
   return (
     <div className="relative">
       <div className="flex flex-wrap gap-1.5">
@@ -44,46 +53,53 @@ export function TagInput({
           </button>
         ))}
       </div>
-      <Input
-        className="mt-2"
-        value={draft}
-        placeholder="Add a tag and press Enter"
-        role="combobox"
-        aria-expanded={matches.length > 0}
-        aria-autocomplete="list"
-        aria-activedescendant={highlight >= 0 ? `tag-option-${highlight}` : undefined}
-        onChange={(event) => {
-          setDraft(event.target.value);
-          setHighlight(-1);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "ArrowDown" && matches.length > 0) {
-            event.preventDefault();
-            setHighlight((current) => (current + 1) % matches.length);
-            return;
-          }
-          if (event.key === "ArrowUp" && matches.length > 0) {
-            event.preventDefault();
-            setHighlight((current) => (current <= 0 ? matches.length - 1 : current - 1));
-            return;
-          }
-          if (event.key === "Escape" && (draft || matches.length > 0)) {
-            event.preventDefault();
-            setDraft("");
+      <div className="mt-2 flex gap-2">
+        <Input
+          className="min-w-0 flex-1"
+          value={draft}
+          placeholder="Add a tag"
+          enterKeyHint="done"
+          autoComplete="off"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          role="combobox"
+          aria-expanded={matches.length > 0}
+          aria-autocomplete="list"
+          aria-activedescendant={highlight >= 0 ? `tag-option-${highlight}` : undefined}
+          onChange={(event) => {
+            setDraft(event.target.value);
             setHighlight(-1);
-            return;
-          }
-          if (event.key === "Enter") {
-            event.preventDefault();
-            if (highlight >= 0 && matches[highlight]) {
-              add(matches[highlight].name);
-            } else {
-              add(draft);
+          }}
+          onKeyDown={(event) => {
+            if (event.nativeEvent.isComposing) return;
+            if (event.key === "ArrowDown" && matches.length > 0) {
+              event.preventDefault();
+              setHighlight((current) => (current + 1) % matches.length);
+              return;
             }
-          }
-        }}
-        aria-label="Add tag"
-      />
+            if (event.key === "ArrowUp" && matches.length > 0) {
+              event.preventDefault();
+              setHighlight((current) => (current <= 0 ? matches.length - 1 : current - 1));
+              return;
+            }
+            if (event.key === "Escape" && (draft || matches.length > 0)) {
+              event.preventDefault();
+              setDraft("");
+              setHighlight(-1);
+              return;
+            }
+            if (event.key === "," || event.key === "Enter") {
+              event.preventDefault();
+              commit();
+            }
+          }}
+          aria-label="Add tag"
+        />
+        <Button type="button" variant="secondary" aria-label="Add this tag" disabled={!draft.trim()} onClick={commit}>
+          Add
+        </Button>
+      </div>
       {matches.length > 0 ? (
         <ul
           role="listbox"
@@ -100,7 +116,7 @@ export function TagInput({
                   "block w-full px-3 py-2 text-left text-sm hover:bg-paper-sunken",
                   index === highlight && "bg-paper-sunken",
                 )}
-                onMouseDown={(event) => event.preventDefault()}
+                onPointerDown={(event) => event.preventDefault()}
                 onMouseEnter={() => setHighlight(index)}
                 onClick={() => add(tag.name)}
               >
