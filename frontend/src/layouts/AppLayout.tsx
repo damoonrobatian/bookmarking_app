@@ -1,6 +1,6 @@
 import { Archive, Bookmark as BookmarkIcon, Clock, Menu, Plus, Search, Settings, Star, Tag, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
-import { Link, NavLink, Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { BrandMark } from "@/components/BrandMark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ export function AppLayout() {
   const user = useCurrentUser();
   const logout = useLogout();
   const navigate = useNavigate();
+  const location = useLocation();
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
@@ -25,6 +26,14 @@ export function AppLayout() {
   useEffect(() => {
     if (!user.isLoading && !user.data) navigate("/login");
   }, [user.isLoading, user.data, navigate]);
+
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (isDesktop) setSidebarOpen(false);
+  }, [isDesktop]);
 
   useEffect(() => {
     const current = new URLSearchParams(window.location.search).get("q") ?? "";
@@ -56,6 +65,11 @@ export function AppLayout() {
           isDesktop ? "sticky top-0 h-screen" : "fixed inset-y-0 left-0 w-72 max-w-[85vw] transition-transform",
           !isDesktop && !sidebarOpen && "-translate-x-full",
         )}
+        onClick={(event) => {
+          if (isDesktop || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          if (!(event.target instanceof Element)) return;
+          if (event.target.closest("a")) setSidebarOpen(false);
+        }}
       >
         <div className="mb-6 flex items-center justify-between">
           <Link to="/app" className="text-ink">
