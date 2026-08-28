@@ -83,6 +83,10 @@ Settings → **Theme** lists six palettes: Terracotta, Gray, Teal, Green, Purple
 
 Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is only the toolbar button for Load unpacked.
 
+## Library cards
+
+The All Bookmarks, folder, favorites, archive, and search pages share list and grid layouts. Compact format is a separate toggle in the same control: it keeps the current layout and shows only the favicon and title on each card. Both choices stay in this browser (`localStorage`).
+
 ## Overlay menu
 
 Below `1024px` wide, including a zoomed desktop window, the left menu is an overlay. Open it with the menu button. The account name sits under the logo; Log out is at the bottom. Choosing All Bookmarks, a folder, Settings, or another destination closes it. Expanding a folder or using folder actions leaves it open. Tap the dimmed page or the close control to dismiss it without navigating.

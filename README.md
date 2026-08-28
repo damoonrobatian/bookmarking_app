@@ -22,7 +22,7 @@ _Add screenshots of the library, folder sidebar, and add-bookmark dialog here af
 - Nested folders with move and rename
 - Tags grouped by folder on a Tags page, with autocomplete when saving
 - Search across title, URL, domain, description, notes, and tags
-- Sorting and pagination
+- Sorting, pagination, list or grid layout, and compact cards (icon and title only)
 - Recently added and recently visited views
 - Visit counts
 - Duplicate URL detection

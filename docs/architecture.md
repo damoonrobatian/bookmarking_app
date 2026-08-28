@@ -55,7 +55,7 @@ User-supplied URLs are treated as untrusted. Before fetching a page, the backend
 
 ## Frontend
 
-The SPA uses React Router for pages and TanStack Query for server state. Feature folders keep bookmark, folder, tag, and auth UI separate from shared layout and primitives.
+The SPA uses React Router for pages and TanStack Query for server state. Feature folders keep bookmark, folder, tag, and auth UI separate from shared layout and primitives. The library can show bookmarks as a list or a grid. A separate compact control hides the URL, description, and tags so each card is the favicon and title only; it works with both layouts. Layout is stored in `localStorage` as `neshanak.view`; compact as `neshanak.compact`.
 
 `/save` is a compact page (no app chrome) used as a popup. Query parameters supply the page URL and `document.title`. The form keeps a reasonable tab title and only replaces it when that title looks like an SEO keyword list. `POST /api/bookmarks/preview` can still fill a heading-based title, a description, and suggested tags. Signed-out visitors are sent to `/login?next=/save?...`; `safeInternalPath` keeps that return path on this origin.
 

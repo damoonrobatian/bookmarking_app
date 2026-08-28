@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (41) and frontend tests (35)
+- Backend tests (41) and frontend tests (44)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -32,6 +32,7 @@
 - App logo: GPT landscape-in-a-page mark (black knocked out) for the header, PNG/ICO favicons, imported bookmarks-bar button, and toolbar extension
 - Account themes: Settings → Theme; six palettes change accent color and the header mark (`PATCH /api/auth/theme`); tab favicon and unpacked extension stay terracotta
 - Overlay sidebar (mobile and zoomed desktop) closes after choosing a destination
+- Compact bookmark cards (favicon and title only) that work with list and grid
 
 ## Remaining
 

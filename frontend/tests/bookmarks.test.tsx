@@ -52,6 +52,10 @@ function renderCollection(items: Bookmark[]) {
 }
 
 describe("bookmark list", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it("renders bookmarks", async () => {
     renderCollection([sample]);
     expect(await screen.findByText("React documentation")).toBeInTheDocument();
@@ -94,6 +98,33 @@ describe("bookmark list", () => {
     await screen.findByText("React documentation");
     await user.click(screen.getByRole("button", { name: "Copy URL" }));
     expect(writeText).toHaveBeenCalledWith("https://react.dev/");
+  });
+
+  it("hides the URL, description, and tags in compact format", async () => {
+    const user = userEvent.setup();
+    renderCollection([sample]);
+    await screen.findByText("React documentation");
+    expect(screen.getByText("react.dev")).toBeInTheDocument();
+    expect(screen.getByText("Learn React")).toBeInTheDocument();
+    expect(screen.getByText("docs")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Compact format" }));
+    expect(screen.getByRole("button", { name: "Compact format" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("React documentation")).toBeInTheDocument();
+    expect(screen.queryByText("react.dev")).not.toBeInTheDocument();
+    expect(screen.queryByText("Learn React")).not.toBeInTheDocument();
+    expect(screen.queryByText("docs")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Grid view" }));
+    expect(screen.getByRole("button", { name: "Grid view" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Compact format" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByText("react.dev")).not.toBeInTheDocument();
+    expect(screen.getByText("React documentation")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Compact format" }));
+    expect(screen.getByText("react.dev")).toBeInTheDocument();
+    expect(screen.getByText("Learn React")).toBeInTheDocument();
+    expect(screen.getByText("docs")).toBeInTheDocument();
   });
 
   it("shows an empty state", async () => {

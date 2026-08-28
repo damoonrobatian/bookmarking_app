@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LayoutGrid, List } from "lucide-react";
+import { LayoutGrid, List, ListCollapse } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -19,6 +19,7 @@ import type { Bookmark, BookmarkFilters } from "@/types";
 import { Button } from "@/components/ui/button";
 
 const VIEW_KEY = "neshanak.view";
+const COMPACT_KEY = "neshanak.compact";
 
 export function BookmarkCollection({
   title,
@@ -37,6 +38,7 @@ export function BookmarkCollection({
   const [view, setView] = useState<"list" | "grid">(
     () => (localStorage.getItem(VIEW_KEY) as "list" | "grid") || "list",
   );
+  const [compact, setCompact] = useState(() => localStorage.getItem(COMPACT_KEY) === "1");
   const [editing, setEditing] = useState<Bookmark | null>(null);
   const [moving, setMoving] = useState<Bookmark | null>(null);
   const [deleting, setDeleting] = useState<Bookmark | null>(null);
@@ -70,14 +72,26 @@ export function BookmarkCollection({
 
   const items = bookmarks.data?.items ?? [];
   const totalPages = Math.max(1, Math.ceil((bookmarks.data?.total ?? 0) / 50));
-  const layoutClass = useMemo(
-    () => (view === "grid" ? "grid gap-3 sm:grid-cols-2 xl:grid-cols-3" : "flex flex-col gap-3"),
-    [view],
-  );
+  const layoutClass = useMemo(() => {
+    if (view === "grid") {
+      return compact
+        ? "grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        : "grid gap-3 sm:grid-cols-2 xl:grid-cols-3";
+    }
+    return compact ? "flex flex-col gap-2" : "flex flex-col gap-3";
+  }, [compact, view]);
 
   function changeView(next: "list" | "grid") {
     setView(next);
     localStorage.setItem(VIEW_KEY, next);
+  }
+
+  function toggleCompact() {
+    setCompact((current) => {
+      const next = !current;
+      localStorage.setItem(COMPACT_KEY, next ? "1" : "0");
+      return next;
+    });
   }
 
   return (
@@ -115,6 +129,7 @@ export function BookmarkCollection({
               size="icon"
               aria-label="List view"
               aria-pressed={view === "list"}
+              className={view === "list" ? "bg-paper-sunken text-ink" : undefined}
               onClick={() => changeView("list")}
             >
               <List className="h-4 w-4" />
@@ -124,9 +139,21 @@ export function BookmarkCollection({
               size="icon"
               aria-label="Grid view"
               aria-pressed={view === "grid"}
+              className={view === "grid" ? "bg-paper-sunken text-ink" : undefined}
               onClick={() => changeView("grid")}
             >
               <LayoutGrid className="h-4 w-4" />
+            </Button>
+            <span className="mx-0.5 w-px self-stretch bg-line" aria-hidden />
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Compact format"
+              aria-pressed={compact}
+              className={compact ? "bg-paper-sunken text-ink" : undefined}
+              onClick={toggleCompact}
+            >
+              <ListCollapse className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -135,7 +162,7 @@ export function BookmarkCollection({
       {bookmarks.isLoading ? (
         <div className={layoutClass}>
           {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton key={index} className="h-24" />
+            <Skeleton key={index} className={compact ? "h-12" : "h-24"} />
           ))}
         </div>
       ) : bookmarks.isError ? (
@@ -154,6 +181,7 @@ export function BookmarkCollection({
               key={bookmark.id}
               bookmark={bookmark}
               view={view}
+              compact={compact}
               onOpen={() => {
                 window.open(bookmark.url, "_blank", "noopener,noreferrer");
                 void visitBookmark(bookmark.id).then(invalidate);
