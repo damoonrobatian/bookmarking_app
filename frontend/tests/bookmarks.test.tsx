@@ -66,6 +66,34 @@ describe("bookmark list", () => {
     expect(document.querySelector("img")?.getAttribute("src")).not.toContain("logo");
   });
 
+  it("uses the parent site icon when a subdomain publishes a blank favicon", async () => {
+    renderCollection([
+      {
+        ...sample,
+        url: "https://continuingstudies.mcgill.ca/login",
+        page_domain: "continuingstudies.mcgill.ca",
+        favicon_url: "data:image/x-icon;,",
+        title: "Athena Instructor Login",
+      },
+    ]);
+    expect(await screen.findByText("Athena Instructor Login")).toBeInTheDocument();
+    expect(document.querySelector("img")).toHaveAttribute("src", "https://www.mcgill.ca/favicon.ico");
+  });
+
+  it("uses the parent site icon instead of a subdomain default favicon.ico", async () => {
+    renderCollection([
+      {
+        ...sample,
+        url: "https://continuingstudies.mcgill.ca/login",
+        page_domain: "continuingstudies.mcgill.ca",
+        favicon_url: "https://continuingstudies.mcgill.ca/favicon.ico",
+        title: "Athena Instructor Login",
+      },
+    ]);
+    expect(await screen.findByText("Athena Instructor Login")).toBeInTheDocument();
+    expect(document.querySelector("img")).toHaveAttribute("src", "https://www.mcgill.ca/favicon.ico");
+  });
+
   it("uses a stored site favicon instead of the Neshanak logo", async () => {
     renderCollection([{ ...sample, favicon_url: "https://outlook.office.com/apple-touch-icon.png" }]);
     expect(await screen.findByText("React documentation")).toBeInTheDocument();

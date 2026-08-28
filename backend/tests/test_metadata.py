@@ -19,6 +19,18 @@ def test_parse_html_suggests_keyword_and_article_tags() -> None:
     assert "hooks" in tags
 
 
+def test_parse_html_skips_empty_data_favicon() -> None:
+    html = """
+    <html>
+      <head>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
+      </head>
+    </html>
+    """
+    _title, _description, favicon, _tags = _parse_html(html, "https://continuingstudies.mcgill.ca/")
+    assert favicon == "https://continuingstudies.mcgill.ca/favicon.ico"
+
+
 def test_parse_html_prefers_apple_touch_icon() -> None:
     html = """
     <html>

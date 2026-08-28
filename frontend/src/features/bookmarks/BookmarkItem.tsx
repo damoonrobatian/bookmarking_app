@@ -156,13 +156,35 @@ export function BookmarkItem({
   );
 }
 
+function emptyDataFavicon(url: string): boolean {
+  if (!url.startsWith("data:")) return false;
+  const comma = url.indexOf(",");
+  if (comma < 0) return true;
+  return url.slice(comma + 1).replace(/\s/g, "") === "";
+}
+
+function parentHost(host: string): string | null {
+  if (host.startsWith("www.")) return null;
+  const parts = host.split(".").filter(Boolean);
+  if (parts.length < 3) return null;
+  return parts.slice(1).join(".");
+}
+
+function isDefaultHostIcon(url: string, host: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === host && parsed.pathname.replace(/\/$/, "") === "/favicon.ico";
+  } catch {
+    return false;
+  }
+}
+
 function faviconCandidates(bookmark: Bookmark): string[] {
   const urls: string[] = [];
   const add = (value: string | null | undefined) => {
-    if (!value || value.includes("/logo.") || urls.includes(value)) return;
+    if (!value || value.includes("/logo.") || emptyDataFavicon(value) || urls.includes(value)) return;
     urls.push(value);
   };
-  add(bookmark.favicon_url);
   let host = bookmark.page_domain;
   if (!host) {
     try {
@@ -171,9 +193,22 @@ function faviconCandidates(bookmark: Bookmark): string[] {
       host = null;
     }
   }
+  const parent = host ? parentHost(host) : null;
+  const stored = bookmark.favicon_url;
+  if (stored && !(parent && host && isDefaultHostIcon(stored, host))) {
+    add(stored);
+  }
   if (host) {
-    add(`https://${host}/favicon.ico`);
-    add(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`);
+    if (parent) {
+      add(`https://www.${parent}/favicon.ico`);
+      add(`https://${parent}/favicon.ico`);
+      add(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(parent)}&sz=64`);
+      add(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`);
+      add(`https://${host}/favicon.ico`);
+    } else {
+      add(`https://${host}/favicon.ico`);
+      add(`https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`);
+    }
   }
   return urls;
 }

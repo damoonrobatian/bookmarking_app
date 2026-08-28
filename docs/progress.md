@@ -11,7 +11,7 @@
 - URL normalization, metadata extraction, SSRF protection, duplicate handling
 - Netscape bookmark import and export
 - Frontend application: auth, layout, bookmarks, folders, tags, settings
-- Backend tests (41) and frontend tests (46)
+- Backend tests (42) and frontend tests (48)
 - Playwright happy-path spec
 - Documentation and GitHub Actions CI/CD (tests on every push; deploy to the droplet after `main` is green)
 - DigitalOcean droplet: Ubuntu 24.04, 1 GB, Docker Compose at `/root/bookmarking_app`
@@ -35,6 +35,7 @@
 - Compact bookmark cards (favicon and title only) that work with list and grid
 - Tag field has an Add button so a phone keyboard does not need Enter
 - Title sort is A to Z; other sorts stay newest or most visited first
+- Subdomain bookmarks with a blank site icon use the parent domain favicon (Athena / McGill)
 
 ## Remaining
 

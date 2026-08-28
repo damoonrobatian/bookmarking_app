@@ -161,6 +161,8 @@ def _favicon(soup: BeautifulSoup, base_url: str) -> str | None:
         if not any("icon" in rel for rel in rels):
             continue
         href_str = str(href)
+        if not _usable_favicon_href(href_str):
+            continue
         type_hint = str(tag.get("type") or "").lower()
         score = 0
         if "apple-touch-icon" in rels:
@@ -175,6 +177,13 @@ def _favicon(soup: BeautifulSoup, base_url: str) -> str | None:
         return candidates[0][1]
     parsed = urlparse(base_url)
     return f"{parsed.scheme}://{parsed.netloc}/favicon.ico"
+
+
+def _usable_favicon_href(href: str) -> bool:
+    if not href.startswith("data:"):
+        return True
+    payload = href.split(",", 1)[1].strip() if "," in href else ""
+    return bool(payload)
 
 
 def _link_rels(tag: Tag) -> list[str]:
