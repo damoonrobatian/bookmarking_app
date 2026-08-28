@@ -2,26 +2,36 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { THEME_STORAGE_KEY } from "@/theme";
 
 function renderSettings(path = "/settings") {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[path]}>
-        <Routes>
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/settings/:section" element={<SettingsPage />} />
-        </Routes>
-      </MemoryRouter>
+      <ThemeProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <Routes>
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/settings/:section" element={<SettingsPage />} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
     </QueryClientProvider>,
   );
 }
 
 describe("settings", () => {
+  afterEach(() => {
+    localStorage.removeItem(THEME_STORAGE_KEY);
+    document.documentElement.removeAttribute("data-theme");
+  });
+
   it("lists options without password fields until one is chosen", async () => {
     const user = userEvent.setup();
     renderSettings();
+    expect(screen.getByRole("link", { name: /Theme/ })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Change Password/ })).toBeInTheDocument();
     expect(screen.queryByLabelText("Current password")).not.toBeInTheDocument();
     await user.click(screen.getByRole("link", { name: /Change Password/ }));
@@ -69,5 +79,30 @@ describe("settings", () => {
     expect(firefoxButtons[1]).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText(/Import Bookmarks from HTML/)).toBeInTheDocument();
     expect(screen.queryByText(/Other Bookmarks/)).not.toBeInTheDocument();
+  });
+
+  it("lets you pick a theme", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      headers: new Headers({ "content-type": "application/json" }),
+      json: async () => ({
+        id: "1",
+        email: "ada@example.com",
+        display_name: "Ada",
+        theme: "teal",
+        created_at: "2026-01-01T00:00:00Z",
+        last_login_at: null,
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    renderSettings("/settings/theme");
+    expect(screen.getByRole("button", { name: "Terracotta", pressed: true })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Teal" }));
+    expect(screen.getByRole("button", { name: "Teal", pressed: true })).toBeInTheDocument();
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/auth/theme");
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1].body))).toEqual({ theme: "teal" });
+    expect(document.documentElement.dataset.theme).toBe("teal");
   });
 });

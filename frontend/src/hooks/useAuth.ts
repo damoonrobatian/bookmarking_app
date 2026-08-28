@@ -61,6 +61,16 @@ export function useDeleteAccount() {
   });
 }
 
+export function useUpdateTheme() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: authApi.updateTheme,
+    onSuccess: (user) => {
+      queryClient.setQueryData(["me"], user);
+    },
+  });
+}
+
 export function errorMessage(error: unknown, fallback: string) {
   return (error as ApiError)?.message ?? fallback;
 }

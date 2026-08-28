@@ -11,8 +11,19 @@ def test_register_and_me(client: TestClient) -> None:
     data = me.json()
     assert data["email"] == "ada@example.com"
     assert data["display_name"] == "Ada"
+    assert data["theme"] == "terracotta"
     assert "password" not in data
     assert "password_hash" not in data
+
+
+def test_theme_can_be_changed(client: TestClient) -> None:
+    register_user(client)
+    changed = client.patch("/api/auth/theme", json={"theme": "teal"})
+    assert changed.status_code == 200
+    assert changed.json()["theme"] == "teal"
+    assert client.get("/api/auth/me").json()["theme"] == "teal"
+    rejected = client.patch("/api/auth/theme", json={"theme": "neon"})
+    assert rejected.status_code == 422
 
 
 def test_duplicate_email_rejected(client: TestClient) -> None:

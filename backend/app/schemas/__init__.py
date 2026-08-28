@@ -1,10 +1,13 @@
 from datetime import datetime
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 T = TypeVar("T")
+
+ThemeId = Literal["terracotta", "gray", "teal", "green", "purple", "blue"]
+DEFAULT_THEME: ThemeId = "terracotta"
 
 
 class APIError(BaseModel):
@@ -26,8 +29,13 @@ class UserRead(BaseModel):
     id: UUID
     email: EmailStr
     display_name: str
+    theme: ThemeId = DEFAULT_THEME
     created_at: datetime
     last_login_at: datetime | None = None
+
+
+class ThemeUpdate(BaseModel):
+    theme: ThemeId
 
 
 class RegisterRequest(BaseModel):

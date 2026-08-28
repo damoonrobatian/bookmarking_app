@@ -1,3 +1,5 @@
+import { useTheme } from "@/hooks/useTheme";
+import { themeLogo } from "@/theme";
 import { cn } from "@/utils/cn";
 
 export function BrandMark({
@@ -9,13 +11,14 @@ export function BrandMark({
   wordmark?: boolean;
   size?: "sm" | "md" | "lg";
 }) {
+  const { theme } = useTheme();
   const icon = size === "lg" ? "h-16 w-16" : size === "sm" ? "h-8 w-8" : "h-10 w-10";
   const type = size === "lg" ? "text-4xl" : "text-2xl";
   const pixels = size === "lg" ? 64 : size === "sm" ? 32 : 40;
   return (
     <span className={cn("inline-flex items-center", size === "lg" ? "gap-3.5" : "gap-2.5", className)}>
       <img
-        src="/logo.png"
+        src={themeLogo(theme)}
         alt={wordmark ? "" : "Neshanak"}
         className={icon}
         width={pixels}

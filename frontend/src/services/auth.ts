@@ -27,6 +27,13 @@ export function me() {
   return apiFetch<User>("/api/auth/me");
 }
 
+export function updateTheme(theme: string) {
+  return apiFetch<User>("/api/auth/theme", {
+    method: "PATCH",
+    body: JSON.stringify({ theme }),
+  });
+}
+
 export function changePassword(payload: { current_password: string; new_password: string }) {
   return apiFetch<void>("/api/auth/password", {
     method: "POST",

@@ -4,10 +4,12 @@ import { useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { useTheme } from "@/hooks/useTheme";
 import { ChangePasswordForm } from "@/features/auth/ChangePasswordForm";
 import { DeleteAccountForm } from "@/features/auth/DeleteAccountForm";
-import { useCurrentUser } from "@/hooks/useAuth";
+import { useCurrentUser, useUpdateTheme } from "@/hooks/useAuth";
 import { exportBookmarks, importBookmarks } from "@/services/tags";
+import { THEMES, type ThemeId } from "@/theme";
 import type { ImportReport } from "@/types";
 import {
   BOOKMARKLET_TITLE,
@@ -27,6 +29,7 @@ type SettingsSection = {
 
 const SECTIONS: SettingsSection[] = [
   { id: "account", title: "Account", description: "Name and email for this account." },
+  { id: "theme", title: "Theme", description: "Color and logo for this account." },
   { id: "password", title: "Change Password", description: "Choose a new password for this account." },
   { id: "import", title: "Import Bookmarks", description: "Upload a Netscape bookmark HTML file." },
   { id: "export", title: "Export Bookmarks", description: "Download a browser-compatible HTML file." },
@@ -100,6 +103,7 @@ function SettingsDetail({
 
 function SettingsBody({ id }: { id: string }) {
   if (id === "account") return <AccountBody />;
+  if (id === "theme") return <ThemeBody />;
   if (id === "password") return <ChangePasswordForm />;
   if (id === "import") return <ImportBody />;
   if (id === "export") return <ExportBody />;
@@ -120,6 +124,53 @@ function AccountBody() {
         <dd>{user.data?.email}</dd>
       </div>
     </dl>
+  );
+}
+
+function ThemeBody() {
+  const { theme, setTheme } = useTheme();
+  const updateTheme = useUpdateTheme();
+  const [error, setError] = useState("");
+
+  function choose(id: ThemeId) {
+    const previous = theme;
+    setError("");
+    setTheme(id);
+    updateTheme.mutate(id, {
+      onError: () => {
+        setTheme(previous);
+        setError("Could not save the theme. Try again.");
+      },
+    });
+  }
+
+  return (
+    <>
+      <p className="text-sm text-ink-muted">
+        Choose a color for buttons and the Neshanak mark. The tab icon and the browser extension stay terracotta.
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {THEMES.map((item) => {
+          const selected = theme === item.id;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => choose(item.id)}
+              className={cn(
+                "flex flex-col items-center gap-2 rounded-xl border px-3 py-4 text-sm hover:bg-paper-sunken",
+                selected ? "border-accent ring-2 ring-accent/40" : "border-line",
+              )}
+            >
+              <img src={item.logo} alt="" width={48} height={48} className="h-12 w-12" />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+      {error ? <p className="mt-3 text-sm text-red-800">{error}</p> : null}
+    </>
   );
 }
 

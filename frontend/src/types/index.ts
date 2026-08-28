@@ -2,6 +2,7 @@ export type User = {
   id: string;
   email: string;
   display_name: string;
+  theme: string;
   created_at: string;
   last_login_at: string | null;
 };

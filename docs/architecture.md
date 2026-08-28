@@ -61,7 +61,7 @@ The SPA uses React Router for pages and TanStack Query for server state. Feature
 
 The Settings bookmarklet and the unpacked extension in `extension/` open that popup on `https://neshanak.ca` so existing login cookies apply (`SameSite=Lax`). The bookmarklet `href` is a `javascript:` URL so it can read the current tab. Chrome and Edge will not show a custom icon on a script you drag onto the bar; Settings therefore also downloads a Netscape HTML file with an `ICON` data URI for Bookmark Manager import.
 
-Settings is a menu of one action at a time (`/settings/password`, and so on) so password fields are not mounted until that action is chosen.
+Settings is a menu of one action at a time (`/settings/password`, and so on) so password fields are not mounted until that action is chosen. Theme is one of those actions: six named palettes change the accent color and the header mark for that account.
 
 Tags live on `/app/tags`, grouped by folder. The sidebar lists folders only.
 

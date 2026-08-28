@@ -4,6 +4,45 @@
 
 :root {
   color-scheme: light;
+  --accent: 196 92 38;
+  --accent-hover: 169 75 28;
+  --accent-soft: 244 225 212;
+}
+
+html[data-theme="terracotta"] {
+  --accent: 196 92 38;
+  --accent-hover: 169 75 28;
+  --accent-soft: 244 225 212;
+}
+
+html[data-theme="gray"] {
+  --accent: 90 90 90;
+  --accent-hover: 64 64 64;
+  --accent-soft: 232 230 226;
+}
+
+html[data-theme="teal"] {
+  --accent: 16 130 130;
+  --accent-hover: 8 100 100;
+  --accent-soft: 220 240 240;
+}
+
+html[data-theme="green"] {
+  --accent: 63 107 72;
+  --accent-hover: 46 82 56;
+  --accent-soft: 226 236 220;
+}
+
+html[data-theme="purple"] {
+  --accent: 122 72 148;
+  --accent-hover: 90 48 112;
+  --accent-soft: 238 228 244;
+}
+
+html[data-theme="blue"] {
+  --accent: 48 112 200;
+  --accent-hover: 24 80 160;
+  --accent-soft: 220 232 246;
 }
 
 html,

@@ -20,9 +20,9 @@ export default {
         },
         line: "#E4D9C8",
         accent: {
-          DEFAULT: "#C45C26",
-          hover: "#A94B1C",
-          soft: "#F4E1D4",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          hover: "rgb(var(--accent-hover) / <alpha-value>)",
+          soft: "rgb(var(--accent-soft) / <alpha-value>)",
         },
       },
       boxShadow: {

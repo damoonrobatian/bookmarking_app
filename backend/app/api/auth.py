@@ -9,7 +9,14 @@ from app.dependencies import get_current_user
 from app.models.user import User
 from app.rate_limit import limiter
 from app.repositories.user import UserRepository
-from app.schemas import ChangePasswordRequest, DeleteAccountRequest, LoginRequest, RegisterRequest, UserRead
+from app.schemas import (
+    ChangePasswordRequest,
+    DeleteAccountRequest,
+    LoginRequest,
+    RegisterRequest,
+    ThemeUpdate,
+    UserRead,
+)
 from app.security.cookies import REFRESH_COOKIE, clear_auth_cookies, set_auth_cookies
 from app.security.tokens import decode_token
 from app.services.auth import AuthService
@@ -54,6 +61,15 @@ def logout(response: Response) -> None:
 
 @router.get("/me", response_model=UserRead)
 def me(user: User = Depends(get_current_user)) -> User:
+    return user
+
+
+@router.patch("/theme", response_model=UserRead)
+def update_theme(
+    payload: ThemeUpdate,
+    user: User = Depends(get_current_user),
+) -> User:
+    user.theme = payload.theme
     return user
 
 
