@@ -85,7 +85,7 @@ Header marks are the PNGs in `frontend/public/themes/`. `extension/icons/` is on
 
 ## Overlay menu
 
-Below `1024px` wide, including a zoomed desktop window, the left menu is an overlay. Open it with the menu button. Choosing All Bookmarks, a folder, Settings, or another destination closes it. Expanding a folder or using folder actions leaves it open. Tap the dimmed page or the close control to dismiss it without navigating.
+Below `1024px` wide, including a zoomed desktop window, the left menu is an overlay. Open it with the menu button. The account name sits under the logo; Log out is at the bottom. Choosing All Bookmarks, a folder, Settings, or another destination closes it. Expanding a folder or using folder actions leaves it open. Tap the dimmed page or the close control to dismiss it without navigating.
 
 ## Save from the browser
 

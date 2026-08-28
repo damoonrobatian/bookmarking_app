@@ -84,4 +84,17 @@ describe("overlay sidebar", () => {
     await events.click(screen.getByRole("link", { name: "Favorites" }));
     expect(screen.queryByRole("button", { name: "Close sidebar" })).not.toBeInTheDocument();
   });
+
+  it("shows the account name under the logo and Log out at the bottom of the overlay", async () => {
+    stubViewport(false);
+    const events = userEvent.setup();
+    renderLayout();
+    await events.click(await screen.findByRole("button", { name: "Open menu" }));
+    const name = await screen.findByText("Ada");
+    const logo = screen.getByRole("link", { name: "Neshanak" });
+    const logout = screen.getByRole("button", { name: "Log out" });
+    expect(logo.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(name.compareDocumentPosition(logout) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Log out" })).toBeInTheDocument();
+  });
 });

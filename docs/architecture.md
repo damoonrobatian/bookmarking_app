@@ -63,6 +63,6 @@ The Settings bookmarklet and the unpacked extension in `extension/` open that po
 
 Settings is a menu of one action at a time (`/settings/password`, and so on) so password fields are not mounted until that action is chosen. Theme is one of those actions: six named palettes (`terracotta`, `gray`, `teal`, `green`, `purple`, `blue`) change the accent color and the header mark for that account. The choice is stored on the user (`PATCH /api/auth/theme`) and cached in `localStorage` (`neshanak-theme`) so the next visit can paint before `/me` returns. Header marks live in `frontend/public/themes/`. The tab favicon and the unpacked extension icons in `extension/icons/` stay terracotta.
 
-Tags live on `/app/tags`, grouped by folder. The sidebar lists folders only. Below `1024px` (including a zoomed-in desktop window) that sidebar is an overlay. Choosing a destination closes it; expanding a folder or using folder actions does not.
+Tags live on `/app/tags`, grouped by folder. The sidebar lists folders only. The account name sits under the logo; Log out is at the bottom of that column. Below `1024px` (including a zoomed-in desktop window) the sidebar is an overlay. Choosing a destination closes it; expanding a folder or using folder actions does not.
 
 Page titles, dialog titles, settings section titles, and nav labels use Title Case. Other chrome copy (buttons, labels, descriptions, empty states, errors) uses sentence case. User content — bookmark titles, folder names, tags, emails, and URLs — is shown as stored. Password fields include a show-password control.

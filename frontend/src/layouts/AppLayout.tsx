@@ -71,15 +71,18 @@ export function AppLayout() {
           if (event.target.closest("a")) setSidebarOpen(false);
         }}
       >
-        <div className="mb-6 flex items-center justify-between">
-          <Link to="/app" className="text-ink">
-            <BrandMark size="sm" />
-          </Link>
-          {!isDesktop ? (
-            <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
-              <X className="h-5 w-5" />
-            </button>
-          ) : null}
+        <div className="mb-6">
+          <div className="flex items-center justify-between gap-2">
+            <Link to="/app" className="min-w-0 text-ink">
+              <BrandMark size="sm" />
+            </Link>
+            {!isDesktop ? (
+              <button type="button" onClick={() => setSidebarOpen(false)} aria-label="Close menu">
+                <X className="h-5 w-5" />
+              </button>
+            ) : null}
+          </div>
+          <p className="mt-2 truncate text-sm text-ink-muted">{user.data.display_name}</p>
         </div>
         <nav className="space-y-1">
           <SideLink to="/app" icon={<BookmarkIcon className="h-4 w-4" />} end>
@@ -101,8 +104,13 @@ export function AppLayout() {
             Settings
           </SideLink>
         </nav>
-        <div className="mt-6 flex-1 overflow-y-auto">
+        <div className="mt-6 min-h-0 flex-1 overflow-y-auto">
           <FolderTree />
+        </div>
+        <div className="mt-4 shrink-0 border-t border-line pt-3">
+          <Button variant="ghost" className="w-full justify-start" onClick={() => logout.mutate()}>
+            Log out
+          </Button>
         </div>
       </aside>
       <div className="flex min-h-screen flex-col">
@@ -126,12 +134,6 @@ export function AppLayout() {
             <Plus className="h-4 w-4" />
             Add bookmark
           </Button>
-          <div className="hidden items-center gap-2 sm:flex">
-            <span className="max-w-[10rem] truncate text-sm text-ink-muted">{user.data.display_name}</span>
-            <Button variant="ghost" size="sm" onClick={() => logout.mutate()}>
-              Log out
-            </Button>
-          </div>
         </header>
         <main className="flex-1 px-4 py-6 sm:px-8">
           <Outlet />
